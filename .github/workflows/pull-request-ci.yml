@@ -1,0 +1,31 @@
+name: PR 제출 시 코드 검사
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Prettier 검사 수행
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 코드 체크아웃
+        uses: actions/checkout@v3
+
+      - name: Node.js 설정
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: devDependencies 설치
+        run: npm install --only=dev
+
+      - name: Prettier 실행
+        run: npx prettier --check .

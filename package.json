@@ -1,0 +1,51 @@
+{
+  "name": "ai-quiz",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "scripts": {
+    "start": "npm run build && node dist/index.js",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "type": "module",
+  "dependencies": {
+    "@aws-sdk/client-s3": "3.740.0",
+    "@aws-sdk/types": "3.734.0",
+    "@types/multer": "1.4.12",
+    "@types/nodemailer": "6.4.17",
+    "aws-sdk": "2.1692.0",
+    "dotenv": "16.4.7",
+    "express": "4.21.2",
+    "express-asyncify": "3.1.0",
+    "multer": "1.4.5-lts.1",
+    "nodemailer": "6.10.0",
+    "pg": "8.13.1"
+  },
+  "imports": {
+    "#router/*": "./dist/src/router/*.js",
+    "#service/*": "./dist/src/service/*.js",
+    "#adapter/*": "./dist/src/adapter/*.js",
+    "#repository/*": "./dist/src/repository/*.js",
+    "#dto/*": "./dist/src/dto/*.js",
+    "#domain/*": "./dist/src/domain/*.js",
+    "#database/*": "./dist/src/core/config/database/*.js",
+    "#error/*": "./dist/src/core/error/*.js"
+  },
+  "devDependencies": {
+    "@types/express": "5.0.0",
+    "@types/node": "^22.10.7",
+    "@types/pg": "8.11.10",
+    "eslint": "8.57.1",
+    "eslint-config-airbnb-base": "15.0.0",
+    "eslint-config-prettier": "10.0.1",
+    "eslint-plugin-import": "2.31.0",
+    "eslint-plugin-prettier": "5.2.2",
+    "prettier": "3.4.2",
+    "ts-node": "10.9.2",
+    "ts-node-dev": "2.0.0",
+    "typescript": "5.7.3"
+  }
+}
