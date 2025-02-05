@@ -1,3 +1,4 @@
+import LoginAdapter from '#adapter/oAuthAdapter'
 import CustomError from './customError.js'
 
 export default class ErrorRegistry {
@@ -19,10 +20,14 @@ export default class ErrorRegistry {
     'US001',
     '사용자 정보가 존재하지 않습니다',
   )
-
-  static readonly INVALID_USER = new CustomError(
+  static readonly LOGIN_REQUIRED = new CustomError(
     401,
     'US002',
+    '로그인이 필요합니다.',
+  )
+  static readonly ACCESS_DENIED = new CustomError(
+    403,
+    'US003',
     '접근 권한이 없습니다.',
   )
 
