@@ -32,7 +32,10 @@
     "#dto/*": "./dist/src/dto/*.js",
     "#domain/*": "./dist/src/domain/*.js",
     "#database/*": "./dist/src/core/config/database/*.js",
-    "#error/*": "./dist/src/core/error/*.js"
+    "#error/*": "./dist/src/core/error/*.js",
+    "#asyncRouter": [
+      "./dist/src/core/getAsyncRouter/index.js"
+    ]
   },
   "devDependencies": {
     "@types/express": "5.0.0",

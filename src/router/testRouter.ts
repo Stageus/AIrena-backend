@@ -1,8 +1,8 @@
-import asyncify from 'express-asyncify'
-import express, { Request, Response } from 'express'
+import getAsyncRouter from '#asyncRouter'
 import ErrorRegistry from '#error/errorRegistry'
+import { Request, Response } from 'express'
 
-export const testRouter = asyncify(express.Router())
+export const testRouter = getAsyncRouter()
 
 testRouter.get('/internal-error', async (req: Request, res: Response) => {
   throw new Error('Internal Server Error')

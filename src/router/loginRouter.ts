@@ -1,9 +1,9 @@
-import asyncify from 'express-asyncify'
-import dotenv from 'dotenv'
-import LoginService from '#service/loginService'
+import getAsyncRouter from '#asyncRouter'
 import LoginRequest from '#dto/request/loginRequest'
-import express, { Request, Response } from 'express'
 import LoginUserDataResponse from '#dto/response/loginUserDataResponse'
+import LoginService from '#service/loginService'
+import dotenv from 'dotenv'
+import { Request, Response } from 'express'
 dotenv.config()
 
 const kakaoOauthUri = process.env.KAKAO_OAUTH_URI
@@ -14,7 +14,7 @@ const googleOauthUri = process.env.GOOGLE_OAUTH_URI
 const googleClientId = process.env.GOOGLE_CLIENT_ID
 const googleRedirectUri = process.env.GOOGLE_REDIRECT_URI
 
-export const loginRouter = asyncify(express.Router())
+export const loginRouter = getAsyncRouter()
 
 loginRouter.get('/kakao', async (req: Request, res: Response) => {
   return res.redirect(
