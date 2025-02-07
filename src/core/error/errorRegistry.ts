@@ -1,4 +1,3 @@
-import LoginAdapter from '#adapter/oAuthAdapter'
 import CustomError from './customError.js'
 
 export default class ErrorRegistry {
@@ -29,6 +28,11 @@ export default class ErrorRegistry {
     403,
     'US003',
     '접근 권한이 없습니다.',
+  )
+  static readonly PASSWORD_NOT_EQUAL = new CustomError(
+    400,
+    'US004',
+    '비밀번호가 일치하지않습니다',
   )
 
   // Mock Test(MO)
