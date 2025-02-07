@@ -1,6 +1,6 @@
 import FindPasswordRequest from '#dto/request/FindPasswordRequest'
 import SignupRequest from '#dto/request/SignupRequest'
-import UserService from '#service/UserService'
+import UserService from '#service/MemberService'
 import express, { Request, Response } from 'express'
 import asyncify from 'express-asyncify'
 

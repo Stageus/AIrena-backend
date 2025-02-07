@@ -1,8 +1,8 @@
 import { testPostgresConnection } from '#database/postgres'
 import globalExceptionHandler from '#error/globalExceptionHandler'
 import { loginRouter } from '#router/loginRouter'
+import { userRouter } from '#router/MemberRouter'
 import { testRouter } from '#router/testRouter'
-import { userRouter } from '#router/UserRouter'
 import express from 'express'
 
 const app = express()
