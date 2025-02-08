@@ -1,6 +1,6 @@
 import FindPasswordRequest from '#dto/request/FindPasswordRequest'
 import SignupRequest from '#dto/request/SignupRequest'
-import UserService from '#service/MemberService'
+import MemberService from '#service/MemberService'
 import express, { Request, Response } from 'express'
 import asyncify from 'express-asyncify'
 
@@ -13,7 +13,7 @@ userRouter.post(
     req: Request<{}, {}, SignupRequest, {}>,
     res: Response,
   ): Promise<any> => {
-    await UserService.signup(req.body)
+    await MemberService.signup(req.body)
     return res.sendStatus(201)
   },
 )
@@ -24,7 +24,7 @@ userRouter.post(
     req: Request<{}, {}, FindPasswordRequest, {}>,
     res: Response,
   ): Promise<any> => {
-    await UserService.findPassword(req.body)
+    await MemberService.findPassword(req.body)
     // return res.sendStatus(201)
     return res.send({
       message: '성공',
