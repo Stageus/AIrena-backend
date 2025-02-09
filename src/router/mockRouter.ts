@@ -17,7 +17,7 @@ mockRouter.post(
     MockWriteRequest,
     MockWriteResponse,
   )(async (req, res) => {
-    await MockWriteService.writeMock(1, req.body)
+    await MockWriteService.writeMock(29, req.body)
     return res.send(new MockWriteResponse(randomUUID()))
   }),
 )

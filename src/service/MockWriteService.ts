@@ -1,4 +1,5 @@
 import AIAdapter from '#adapter/AIAdapter'
+import ImageAdapter from '#adapter/ImageAdater'
 import MockAdapter from '#adapter/MockAdapter'
 import MockWriteRequest from '#dto/request/MockWriteRequest/MockWriteRequest'
 import MockWriteResponse from '#dto/response/MockWriteResponse'
@@ -46,7 +47,8 @@ export default class MockWriteService {
 
     const image = new Image(mock.idx, mockWriteRequest.uploadUrls)
 
-    MockAdapter.insertMockData(mock, image, quizzes)
+    await MockAdapter.insertMockData(memberIdx, mock, quizzes)
+    await ImageAdapter.insertImage(image)
 
     return new MockWriteResponse(mock.idx)
   }

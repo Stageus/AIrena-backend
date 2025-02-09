@@ -1,11 +1,11 @@
 import { UUID } from 'crypto'
 
 export default class Image {
-  articleId: UUID
+  articleIdx: UUID
   urls: string[]
 
-  constructor(articleId: UUID, urls: string[]) {
-    this.articleId = articleId
+  constructor(articleIdx: UUID, urls: string[]) {
+    this.articleIdx = articleIdx
     this.urls = urls
   }
 }
