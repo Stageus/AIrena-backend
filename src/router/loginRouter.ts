@@ -3,8 +3,6 @@ import LoginRequest from '#dto/request/LoginRequest'
 import LoginUserDataResponse from '#dto/response/loginUserDataResponse'
 import LoginService from '#service/LoginService'
 import dotenv from 'dotenv'
-import { Request, Response } from 'express'
-import controller from '../../src/core/controller/index.js'
 import express from 'express'
 dotenv.config()
 
