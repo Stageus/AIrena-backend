@@ -68,9 +68,4 @@ export default class ErrorRegistry {
     'MU001',
     '지원하지 않는 파일 형식입니다',
   )
-  static readonly TOO_MANY_FILES = new CustomError(
-    400,
-    'MU002',
-    '파일 개수가 너무 많습니다',
-  )
 }

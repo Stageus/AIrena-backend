@@ -10,11 +10,6 @@ mockRouter.post(
   '/write',
   multipartParser('image', 1),
   async (req: Request, res: Response<MockPostResponse>): Promise<any> => {
-    if (req.files) {
-      if (Array.isArray(req.files)) {
-        console.log(req.files[0])
-      }
-    }
     console.log(req.body)
     return res.send(new MockPostResponse(randomUUID()))
   },

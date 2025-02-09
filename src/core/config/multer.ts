@@ -17,7 +17,10 @@ const s3Uploader = multer({
       cb(null, `${Date.now()}_${path.basename(utf8FileName)}`)
     },
   }),
-  limits: { fileSize: 5 * 1024 * 1024 },
+  limits: {
+    fieldNameSize: 255,
+    fileSize: 1024 * 1024 * 10,
+  },
 })
 
 export default s3Uploader
