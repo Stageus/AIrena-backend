@@ -13,7 +13,7 @@ userRouter.post(
     req: Request<{}, {}, SignupRequest, {}>,
     res: Response,
   ): Promise<any> => {
-    await MemberService.signup(req.body)
+    await MemberService.emailSend(req.body)
     return res.sendStatus(201)
   },
 )
