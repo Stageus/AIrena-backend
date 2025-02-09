@@ -1,4 +1,3 @@
-import ErrorRegistry from '#core/error/errorRegistry'
 import SingleChoiceQuizResponseFromAI, {
   SingleChoiceQuiz,
 } from '#dto/ai/response/SingleChoiceQuizResponseFromAI'
@@ -6,6 +5,7 @@ import TextQuizResponseFromAI, {
   TextQuiz,
 } from '#dto/ai/response/TextQuizResponseFromAI'
 import Quiz from '#entity/Quiz'
+import ErrorRegistry from '#error/errorRegistry'
 import dotenv from 'dotenv'
 import QuizInfo from 'src/entity/QuizInfo.js'
 dotenv.config()

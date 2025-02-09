@@ -1,4 +1,4 @@
-import { postgres } from '#database/postgres'
+import { postgres } from '#config/postgres'
 
 export default class TestRepository {
   static async getById(id: string) {

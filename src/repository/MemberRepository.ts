@@ -1,5 +1,5 @@
-import { postgres } from '#database/postgres'
-import { redis } from '#database/redis'
+import { postgres } from '#config/postgres'
+import { redis } from '#config/redis'
 import ErrorRegistry from '#error/errorRegistry'
 export default class MemberRepository {
   /**아이디 중복 체크 */

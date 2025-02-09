@@ -1,5 +1,5 @@
-import multer from '#core/config/multer'
-import ErrorRegistry from '#core/error/errorRegistry'
+import multer from '#config/multer'
+import ErrorRegistry from '#error/errorRegistry'
 import dotenv from 'dotenv'
 import { NextFunction, Request, Response } from 'express'
 dotenv.config()

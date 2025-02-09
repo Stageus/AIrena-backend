@@ -1,8 +1,8 @@
-import controller from '#core/controller/index'
-import multipartParser from '#core/util/multipartParser'
-import MockWriteRequest from '#dto/request/MockWriteRequest/MockWriteRequest'
+import controller from '#controller'
+import MockWriteRequest from '#dto/request/MockWriteRequest'
 import MockWriteResponse from '#dto/response/MockWriteResponse'
 import MockWriteService from '#service/MockWriteService'
+import multipartParser from '#util/multipartParser'
 import { randomUUID } from 'crypto'
 import express from 'express'
 

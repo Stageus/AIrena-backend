@@ -1,14 +1,14 @@
-import pg from 'pg'
 import { configDotenv } from 'dotenv'
+import pg from 'pg'
 
 configDotenv()
 
 export const postgres = new pg.Pool({
-  host: process.env.POSTGRES_HOST || '',
-  port: process.env.POSTGRES_PORT ? parseInt(process.env.POSTGRES_PORT) : 5432,
-  user: process.env.POSTGRES_USER || '',
-  password: process.env.POSTGRES_PASSWORD || '',
-  database: process.env.POSTGRES_DB,
+  host: process.env.POSTGRES_HOST as string,
+  port: parseInt(process.env.POSTGRES_PORT as string),
+  user: process.env.POSTGRES_USER as string,
+  password: process.env.POSTGRES_PASSWORD as string,
+  database: process.env.POSTGRES_DB as string,
 })
 
 export const testPostgresConnection = async () => {

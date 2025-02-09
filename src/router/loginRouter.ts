@@ -1,4 +1,4 @@
-import controller from '#core/controller/index'
+import controller from '#controller'
 import LoginRequest from '#dto/request/LoginRequest'
 import LoginUserDataResponse from '#dto/response/loginUserDataResponse'
 import LoginService from '#service/LoginService'
