@@ -19,7 +19,7 @@ const s3Uploader = multer({
   }),
   limits: {
     fieldNameSize: 255,
-    files: 1,
+    files: 10,
     fileSize: 1024 * 1024 * 10,
   },
 })
