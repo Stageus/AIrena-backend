@@ -1,5 +1,5 @@
 import AIAdapter from '#adapter/AIAdapter'
-import ImageAdapter from '#adapter/ImageAdater'
+import ImageAdapter from '#adapter/ImageAdapter'
 import MockAdapter from '#adapter/MockAdapter'
 import MockWriteRequest from '#dto/request/MockWriteRequest/MockWriteRequest'
 import MockWriteResponse from '#dto/response/MockWriteResponse'
