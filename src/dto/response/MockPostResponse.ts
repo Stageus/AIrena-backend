@@ -1,6 +1,6 @@
 import { UUID } from 'crypto'
 
-export default class MockPostResponse {
+export default class MockWriteResponse {
   public articleId: UUID
 
   constructor(articleId: UUID) {

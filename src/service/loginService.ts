@@ -1,4 +1,4 @@
-import LoginAdapter from '#adapter/oAuthAdapter'
+import LoginAdapter from '#adapter/OAuthAdapter'
 import LoginUserDataResponse from '#dto/response/loginUserDataResponse'
 
 const kakaoOauthUserInfoUrl = process.env.KAKAO_OAUTH_USER_INFO_URL || ''
