@@ -31,9 +31,10 @@ export default class MemberRepository {
   ) {
     let checkApprove = await redis.hget('email', 'is_approved')
     if (checkApprove != true) {
+      let datetime = new Date()
       await postgres.query(
-        'INSERT INTO member (id, provider, password, email, nickname) VALUES ($1, $2, $3, $4, $5)',
-        [id, 'NORMAL', password, email, nickname],
+        'INSERT INTO member (id, provider, password, email, nickname,created_at) VALUES ($1, $2, $3, $4, $5, $6)',
+        [id, 'NORMAL', password, email, nickname, datetime],
       )
     }
   }

@@ -48,7 +48,7 @@ export default class UserService {
     const { token } = signupVerifyRequest
     const secretKey = process.env.JWT_SIGNATURE_KEY || 'jwt-secret-key'
     const data: any = jwt.verify(token, secretKey)
-    const nickname = 'test1' // 랜덤 생성기 자리
+    const nickname = 'young' // 랜덤 생성기 자리
     /** 이메일 인증 확인 */
     await MemberRepository.emailCheck(data.email)
     /** 이메일 인증 처리 후 토큰 데이터로 DB에 사용자 저장 */
