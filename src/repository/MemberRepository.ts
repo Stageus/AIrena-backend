@@ -9,8 +9,15 @@ export default class MemberRepository {
     )
   }
   /** 인증 이메일 정보를 저장합니다.  */
-  static async emailInfoSave(email: string, count: number = 1): Promise<void> {
+  static async emailInfoSave(email: string): Promise<void> {
     await redis.hset('email', { address: email, sendCount: 1 })
+    console.log(await redis.hget('email', 'address'))
+    console.log(await redis.hget('email', 'sendCount'))
+  }
+
+  /** 이메일 전송 횟수를 증가 시킵니다. */
+  static async emailCountIncrease() {
+    await redis.hincrby('email', 'sendCount', 1)
     console.log(await redis.hget('email', 'address'))
     console.log(await redis.hget('email', 'sendCount'))
   }
