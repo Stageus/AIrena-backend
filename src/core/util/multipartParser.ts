@@ -14,6 +14,7 @@ const multipartParser = (contentType: string, limit: number) => {
   return (req: Request, res: Response, next: NextFunction) => {
     multer.array(contentType, limit)(req, res, (err) => {
       if (err) {
+        console.error(err)
         return next(ErrorRegistry.FILE_UPLOAD_FAILED)
       }
 
