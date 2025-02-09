@@ -31,13 +31,13 @@ export default class ErrorRegistry {
   )
   static readonly LOGIN_REQUIRED = new CustomError(
     401,
-    'US004',
-    '로그인이 필요합니다.',
+    'US002',
+    '로그인이 필요합니다',
   )
   static readonly ACCESS_DENIED = new CustomError(
     403,
-    'US005',
-    '접근 권한이 없습니다.',
+    'US003',
+    '접근 권한이 없습니다',
   )
   static readonly PASSWORD_NOT_EQUAL = new CustomError(
     400,
@@ -49,7 +49,7 @@ export default class ErrorRegistry {
   static readonly CAN_NOT_FIND_TEST = new CustomError(
     404,
     'MO001',
-    '모의고사가 존재하지 않습니다.',
+    '모의고사가 존재하지 않습니다',
   )
 
   // Notice(NO)
@@ -61,4 +61,16 @@ export default class ErrorRegistry {
 
   // Test(TE)
   static readonly TEST_ERROR = new CustomError(400, 'TE001', '테스트 에러')
+
+  // MULTER(MU)
+  static readonly INVALID_CONTENT_TYPE = new CustomError(
+    400,
+    'MU001',
+    '지원하지 않는 파일 형식입니다',
+  )
+  static readonly TOO_MANY_FILES = new CustomError(
+    400,
+    'MU002',
+    '파일 개수가 너무 많습니다',
+  )
 }
