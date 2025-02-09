@@ -9,7 +9,7 @@ const googleClientSecert = process.env.GOOGLE_CLIENT_SECRET || ''
 const googleRedirectUri = process.env.GOOGLE_REDIRECT_URI || ''
 const googleoOauthTokenUrl = process.env.GOOGLE_OAUTH_TOKEN_URL || ''
 
-export default class LoginAdapter {
+export default class OAuthAdapter {
   /**code를 통해서 카카오 Oauth토큰을 요청 및 획득*/
   static async getKakaoToken(code: string): Promise<string> {
     const tokenResponse = await fetch(

@@ -1,10 +1,11 @@
-import getAsyncRouter from '#asyncRouter'
-import LoginRequest from '#dto/request/loginRequest'
+import controller from '#core/controller/index'
+import LoginRequest from '#dto/request/LoginRequest'
 import LoginUserDataResponse from '#dto/response/loginUserDataResponse'
-import LoginService from '#service/loginService'
+import LoginService from '#service/LoginService'
 import dotenv from 'dotenv'
 import { Request, Response } from 'express'
 import controller from '../../src/core/controller/index.js'
+import express from 'express'
 dotenv.config()
 
 const kakaoOauthUri = process.env.KAKAO_OAUTH_URI
@@ -15,13 +16,21 @@ const googleOauthUri = process.env.GOOGLE_OAUTH_URI
 const googleClientId = process.env.GOOGLE_CLIENT_ID
 const googleRedirectUri = process.env.GOOGLE_REDIRECT_URI
 
-export const loginRouter = getAsyncRouter()
+export const loginRouter = express.Router()
 
-loginRouter.get('/kakao', async (req: Request, res: Response) => {
-  return res.redirect(
-    `${kakaoOauthUri}authorize?client_id=${kakaoClientId}&redirect_uri=${kakaoRedirectUri}&response_type=${kakaoResponseType}`,
-  )
-})
+loginRouter.get(
+  '/kakao',
+  controller(
+    null,
+    null,
+    null,
+    null,
+  )(async (req, res) => {
+    return res.redirect(
+      `${kakaoOauthUri}authorize?client_id=${kakaoClientId}&redirect_uri=${kakaoRedirectUri}&response_type=${kakaoResponseType}`,
+    )
+  }),
+)
 
 loginRouter.get(
   '/kakao/redirect',
@@ -35,18 +44,28 @@ loginRouter.get(
   }),
 )
 
-loginRouter.get('/google', async (req: Request, res: Response) => {
-  return res.redirect(
-    `${googleOauthUri}?client_id=${googleClientId}&redirect_uri=${googleRedirectUri}&response_type=code&scope=email profile`,
-  )
-})
+loginRouter.get(
+  '/google',
+  controller(
+    null,
+    null,
+    null,
+    null,
+  )(async (req, res) => {
+    return res.redirect(
+      `${googleOauthUri}?client_id=${googleClientId}&redirect_uri=${googleRedirectUri}&response_type=code&scope=email profile`,
+    )
+  }),
+)
 
 loginRouter.get(
   '/google/redirect',
-  async (
-    req: Request<{}, {}, {}, LoginRequest>,
-    res: Response<LoginUserDataResponse>,
-  ): Promise<any> => {
+  controller(
+    LoginRequest,
+    null,
+    null,
+    LoginUserDataResponse,
+  )(async (req, res): Promise<any> => {
     return res.send(await LoginService.getGoogleUserData(req.query.code))
-  },
+  }),
 )

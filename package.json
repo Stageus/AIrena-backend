@@ -13,6 +13,7 @@
   "type": "module",
   "dependencies": {
     "@aws-sdk/client-s3": "3.740.0",
+    "@types/multer-s3": "^3.0.3",
     "@aws-sdk/types": "3.734.0",
     "@types/jsonwebtoken": "^9.0.8",
     "@types/multer": "1.4.12",
@@ -24,7 +25,8 @@
     "express-asyncify": "3.1.0",
     "jsonwebtoken": "^9.0.2",
     "multer": "1.4.5-lts.1",
-    "nodemailer": "^6.10.0",
+    "multer-s3": "3.0.1",
+    "nodemailer": "6.10.0",
     "pg": "8.13.1"
   },
   "imports": {
@@ -33,7 +35,8 @@
     "#adapter/*": "./dist/src/adapter/*.js",
     "#repository/*": "./dist/src/repository/*.js",
     "#dto/*": "./dist/src/dto/*.js",
-    "#domain/*": "./dist/src/domain/*.js",
+    "#core/*": "./dist/src/core/*.js",
+    "#entity/*": "./dist/src/entity/*.js",
     "#database/*": "./dist/src/core/config/database/*.js",
     "#error/*": "./dist/src/core/error/*.js",
     "#asyncRouter": [
@@ -41,8 +44,11 @@
     ]
   },
   "devDependencies": {
+    "@aws-sdk/types": "3.734.0",
     "@types/express": "5.0.0",
-    "@types/node": "^22.10.7",
+    "@types/multer-s3": "^3.0.3",
+    "@types/node": "22.10.7",
+    "@types/nodemailer": "6.4.17",
     "@types/pg": "8.11.10",
     "eslint": "8.57.1",
     "eslint-config-airbnb-base": "15.0.0",
