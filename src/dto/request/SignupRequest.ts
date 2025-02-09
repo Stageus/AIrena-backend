@@ -16,5 +16,7 @@ export default class SignupRequest {
     this.password = parms.password
     this.passwordCheck = parms.passwordCheck
     this.email = parms.email
+    console.log(this.id, '아이디')
+    console.log(this.passwordCheck, '비밀번호 체크')
   }
 }
