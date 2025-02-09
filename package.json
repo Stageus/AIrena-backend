@@ -1,12 +1,12 @@
 {
-  "name": "ai-quiz",
+  "name": "ai-rena-backend",
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
     "start": "npm run build && node dist/index.js",
     "build": "tsc"
   },
-  "author": "",
+  "author": "gb6105 & GulSauce",
   "license": "ISC",
   "description": "",
   "type": "module",
