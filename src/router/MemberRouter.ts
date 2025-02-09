@@ -1,5 +1,4 @@
 import FindPasswordRequest from '#dto/request/FindPasswordRequest'
-import NicknameChangeRequest from '#dto/request/NicknameChangeRequest'
 import SignupRequest from '#dto/request/SignupRequest'
 import SignupVerifyRequest from '#dto/request/SignupVerifyRequest'
 import MemberService from '#service/MemberService'
@@ -37,16 +36,16 @@ userRouter.post(
 )
 
 /** 닉네임 변경 API */
-userRouter.patch(
-  'change/nickname',
-  async (
-    req: Request<{}, {}, NicknameChangeRequest, {}>,
-    res: Response,
-  ): Promise<any> => {
-    await MemberService.nicknameChange(req.body)
-    return res.sendStatus(201)
-  },
-)
+// userRouter.patch(
+//   'change/nickname',
+//   async (
+//     req: Request<{}, {}, NicknameChangeRequest, {}>,
+//     res: Response,
+//   ): Promise<any> => {
+//     await MemberService.nicknameChange(req.header, req.body)
+//     return res.sendStatus(201)
+//   },
+// )
 
 /** 비밀번호 변경 API */
 userRouter.post(

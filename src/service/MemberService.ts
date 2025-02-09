@@ -1,6 +1,5 @@
 import { postgres } from '#database/postgres'
 import FindPasswordRequest from '#dto/request/FindPasswordRequest'
-import NicknameChangeRequest from '#dto/request/NicknameChangeRequest'
 import SignupRequest from '#dto/request/SignupRequest'
 import SignupVerifyRequest from '#dto/request/SignupVerifyRequest'
 import ErrorRegistry from '#error/errorRegistry'
@@ -62,10 +61,16 @@ export default class UserService {
   }
 
   /** 닉네임 변경 서비스 로직 */
-  static async nicknameChange(nicknameChangeRequest: NicknameChangeRequest) {
-    const { nickname, id } = nicknameChangeRequest
-    await MemberRepository.changeNickname(nickname, id)
-  }
+  // static async nicknameChange(
+  //   header: Request,
+  //   nicknameChangeRequest: NicknameChangeRequest,
+  // ) {
+  //   const token = JSON.parse(header)
+  //   const secretKey = process.env.JWT_SIGNATURE_KEY || 'jwt-secret-key'
+  //   const data: any = jwt.verify(token, secretKey)
+  //   const { nickname } = nicknameChangeRequest
+  //   await MemberRepository.changeNickname(nickname, data.userId)
+  // }
 
   /** 비밀번호 변경 서비스 로직 */
   static async findPassword(findPasswordRequest: FindPasswordRequest) {
