@@ -36,7 +36,7 @@
     "#repository/*": "./dist/src/repository/*.js",
     "#dto/*": "./dist/src/dto/*.js",
     "#core/*": "./dist/src/core/*.js",
-    "#domain/*": "./dist/src/domain/*.js",
+    "#entity/*": "./dist/src/entity/*.js",
     "#database/*": "./dist/src/core/config/database/*.js",
     "#error/*": "./dist/src/core/error/*.js",
     "#asyncRouter": [
@@ -46,6 +46,7 @@
   "devDependencies": {
     "@aws-sdk/types": "3.734.0",
     "@types/express": "5.0.0",
+    "@types/multer-s3": "^3.0.3",
     "@types/node": "22.10.7",
     "@types/nodemailer": "6.4.17",
     "@types/pg": "8.11.10",

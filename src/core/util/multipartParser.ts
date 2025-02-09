@@ -2,6 +2,7 @@ import multer from '#core/config/multer'
 import ErrorRegistry from '#core/error/errorRegistry'
 import dotenv from 'dotenv'
 import { NextFunction, Request, Response } from 'express'
+import { MulterError } from 'multer'
 dotenv.config()
 
 const oldBaseUrl = process.env.AWS_S3_BUCKET_BASE_URL as string
@@ -10,16 +11,25 @@ const newBaseUrl = process.env.AWS_CLOUDFRONT_BASE_URL as string
 const replaceBaseUrl = (url: string): string => {
   return newBaseUrl + url.slice(oldBaseUrl.length)
 }
-
 const multipartParser = (contentType: string, limit: number) => {
   return (req: Request, res: Response, next: NextFunction) => {
     multer.array(contentType, limit)(req, res, (err) => {
+      if (err) {
+        if (!(err instanceof MulterError)) {
+          return next(ErrorRegistry.INTERNAL_SERVER_ERROR)
+        }
+        return next(ErrorRegistry.FILE_UPLOAD_FAILED)
+      }
+
       if (!Array.isArray(req.files)) {
         return next(ErrorRegistry.INTERNAL_SERVER_ERROR)
       }
 
       for (const file of req.files) {
         const multerFile = file as Express.MulterS3.File
+        if (!multerFile.mimetype.startsWith(contentType)) {
+          return next(ErrorRegistry.INVALID_CONTENT_TYPE)
+        }
         if (!multerFile.contentType.startsWith(contentType)) {
           return next(ErrorRegistry.INVALID_CONTENT_TYPE)
         }

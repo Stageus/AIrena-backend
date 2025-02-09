@@ -1,20 +1,23 @@
-import getAsyncRouter from '#asyncRouter'
+import controller from '#core/controller/index'
 import multipartParser from '#core/util/multipartParser'
-import MockWriteRequest from '#dto/request/MockWriteRequest./MockWriteRequest'
-import MockWriteResponse from '#dto/response/MockPostResponse'
+import MockWriteRequest from '#dto/request/MockWriteRequest/MockWriteRequest'
+import MockWriteResponse from '#dto/response/MockWriteResponse'
+import MockWriteService from '#service/MockWriteService'
 import { randomUUID } from 'crypto'
-import { Request, Response } from 'express'
+import express from 'express'
 
-export const mockRouter = getAsyncRouter()
+export const mockRouter = express.Router()
 
 mockRouter.post(
   '/write',
   multipartParser('image', 1),
-  async (
-    req: Request<{}, {}, MockWriteRequest, {}>,
-    res: Response<MockWriteResponse>,
-  ): Promise<any> => {
-    console.log(req.body)
+  controller(
+    null,
+    null,
+    MockWriteRequest,
+    MockWriteResponse,
+  )(async (req, res) => {
+    await MockWriteService.writeMock(1, req.body)
     return res.send(new MockWriteResponse(randomUUID()))
-  },
+  }),
 )

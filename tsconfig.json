@@ -15,7 +15,7 @@
       "#repository/*": ["src/repository/*.ts"],
       "#dto/*": ["src/dto/*.ts"],
       "#core/*": ["src/core/*.ts"],
-      "#domain/*": ["src/domain/*.ts"],
+      "#entity/*": ["src/entity/*.ts"],
       "#database/*": ["src/core/config/database/*.ts"],
       "#error/*": ["src/core/error/*.ts"],
       "#asyncRouter": ["src/core/getAsyncRouter/index.ts"]

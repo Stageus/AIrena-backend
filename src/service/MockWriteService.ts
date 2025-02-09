@@ -1,28 +1,53 @@
 import AIAdapter from '#adapter/AIAdapter'
-import QuizInfo from '#domain/QuizInfo'
-import MockWriteRequest from '#dto/request/MockWriteRequest./MockWriteRequest'
+import MockAdapter from '#adapter/MockAdapter'
+import MockWriteRequest from '#dto/request/MockWriteRequest/MockWriteRequest'
+import MockWriteResponse from '#dto/response/MockWriteResponse'
+import Image from '#entity/Image'
+import Mock from '#entity/Mock'
+import Quiz from '#entity/Quiz'
+import QuizInfo from '#entity/QuizInfo'
 
 export default class MockWriteService {
-  static async writeMock(mockWriteRequest: MockWriteRequest) {
+  static async writeMock(
+    memberIdx: number,
+    mockWriteRequest: MockWriteRequest,
+  ) {
     const quizCount = mockWriteRequest.quizCount
     const singleChoiceQuizCount = Math.floor(quizCount * 0.7)
     const textQuizCount = Math.ceil(quizCount * 0.3)
 
-    AIAdapter.getSingleChoiceQuizzes(
-      new QuizInfo(
-        mockWriteRequest.title,
-        mockWriteRequest.content,
-        mockWriteRequest.subject,
-        singleChoiceQuizCount,
+    const generatedQuizzes = await Promise.all([
+      AIAdapter.getSingleChoiceQuizzes(
+        new QuizInfo(
+          mockWriteRequest.title,
+          mockWriteRequest.description,
+          mockWriteRequest.subject,
+          singleChoiceQuizCount,
+        ),
       ),
-    )
-    AIAdapter.getTextQuizzes(
-      new QuizInfo(
-        mockWriteRequest.title,
-        mockWriteRequest.content,
-        mockWriteRequest.subject,
-        textQuizCount,
+      AIAdapter.getTextQuizzes(
+        new QuizInfo(
+          mockWriteRequest.title,
+          mockWriteRequest.description,
+          mockWriteRequest.subject,
+          textQuizCount,
+        ),
       ),
+    ])
+
+    const quizzes: Quiz[] = [...generatedQuizzes[0], ...generatedQuizzes[1]]
+
+    const mock = new Mock(
+      memberIdx,
+      mockWriteRequest.title,
+      mockWriteRequest.description,
+      quizzes.length,
     )
+
+    const image = new Image(mock.idx, mockWriteRequest.uploadUrls)
+
+    MockAdapter.insertMockData(mock, image, quizzes)
+
+    return new MockWriteResponse(mock.idx)
   }
 }

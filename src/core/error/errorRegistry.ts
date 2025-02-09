@@ -63,9 +63,21 @@ export default class ErrorRegistry {
   static readonly TEST_ERROR = new CustomError(400, 'TE001', '테스트 에러')
 
   // MULTER(MU)
-  static readonly INVALID_CONTENT_TYPE = new CustomError(
+  static readonly FILE_UPLOAD_FAILED = new CustomError(
     400,
     'MU001',
+    '파일 업로드에 실패했습니다',
+  )
+  static readonly INVALID_CONTENT_TYPE = new CustomError(
+    401,
+    'MU001',
     '지원하지 않는 파일 형식입니다',
+  )
+
+  // AI(AI)
+  static readonly AI_SERVER_CONNECTION_FAILED = new CustomError(
+    500,
+    'AI001',
+    'AI 서버와의 통신에 실패했습니다',
   )
 }
