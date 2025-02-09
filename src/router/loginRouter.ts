@@ -4,6 +4,7 @@ import LoginUserDataResponse from '#dto/response/loginUserDataResponse'
 import LoginService from '#service/loginService'
 import dotenv from 'dotenv'
 import { Request, Response } from 'express'
+import controller from 'src/core/controller/index.js'
 dotenv.config()
 
 const kakaoOauthUri = process.env.KAKAO_OAUTH_URI
@@ -24,12 +25,14 @@ loginRouter.get('/kakao', async (req: Request, res: Response) => {
 
 loginRouter.get(
   '/kakao/redirect',
-  async (
-    req: Request<{}, {}, {}, LoginRequest>,
-    res: Response<LoginUserDataResponse>,
-  ): Promise<any> => {
+  controller(
+    LoginRequest,
+    null,
+    null,
+    LoginUserDataResponse,
+  )(async (req, res) => {
     return res.send(await LoginService.getKakaoUserData(req.query.code))
-  },
+  }),
 )
 
 loginRouter.get('/google', async (req: Request, res: Response) => {
