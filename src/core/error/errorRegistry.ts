@@ -1,4 +1,3 @@
-import LoginAdapter from '#adapter/oAuthAdapter'
 import CustomError from './customError.js'
 
 export default class ErrorRegistry {
@@ -20,15 +19,30 @@ export default class ErrorRegistry {
     'US001',
     '사용자 정보가 존재하지 않습니다',
   )
+  static readonly DUPLICATED_ID = new CustomError(
+    409,
+    'US002',
+    '존재하는 ID 입니다.',
+  )
+  static readonly DUPLICATED_EMAIL = new CustomError(
+    409,
+    'US003',
+    '존재하는 Email입니다.',
+  )
   static readonly LOGIN_REQUIRED = new CustomError(
     401,
-    'US002',
+    'US004',
     '로그인이 필요합니다.',
   )
   static readonly ACCESS_DENIED = new CustomError(
     403,
-    'US003',
+    'US005',
     '접근 권한이 없습니다.',
+  )
+  static readonly PASSWORD_NOT_EQUAL = new CustomError(
+    400,
+    'US006',
+    '비밀번호가 일치하지않습니다',
   )
 
   // Mock Test(MO)

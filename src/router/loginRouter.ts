@@ -4,7 +4,7 @@ import LoginUserDataResponse from '#dto/response/loginUserDataResponse'
 import LoginService from '#service/loginService'
 import dotenv from 'dotenv'
 import { Request, Response } from 'express'
-import controller from 'src/core/controller/index.js'
+import controller from '../../src/core/controller/index.js'
 dotenv.config()
 
 const kakaoOauthUri = process.env.KAKAO_OAUTH_URI
