@@ -1,5 +1,6 @@
 import FindPasswordRequest from '#dto/request/FindPasswordRequest'
 import SignupRequest from '#dto/request/SignupRequest'
+import SignupVerifyRequest from '#dto/request/SignupVerifyRequest'
 import MemberService from '#service/MemberService'
 import express, { Request, Response } from 'express'
 import asyncify from 'express-asyncify'
@@ -29,5 +30,16 @@ userRouter.post(
     return res.send({
       message: '성공',
     })
+  },
+)
+
+/** 회원가입 인증 API */
+userRouter.post(
+  '/verify',
+  async (
+    req: Request<{}, {}, SignupVerifyRequest, {}>,
+    res: Response,
+  ): Promise<any> => {
+    await MemberService.userVerify(req.body) // 변수 이게 맞나?param으로 주면 이게 맞음 //query로 받으면 req.query 로로
   },
 )

@@ -1,6 +1,7 @@
 import { postgres } from '#database/postgres'
 import FindPasswordRequest from '#dto/request/FindPasswordRequest'
 import SignupRequest from '#dto/request/SignupRequest'
+import SignupVerifyRequest from '#dto/request/SignupVerifyRequest'
 import ErrorRegistry from '#error/errorRegistry'
 import MemberRepository from '#repository/MemberRepository'
 import dotenv from 'dotenv'
@@ -15,14 +16,16 @@ export default class UserService {
       throw ErrorRegistry.PASSWORD_NOT_EQUAL
     }
     // await MemberRepository.insertMember(id, password, email)
-    // redis에 이메일 정보를 저장합니다.
-    await MemberRepository.emailInfoSave(email)
-    // 토큰을 생성하여 메일로 보냅니다.
+    /** redis에 이메일 정보를 저장합니다.*/
+    await MemberRepository.saveEmailInfo(email)
+    /** 토큰을 생성하여 메일로 보냅니다.*/
     const secretKey: string = process.env.JWT_SIGNATURE_KEY || 'jwt-secret-key'
     const Token = jwt.sign(
       {
         userId: id,
         password: password,
+        provider: 'NORMAL',
+        role: 'USER',
       },
       secretKey,
       {
@@ -30,33 +33,7 @@ export default class UserService {
         expiresIn: '30m',
       },
     )
-    EmailSender.sendEmail(email, Token)
-    // const __filename = fileURLToPath(import.meta.url)
-    // const __dirname = path.dirname(__filename)
-    // const htmlContent = readFileSync(
-    //   path.join(__dirname, '../../../src/email/templates/confirmMail.html'),
-    //   'utf-8',
-    // )
-    // const logoImageUrl = path.join(
-    //   __dirname,
-    //   '../../../src/email/images/ai-rena-icon.png',
-    // )
-
-    // EmailSender.sendEmail(
-    //   {
-    //     to: email,
-    //     subject: 'AIrena 회원가입 인증 안내',
-    //     html: htmlContent,
-    //     attachments: [
-    //       {
-    //         filename: 'ai-rena-icon.png',
-    //         path: logoImageUrl,
-    //         cid: 'logoImage',
-    //       },
-    //     ],
-    //   },
-    //   token,
-    // )
+    await EmailSender.sendEmail(email, Token)
   }
 
   static async findPassword(findPasswordRequest: FindPasswordRequest) {
@@ -65,5 +42,10 @@ export default class UserService {
       'SELECT * FROM test.member WHERE id = $1 AND email = $2',
       [id, email],
     )
+  }
+
+  static async userVerify(signupVerifyRequest: SignupVerifyRequest) {
+    const { email } = signupVerifyRequest
+    await MemberRepository.approveEmail(email)
   }
 }
