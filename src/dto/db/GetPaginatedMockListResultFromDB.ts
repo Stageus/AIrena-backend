@@ -1,4 +1,4 @@
-export default interface GetLikeDescMockListResultFromDB {
+export default interface GetPaginatedMockListResultFromDB {
   totalCount: number
   mocks: {
     idx: number

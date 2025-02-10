@@ -21,7 +21,7 @@ export default class MockAdapter {
     offset: number,
     titleToSearch: string,
   ): Promise<MockList> {
-    const result = await MockRepository.getNewMockFilteredList(
+    const result = await MockRepository.getFilteredNewMockList(
       titleToSearch,
       displayCount,
       offset,
@@ -35,8 +35,20 @@ export default class MockAdapter {
     offset: number,
     titleToSearch: string,
   ): Promise<MockList> {
-    const result = await MockRepository.getLikeDescMockFilteredList(
+    const result = await MockRepository.getFilteredLikeDescMockList(
       titleToSearch,
+      displayCount,
+      offset,
+    )
+    return MockList.from(currentPageNumber, displayCount, result)
+  }
+
+  static async getMockList(
+    currentPageNumber: number,
+    displayCount: number,
+    offset: number,
+  ): Promise<MockList> {
+    const result = await MockRepository.getPaginatedMockList(
       displayCount,
       offset,
     )

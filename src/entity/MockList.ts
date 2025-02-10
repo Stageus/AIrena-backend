@@ -1,4 +1,4 @@
-import GetLikeDescMockListResultFromDB from '#dto/db/GetLikeDescMockListResultFromDB'
+import GetLikeDescMockListResultFromDB from '#dto/db/GetPaginatedMockListResultFromDB'
 
 export default class MockList {
   firstPageNumber: number

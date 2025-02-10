@@ -1,10 +1,51 @@
 import { postgres } from '#config/postgres'
-import GetLikeDescMockListResultFromDB from '#dto/db/GetLikeDescMockListResultFromDB'
+import GetPaginatedMockListResultFromDB from '#dto/db/GetPaginatedMockListResultFromDB'
 import Quiz from '#entity/Quiz'
 import { UUID } from 'crypto'
 
 export default class MockRepository {
-  static async getLikeDescMockFilteredList(
+  static async getPaginatedMockList(displayCount: number, offset: number) {
+    return (
+      await postgres.query(
+        `
+        WITH total_mock AS (
+            SELECT
+                idx, 
+                title, 
+                member_idx,
+                created_at,
+                like_count
+            FROM mock
+            WHERE is_deleted = false
+        ),
+        new_paginated AS (
+            SELECT *
+            FROM total_mock
+            ORDER BY created_at DESC
+            LIMIT $1 OFFSET $2
+        ),
+        nickname_added AS (
+            SELECT
+                new_paginated.idx,
+                new_paginated.title,
+                new_paginated.created_at as createdAt,
+                new_paginated.like_count as likeCount,
+                member.nickname as writerNickname
+            FROM new_paginated
+            JOIN member ON member.idx = new_paginated.member_idx
+        )
+        SELECT json_build_object(
+            'totalCount', (SELECT COUNT(*) FROM total_mock),
+            'mocks', (SELECT json_agg(p) 
+            FROM nickname_added as p)
+        )
+        `,
+        [displayCount, offset],
+      )
+    ).rows[0].json_build_object as GetPaginatedMockListResultFromDB
+  }
+
+  static async getFilteredLikeDescMockList(
     titleToSearch: string,
     displayCount: number,
     offset: number,
@@ -46,10 +87,10 @@ export default class MockRepository {
         `,
         [titleToSearch, displayCount, offset],
       )
-    ).rows[0].json_build_object as GetLikeDescMockListResultFromDB
+    ).rows[0].json_build_object as GetPaginatedMockListResultFromDB
   }
 
-  static async getNewMockFilteredList(
+  static async getFilteredNewMockList(
     titleToSearch: string,
     displayCount: number,
     offset: number,
@@ -91,7 +132,7 @@ export default class MockRepository {
         `,
         [titleToSearch, displayCount, offset],
       )
-    ).rows[0].json_build_object as GetLikeDescMockListResultFromDB
+    ).rows[0].json_build_object as GetPaginatedMockListResultFromDB
   }
 
   static async insertMockData(
