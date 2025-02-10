@@ -4,6 +4,7 @@ import SignupRequest from '#dto/request/SignupRequest'
 import SignupVerifyRequest from '#dto/request/SignupVerifyRequest'
 import MemberService from '#service/MemberService'
 import express, { Request, Response } from 'express'
+import RandomNicknameGenerator from '../nickname/randomNicknameGenerator.js'
 
 export const userRouter = express.Router()
 
@@ -79,3 +80,11 @@ userRouter.post(
     })
   },
 )
+
+userRouter.get('/test', async (req: Request, res: Response): Promise<any> => {
+  const nickname = RandomNicknameGenerator.generateNickname() // 랜덤 생성기 자리
+  console.log(nickname)
+  return res.send({
+    name: nickname,
+  })
+})

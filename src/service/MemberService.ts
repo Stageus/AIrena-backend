@@ -7,6 +7,7 @@ import MemberRepository from '#repository/MemberRepository'
 import dotenv from 'dotenv'
 import jwt from 'jsonwebtoken'
 import EmailSender from '../email/mailSender/EmailSender.js'
+import RandomNicknameGenerator from '../nickname/randomNicknameGenerator.js'
 dotenv.config()
 
 export default class UserService {
@@ -49,7 +50,8 @@ export default class UserService {
     const { token } = signupVerifyRequest
     const secretKey = process.env.JWT_SIGNATURE_KEY || 'jwt-secret-key'
     const data: any = jwt.verify(token, secretKey)
-    const nickname = 'young' // 랜덤 생성기 자리
+    const nickname = await RandomNicknameGenerator.generateNickname() // 랜덤 생성기 자리
+    console.log(nickname)
     /** 이메일 인증 확인 */
     await MemberRepository.emailCheck(data.email)
     /** 이메일 인증 처리 후 토큰 데이터로 DB에 사용자 저장 */
@@ -61,7 +63,7 @@ export default class UserService {
     ) //
   }
 
-  /** 닉네임 변경 서비스 로직 */
+  // /** 닉네임 변경 서비스 로직 */
   // static async nicknameChange(
   //   header: Request,
   //   nicknameChangeRequest: NicknameChangeRequest,
