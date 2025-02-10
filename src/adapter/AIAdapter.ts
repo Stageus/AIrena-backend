@@ -5,7 +5,7 @@ import TextQuizResponseFromAI, {
   TextQuiz,
 } from '#dto/ai/response/TextQuizResponseFromAI'
 import Quiz from '#entity/Quiz'
-import ErrorRegistry from '#error/errorRegistry'
+import ErrorRegistry from '#error/ErrorRegistry'
 import dotenv from 'dotenv'
 import QuizInfo from 'src/entity/QuizInfo.js'
 dotenv.config()

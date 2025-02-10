@@ -1,8 +1,99 @@
 import { postgres } from '#config/postgres'
+import GetLikeDescMockListResultFromDB from '#dto/db/GetLikeDescMockListResultFromDB'
 import Quiz from '#entity/Quiz'
 import { UUID } from 'crypto'
 
 export default class MockRepository {
+  static async getLikeDescMockFilteredList(
+    titleToSearch: string,
+    displayCount: number,
+    offset: number,
+  ) {
+    return (
+      await postgres.query(
+        `
+        WITH filtered AS (
+            SELECT
+                idx, 
+                title, 
+                member_idx,
+                created_at,
+                like_count
+            FROM mock
+            WHERE title LIKE $1 AND is_deleted = false
+        ),
+        like_count_paginated AS (
+            SELECT *
+            FROM filtered
+            ORDER BY like_count DESC
+            LIMIT $2 OFFSET $3
+        ),
+        nickname_added AS (
+            SELECT
+                like_count_paginated.idx,
+                like_count_paginated.title,
+                like_count_paginated.like_count as likeCount,
+                like_count_paginated.created_at as createdAt,
+                member.nickname as writerNickname
+            FROM like_count_paginated
+            JOIN member ON member.idx = like_count_paginated.member_idx
+        )
+        SELECT json_build_object(
+          'totalCount', (SELECT COUNT(*) FROM filtered),
+          'mocks', (SELECT json_agg(p)
+          FROM nickname_added as p)
+        );
+        `,
+        [titleToSearch, displayCount, offset],
+      )
+    ).rows[0].json_build_object as GetLikeDescMockListResultFromDB
+  }
+
+  static async getNewMockFilteredList(
+    titleToSearch: string,
+    displayCount: number,
+    offset: number,
+  ) {
+    return (
+      await postgres.query(
+        `
+        WITH filtered AS (
+            SELECT
+                idx, 
+                title, 
+                member_idx,
+                created_at,
+                like_count
+            FROM mock
+            WHERE title LIKE $1 AND is_deleted = false
+        ),
+        new_paginated AS (
+            SELECT *
+            FROM filtered
+            ORDER BY created_at DESC
+            LIMIT $2 OFFSET $3
+        ),
+        nickname_added AS (
+            SELECT
+                new_paginated.idx,
+                new_paginated.title,
+                new_paginated.created_at as createdAt,
+                new_paginated.like_count as likeCount,
+                member.nickname as writerNickname
+            FROM new_paginated
+            JOIN member ON member.idx = new_paginated.member_idx
+        )
+        SELECT json_build_object(
+            'totalCount', (SELECT COUNT(*) FROM filtered),
+            'mocks', (SELECT json_agg(p) 
+            FROM nickname_added as p)
+        )
+        `,
+        [titleToSearch, displayCount, offset],
+      )
+    ).rows[0].json_build_object as GetLikeDescMockListResultFromDB
+  }
+
   static async insertMockData(
     memberIdx: number,
     mockIdx: UUID,

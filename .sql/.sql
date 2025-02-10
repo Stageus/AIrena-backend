@@ -11,7 +11,7 @@ CREATE TABLE "mock_score" (
     "created_at" TIMESTAMP NOT NULL
 );
 
-CREATE TABLE "like" (
+CREATE TABLE "like_history" (
     "idx" serial NOT NULL,
     "member_idx" INTEGER NOT NULL,
     "article_idx" UUID NOT NULL,
@@ -24,9 +24,10 @@ CREATE TABLE "mock" (
     "title" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "quiz_count" INTEGER NOT NULL,
+    "like_count" INTEGER DEFAULT 0 NOT NULL,
     "created_at" TIMESTAMP NOT NULL,
     "updated_at" TIMESTAMP DEFAULT NOW() NOT NULL,
-    "is_deleted" BOOLEAN DEFAULT FALSE NOT NULL
+    "is_deleted" BOOLEAN DEFAULT FALSE NOT NULL,
 );
 
 CREATE TABLE "image" (
@@ -97,7 +98,7 @@ CREATE TABLE "email_send" (
 -- 각 테이블의 Primary Key 설정
 ALTER TABLE "mock_score" ADD CONSTRAINT "PK_MOCK_SCORE" PRIMARY KEY ("idx");
 
-ALTER TABLE "like" ADD CONSTRAINT "PK_LIKE" PRIMARY KEY ("idx");
+ALTER TABLE "like_history" ADD CONSTRAINT "PK_LIKE_COUNT" PRIMARY KEY ("idx");
 
 ALTER TABLE "mock" ADD CONSTRAINT "PK_MOCK" PRIMARY KEY ("idx");
 
@@ -124,8 +125,8 @@ ALTER TABLE "mock_score"
   FOREIGN KEY ("mock_idx")
   REFERENCES "mock"("idx");
 
-ALTER TABLE "like"
-  ADD CONSTRAINT "FK_like_member"
+ALTER TABLE "like_history"
+  ADD CONSTRAINT "FK_likehistory_member"
   FOREIGN KEY ("member_idx")
   REFERENCES "member"("idx");
 
