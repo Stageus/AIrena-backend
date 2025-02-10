@@ -40,6 +40,7 @@ export default class UserService {
     )
     /** 토큰을 포함하여 인증 메일을 전송 */
     EmailSender.sendEmail(email, Token)
+    /** 포스트맨 결과 값 전송 용 */
     return Token
   }
 

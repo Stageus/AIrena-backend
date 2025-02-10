@@ -18,7 +18,8 @@
       "#entity/*": ["src/entity/*.ts"],
       "#database/*": ["src/core/config/database/*.ts"],
       "#error/*": ["src/core/error/*.ts"],
-      "#asyncRouter": ["src/core/getAsyncRouter/index.ts"]
+      "#asyncRouter": ["src/core/getAsyncRouter/index.ts"],
+      "#nickname": ["src/nickname/*.ts"]
     }
   },
   "include": ["src/**/*.ts", "index.ts"], // 포함할 파일 및 폴더
