@@ -1,4 +1,4 @@
-import ErrorRegistry from '#core/error/errorRegistry'
+import ErrorRegistry from '#error/ErrorRegistry'
 
 interface MockSearchRequestParams {
   current: number

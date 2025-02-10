@@ -1,6 +1,6 @@
 import { postgres } from '#config/postgres'
 import { redis } from '#config/redis'
-import ErrorRegistry from '#error/errorRegistry'
+import ErrorRegistry from '#error/ErrorRegistry'
 export default class MemberRepository {
   /**아이디 중복 체크 */
   static async checkIdDuplicate(id: string) {
