@@ -1,7 +1,7 @@
 import controller from '#controller'
-import FindPasswordRequest from '#dto/request/FindPasswordRequest'
-import SignupRequest from '#dto/request/SignupRequest'
-import SignupVerifyRequest from '#dto/request/SignupVerifyRequest'
+import FindPasswordRequest from '#dto/frontend/request/FindPasswordRequest'
+import SignupRequest from '#dto/frontend/request/SignupRequest'
+import SignupVerifyRequest from '#dto/frontend/request/SignupVerifyRequest'
 import MemberService from '#service/MemberService'
 import express, { Request, Response } from 'express'
 

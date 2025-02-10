@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 
-type Constructor<T> = new (data: any) => T
+type Constructor<T> = new (...data: any) => T
 
 /**
  * @param {Constructor<QueryType> | null} QueryClass
@@ -35,9 +35,15 @@ const controller = <
       next: NextFunction,
     ) => {
       try {
-        if (QueryClass) new QueryClass(req.query)
-        if (PathClass) new PathClass(req.params)
-        if (BodyClass) new BodyClass(req.body)
+        if (QueryClass) {
+          req.query = new QueryClass(req.query)
+        }
+        if (PathClass) {
+          req.params = new PathClass(req.params)
+        }
+        if (BodyClass) {
+          req.body = new BodyClass(req.body)
+        }
 
         await handler(req, res)
       } catch (error) {

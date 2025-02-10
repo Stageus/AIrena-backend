@@ -45,7 +45,7 @@ export default class ErrorRegistry {
     '비밀번호가 일치하지않습니다',
   )
 
-  // Mock Test(MO)
+  // Mock(MO)
   static readonly CAN_NOT_FIND_TEST = new CustomError(
     404,
     'MO001',
