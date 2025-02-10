@@ -1,14 +1,14 @@
 import { testPostgresConnection } from '#database/postgres'
 import globalExceptionHandler from '#error/globalExceptionHandler'
 import { loginRouter } from '#router/loginRouter'
-import { userRouter } from '#router/memberRouter'
+import { memberRouter } from '#router/memberRouter'
 import { mockRouter } from '#router/mockRouter'
 import { testRouter } from '#router/testRouter'
 import express from 'express'
 
 const app = express()
 app.use(express.json())
-app.use('/user', userRouter)
+app.use('/member', memberRouter)
 app.use('/login', loginRouter)
 app.use('/mock', mockRouter)
 app.use('/test', testRouter)

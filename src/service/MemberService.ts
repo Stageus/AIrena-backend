@@ -12,7 +12,7 @@ import EmailSender from '../email/mailSender/EmailSender.js'
 import RandomNicknameGenerator from '../nickname/randomNicknameGenerator.js'
 dotenv.config()
 
-export default class UserService {
+export default class MemberService {
   /** 인증 이메일 전송 서비스 로직 */
   static async emailSend(signupRequest: SignupRequest) {
     const { id, password, passwordCheck, email } = signupRequest
@@ -38,17 +38,15 @@ export default class UserService {
       secretKey,
       {
         issuer: 'gb6105',
-        expiresIn: '10m',
+        expiresIn: '60m',
       },
     )
     /** 토큰을 포함하여 인증 메일을 전송 */
     EmailSender.sendEmail(email, Token)
-    /** 포스트맨 결과 값 전송 용 */
-    return Token
   }
 
   /** 회원가입 인증 서비스 로직 */
-  static async userVerify(signupVerifyRequest: SignupVerifyRequest) {
+  static async verifySignup(signupVerifyRequest: SignupVerifyRequest) {
     const { token } = signupVerifyRequest
     const secretKey = process.env.JWT_SIGNATURE_KEY || 'jwt-secret-key'
     const data: any = jwt.verify(token, secretKey)
