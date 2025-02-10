@@ -1,4 +1,4 @@
-import { postgres } from '#core/config/database/postgres'
+import { postgres } from '#config/postgres'
 import Quiz from '#entity/Quiz'
 import { UUID } from 'crypto'
 

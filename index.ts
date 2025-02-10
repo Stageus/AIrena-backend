@@ -1,4 +1,4 @@
-import { testPostgresConnection } from '#database/postgres'
+import { testPostgresConnection } from '#config/postgres'
 import globalExceptionHandler from '#error/globalExceptionHandler'
 import { loginRouter } from '#router/loginRouter'
 import { userRouter } from '#router/memberRouter'
@@ -8,8 +8,8 @@ import express from 'express'
 
 const app = express()
 app.use(express.json())
-app.use('/user', userRouter)
 app.use('/login', loginRouter)
+app.use('/user', userRouter)
 app.use('/mock', mockRouter)
 app.use('/test', testRouter)
 app.use(globalExceptionHandler)

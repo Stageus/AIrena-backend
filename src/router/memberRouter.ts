@@ -1,4 +1,4 @@
-import controller from '#core/controller/index'
+import controller from '#controller'
 import FindPasswordRequest from '#dto/request/FindPasswordRequest'
 import SignupRequest from '#dto/request/SignupRequest'
 import SignupVerifyRequest from '#dto/request/SignupVerifyRequest'

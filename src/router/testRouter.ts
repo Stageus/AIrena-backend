@@ -1,4 +1,4 @@
-import controller from '#core/controller/index'
+import controller from '#controller'
 import ErrorRegistry from '#error/errorRegistry'
 import express from 'express'
 

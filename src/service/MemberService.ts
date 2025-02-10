@@ -1,4 +1,4 @@
-import { postgres } from '#database/postgres'
+import { postgres } from '#config/postgres'
 import FindPasswordRequest from '#dto/request/FindPasswordRequest'
 import SignupRequest from '#dto/request/SignupRequest'
 import SignupVerifyRequest from '#dto/request/SignupVerifyRequest'

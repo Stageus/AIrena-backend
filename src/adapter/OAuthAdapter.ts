@@ -1,13 +1,13 @@
 import dotenv from 'dotenv'
 dotenv.config()
 
-const kakaoOauthUri = process.env.KAKAO_OAUTH_URI || ''
-const kakaoClientId = process.env.KAKAO_CLIENT_ID || ''
-const kakaoRedirectUri = process.env.KAKAO_REDIRECT_URI || ''
-const googleClientId = process.env.GOOGLE_CLIENT_ID || ''
-const googleClientSecert = process.env.GOOGLE_CLIENT_SECRET || ''
-const googleRedirectUri = process.env.GOOGLE_REDIRECT_URI || ''
-const googleoOauthTokenUrl = process.env.GOOGLE_OAUTH_TOKEN_URL || ''
+const kakaoOauthUri = process.env.KAKAO_OAUTH_URI as string
+const kakaoClientId = process.env.KAKAO_CLIENT_ID as string
+const kakaoRedirectUri = process.env.KAKAO_REDIRECT_URI as string
+const googleClientId = process.env.GOOGLE_CLIENT_ID as string
+const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET as string
+const googleRedirectUri = process.env.GOOGLE_REDIRECT_URI as string
+const googleOauthTokenUrl = process.env.GOOGLE_OAUTH_TOKEN_URL as string
 
 export default class OAuthAdapter {
   /**code를 통해서 카카오 Oauth토큰을 요청 및 획득*/
@@ -23,12 +23,12 @@ export default class OAuthAdapter {
 
   /**code를 통해서 구글 Oauth토큰을 요청 및 획득 */
   static async getGoogleToken(code: string): Promise<string> {
-    const tokenResponse = await fetch(googleoOauthTokenUrl, {
+    const tokenResponse = await fetch(googleOauthTokenUrl, {
       method: 'POST',
       body: new URLSearchParams({
         code: code,
         client_id: googleClientId,
-        client_secret: googleClientSecert,
+        client_secret: googleClientSecret,
         redirect_uri: googleRedirectUri,
         grant_type: 'authorization_code',
       }),

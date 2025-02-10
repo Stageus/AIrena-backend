@@ -1,4 +1,4 @@
-import CustomError from '#error/customError'
+import CustomError from '#error/CustomError'
 
 export default class ErrorInfo {
   status: number
