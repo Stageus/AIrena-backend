@@ -1,10 +1,12 @@
 import { postgres } from '#database/postgres'
 import FindPasswordRequest from '#dto/request/FindPasswordRequest'
+import NicknameChangeRequest from '#dto/request/NicknameChangeRequest'
 import SignupRequest from '#dto/request/SignupRequest'
 import SignupVerifyRequest from '#dto/request/SignupVerifyRequest'
 import ErrorRegistry from '#error/errorRegistry'
 import MemberRepository from '#repository/MemberRepository'
 import dotenv from 'dotenv'
+import { Request } from 'express'
 import jwt from 'jsonwebtoken'
 import EmailSender from '../email/mailSender/EmailSender.js'
 import RandomNicknameGenerator from '../nickname/randomNicknameGenerator.js'
@@ -63,17 +65,28 @@ export default class UserService {
     ) //
   }
 
-  // /** 닉네임 변경 서비스 로직 */
-  // static async nicknameChange(
-  //   header: Request,
-  //   nicknameChangeRequest: NicknameChangeRequest,
-  // ) {
-  //   const token = JSON.parse(header)
-  //   const secretKey = process.env.JWT_SIGNATURE_KEY || 'jwt-secret-key'
-  //   const data: any = jwt.verify(token, secretKey)
-  //   const { nickname } = nicknameChangeRequest
-  //   await MemberRepository.changeNickname(nickname, data.userId)
-  // }
+  /** 닉네임 변경 서비스 로직 */
+  static async nicknameChange(
+    req: Request,
+    nicknameChangeRequest: NicknameChangeRequest,
+  ) {
+    const getToken = (req: Request): string | null => {
+      const authHeader = req.headers['authorization']
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        return authHeader.slice(7) // "Bearer " 제거 후 토큰 반환
+      }
+      return null
+    }
+    const token = getToken(req)
+    if (!token) {
+      throw new Error('Token not provided or invalid.')
+    }
+
+    const secretKey = process.env.JWT_SIGNATURE_KEY || 'jwt-secret-key'
+    const data: any = jwt.verify(token, secretKey)
+    const { nickname } = nicknameChangeRequest
+    await MemberRepository.changeNickname(nickname, data.userId)
+  }
 
   /** 비밀번호 변경 서비스 로직 */
   static async findPassword(findPasswordRequest: FindPasswordRequest) {
