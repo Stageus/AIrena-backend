@@ -3,7 +3,7 @@ name: PR 제출 시 코드 검사
 on:
   pull_request:
     paths-ignore:
-     - 'src/email/templates/confirmMail.html'
+      - '../src/email/templates/confirmMail.html'
     branches:
       - main
       - develop

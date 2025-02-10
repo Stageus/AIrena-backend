@@ -47,3 +47,15 @@ mockRouter.get(
     return res.send(await MockGetService.getMockList(req.query))
   }),
 )
+
+mockRouter.get(
+  '/:idx',
+  controller(
+    MockListRequest,
+    null,
+    null,
+    MockListResponse,
+  )(async (req, res) => {
+    return res.send(await MockGetService.getMockList(req.query))
+  }),
+)
