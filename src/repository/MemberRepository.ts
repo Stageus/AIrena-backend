@@ -7,7 +7,6 @@ export default class MemberRepository {
     const checkId = await postgres.query('SELECT * FROM member WHERE id = $1', [
       id,
     ])
-    console.log(checkId)
     if (checkId.rowCount == 1) {
       throw ErrorRegistry.DUPLICATED_ID
     }
@@ -48,8 +47,6 @@ export default class MemberRepository {
   /** 이메일 전송 횟수를 증가 시킵니다. */
   static async increaseEmailCount() {
     await redis.hincrby('email', 'sendCount', 1)
-    console.log(await redis.hget('email', 'address'))
-    console.log(await redis.hget('email', 'sendCount'))
   }
 
   /** redis에 해당 이메일이 있는지를 확인하여 인증합니다. */

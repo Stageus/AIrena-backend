@@ -1,6 +1,7 @@
 import { Redis } from '@upstash/redis'
-
+import dotenv from 'dotenv'
+dotenv.config()
 export const redis = new Redis({
-  url: 'https://diverse-newt-12631.upstash.io',
-  token: 'ATFXAAIjcDE5NDIxNzEzZTI2YjQ0NWQyOWI2YjY5NzQ2NTRkODQwNnAxMA',
+  url: process.env.UPSTASH_REDIS_URL,
+  token: process.env.UPSTASH_REDIS_TOKEN,
 })

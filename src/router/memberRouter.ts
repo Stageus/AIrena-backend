@@ -83,7 +83,6 @@ userRouter.post(
 
 userRouter.get('/test', async (req: Request, res: Response): Promise<any> => {
   const nickname = RandomNicknameGenerator.generateNickname() // 랜덤 생성기 자리
-  console.log(nickname)
   return res.send({
     name: nickname,
   })

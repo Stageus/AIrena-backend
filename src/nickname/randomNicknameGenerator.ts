@@ -6,11 +6,9 @@ export default class RandomNicknameGenerator {
     let modifierRandomNumber: number = Math.floor(
       Math.random() * (modifierList.length - 0),
     )
-    console.log(modifierRandomNumber)
     let nicknameRandomNumber: number = Math.floor(
       Math.random() * (nicknameList.length - 0),
     )
-    console.log(nicknameRandomNumber)
     let randomNickname: string = `${modifierList[modifierRandomNumber]} ${nicknameList[nicknameRandomNumber]}`
     return randomNickname
   }
