@@ -39,20 +39,21 @@ memberRouter.post(
     })
     // return res.sendStatus(201)
   },
-),
-  /** 회원가입 인증 API */
-  memberRouter.get(
-    '/verify',
-    controller(
-      EmailVerifyRequest,
-      null,
-      null,
-      null,
-    )(async (req, res) => {
-      await MemberService.verifySignup(req.query)
-      return res.sendStatus(201)
-    }),
-  )
+)
+/** 회원가입 인증 API */
+memberRouter.get(
+  '/verify',
+  controller(
+    EmailVerifyRequest,
+    null,
+    null,
+    null,
+  )(async (req, res) => {
+    await MemberService.verifySignup(req.query)
+    // return res.sendStatus(201)
+    return res.redirect(process.env.FRONTEND_SERVER_URL as string)
+  }),
+)
 
 /** 닉네임 변경 API */
 memberRouter.patch(

@@ -24,7 +24,7 @@ export default class EmailSender {
       path.join(__dirname, '../../../../src/email/templates/confirmMail.html'),
       'utf-8',
     )
-    const verifyUrl = `${process.env.BACKEND_SERVER_URL as string}/member/verify?token=${token}`
+    const verifyUrl = `${process.env.FRONTEND_SERVER_URL as string}/signup/verify?token=${token}`
     console.log(verifyUrl)
     htmlContent = htmlContent.replace('{{verifyUrl}}', verifyUrl)
 
