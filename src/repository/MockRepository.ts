@@ -1,9 +1,32 @@
 import { postgres } from '#config/postgres'
-import GetPaginatedMockListResultFromDB from '#dto/db/GetPaginatedMockListResultFromDB'
+import MockResultFromDB from '#dto/db/MockResultFromDB'
+import PaginatedMockListResultFromDB from '#dto/db/PaginatedMockListResultFromDB'
 import Quiz from '#entity/Quiz'
 import { UUID } from 'crypto'
 
 export default class MockRepository {
+  static async getMock(idx: UUID) {
+    return (
+      await postgres.query(
+        `
+        SELECT
+            mock.idx,
+            mock.title,
+            mock.description,
+            mock.created_at as "createdAt",
+            mock.quiz_count as "quizCount",
+            mock.like_count as "likeCount",
+            member.nickname as "writerNickname",
+            image.urls as images
+        FROM mock
+        JOIN member ON member.idx = mock.member_idx
+        JOIN image ON image.article_idx = mock.idx
+        WHERE mock.idx = $1 AND mock.is_deleted = false
+        `,
+        [idx],
+      )
+    ).rows[0] as MockResultFromDB
+  }
   static async getPaginatedMockList(displayCount: number, offset: number) {
     return (
       await postgres.query(
@@ -28,9 +51,9 @@ export default class MockRepository {
             SELECT
                 new_paginated.idx,
                 new_paginated.title,
-                new_paginated.created_at as createdAt,
-                new_paginated.like_count as likeCount,
-                member.nickname as writerNickname
+                new_paginated.created_at as "createdAt",
+                new_paginated.like_count as "likeCount",
+                member.nickname as "writerNickname"
             FROM new_paginated
             JOIN member ON member.idx = new_paginated.member_idx
         )
@@ -42,7 +65,7 @@ export default class MockRepository {
         `,
         [displayCount, offset],
       )
-    ).rows[0].json_build_object as GetPaginatedMockListResultFromDB
+    ).rows[0].json_build_object as PaginatedMockListResultFromDB
   }
 
   static async getFilteredLikeDescMockList(
@@ -73,9 +96,9 @@ export default class MockRepository {
             SELECT
                 like_count_paginated.idx,
                 like_count_paginated.title,
-                like_count_paginated.like_count as likeCount,
-                like_count_paginated.created_at as createdAt,
-                member.nickname as writerNickname
+                like_count_paginated.like_count as "likeCount",
+                like_count_paginated.created_at as "createdAt",
+                member.nickname as "writerNickname"
             FROM like_count_paginated
             JOIN member ON member.idx = like_count_paginated.member_idx
         )
@@ -87,7 +110,7 @@ export default class MockRepository {
         `,
         [titleToSearch, displayCount, offset],
       )
-    ).rows[0].json_build_object as GetPaginatedMockListResultFromDB
+    ).rows[0].json_build_object as PaginatedMockListResultFromDB
   }
 
   static async getFilteredNewMockList(
@@ -118,8 +141,8 @@ export default class MockRepository {
             SELECT
                 new_paginated.idx,
                 new_paginated.title,
-                new_paginated.created_at as createdAt,
-                new_paginated.like_count as likeCount,
+                new_paginated.created_at as "createdAt",
+                new_paginated.like_count as "likeCount",
                 member.nickname as writerNickname
             FROM new_paginated
             JOIN member ON member.idx = new_paginated.member_idx
@@ -132,7 +155,7 @@ export default class MockRepository {
         `,
         [titleToSearch, displayCount, offset],
       )
-    ).rows[0].json_build_object as GetPaginatedMockListResultFromDB
+    ).rows[0].json_build_object as PaginatedMockListResultFromDB
   }
 
   static async insertMockData(

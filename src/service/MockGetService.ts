@@ -1,6 +1,8 @@
 import MockAdapter from '#adapter/MockAdapter'
+import MockDetailRequest from '#dto/frontend/request/MockDetailRequest'
 import MockListRequest from '#dto/frontend/request/MockListRequest'
 import MockSearchRequest from '#dto/frontend/request/MockSearchRequest'
+import MockDetailResponse from '#dto/frontend/response/MockDeatailResponse'
 import MockListResponse from '#dto/frontend/response/MockListResponse'
 
 export default class MockGetService {
@@ -50,5 +52,13 @@ export default class MockGetService {
     )
 
     return MockListResponse.of(result)
+  }
+
+  static async getMockDetail(
+    request: MockDetailRequest,
+  ): Promise<MockDetailResponse> {
+    const result = await MockAdapter.getMockDetail(request.idx)
+    console.log(result)
+    return MockDetailResponse.of(result)
   }
 }

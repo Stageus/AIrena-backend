@@ -1,7 +1,9 @@
 import controller from '#controller'
+import MockDetailRequest from '#dto/frontend/request/MockDetailRequest'
 import MockListRequest from '#dto/frontend/request/MockListRequest'
 import MockSearchRequest from '#dto/frontend/request/MockSearchRequest'
 import MockWriteRequest from '#dto/frontend/request/MockWriteRequest'
+import MockDetailResponse from '#dto/frontend/response/MockDeatailResponse'
 import MockListResponse from '#dto/frontend/response/MockListResponse'
 import MockWriteResponse from '#dto/frontend/response/MockWriteResponse'
 import MockGetService from '#service/MockGetService'
@@ -51,11 +53,11 @@ mockRouter.get(
 mockRouter.get(
   '/:idx',
   controller(
-    MockListRequest,
     null,
+    MockDetailRequest,
     null,
-    MockListResponse,
+    MockDetailResponse,
   )(async (req, res) => {
-    return res.send(await MockGetService.getMockList(req.query))
+    return res.send(await MockGetService.getMockDetail(req.params))
   }),
 )
