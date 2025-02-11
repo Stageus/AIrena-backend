@@ -73,13 +73,15 @@ memberRouter.patch(
 /** 비밀번호 찾기 API */
 memberRouter.post(
   '/find/password',
-  async (
-    req: Request<{}, {}, FindPasswordRequest, {}>,
-    res: Response,
-  ): Promise<any> => {
+  controller(
+    null,
+    null,
+    FindPasswordRequest,
+    null,
+  )(async (req, res): Promise<any> => {
     await MemberService.findPassword(req.body)
     return res.sendStatus(201)
-  },
+  }),
 )
 
 /** 비밀번호 변경 API */
@@ -105,7 +107,7 @@ memberRouter.post(
     NormalLoginRequest,
     null,
   )(async (req, res) => {
-    return res.send(await MemberService.normalLogin(req.body, res))
+    return res.send(await MemberService.attemptNormalLogin(req.body, res))
   }),
 )
 

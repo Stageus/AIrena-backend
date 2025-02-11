@@ -8,7 +8,7 @@ import FindPasswordResponse from '#dto/frontend/response/FindPasswordResponse'
 import ErrorRegistry from '#error/ErrorRegistry'
 import MemberRepository from '#repository/MemberRepository'
 import EmailSender from '#util/email/mailSender/EmailSender'
-import Token from '#util/token'
+import Token from '#util/Token'
 import dotenv from 'dotenv'
 import { Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
@@ -105,12 +105,11 @@ export default class MemberService {
   ) {
     const { password } = passwordChangeRequest
     const data: any = Token.getToken(req)
-    console.log(data)
     await MemberRepository.updateMemberPassword(password, data.userId)
   }
 
   /** 일반 로그인 서브시 로직*/
-  static async normalLogin(
+  static async attemptNormalLogin(
     normalLoginRequest: NormalLoginRequest,
     res: Response,
   ) {
