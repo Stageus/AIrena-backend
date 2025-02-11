@@ -7,3 +7,9 @@ export const redis = new Redis({
 
   token: process.env.UPSTASH_REDIS_TOKEN,
 })
+
+export default class RedisReset {
+  static clearExpiredMemberData = () => {
+    let currentTime = Date.now()
+  }
+}

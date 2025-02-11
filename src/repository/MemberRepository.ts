@@ -39,9 +39,14 @@ export default class MemberRepository {
   }
   /** 인증 이메일 정보를 저장합니다.  */
   static async saveEmailInfo(email: string): Promise<void> {
+    const now = new Date() // 현재 시간
+    now.setHours(0, 0, 0, 0) // 현재 시간에서 다음날 00시로 설정
+    console.log(now.setHours(24, 0, 0, 0))
+    const expireTime = Math.floor(now.getTime() / 1000) // Unix 타임스탬프 (초 단위)
     await redis.hset(email, {
       send_count: 1,
     })
+    await redis.expireat(email, expireTime)
   }
 
   /** 이메일 전송 횟수를 증가 시킵니다. */

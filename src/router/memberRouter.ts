@@ -119,3 +119,15 @@ memberRouter.get('/test', async (req: Request, res: Response): Promise<any> => {
     name: nickname,
   })
 })
+
+// memberRouter.get(
+//   '/send-email)',
+//   controller(
+//     null,
+//     null,
+//     null,
+//     null,
+//   )(async (req, res) => {
+//     await MemberService.resendEmail(req)
+//   }),
+// )
