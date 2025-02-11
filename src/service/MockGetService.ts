@@ -1,9 +1,11 @@
 import MockAdapter from '#adapter/MockAdapter'
 import MockDetailRequest from '#dto/frontend/request/MockDetailRequest'
 import MockListRequest from '#dto/frontend/request/MockListRequest'
+import MockQuizRequest from '#dto/frontend/request/MockQuizRequest'
 import MockSearchRequest from '#dto/frontend/request/MockSearchRequest'
-import MockDetailResponse from '#dto/frontend/response/MockDeatailResponse'
+import MockDetailResponse from '#dto/frontend/response/MockDetailResponse'
 import MockListResponse from '#dto/frontend/response/MockListResponse'
+import MockQuizResponse from '#dto/frontend/response/MockQuizResponse'
 
 export default class MockGetService {
   static async searchMock(
@@ -59,5 +61,13 @@ export default class MockGetService {
   ): Promise<MockDetailResponse> {
     const result = await MockAdapter.getMockDetail(request.idx)
     return MockDetailResponse.of(result)
+  }
+
+  static async getMockQuiz(
+    userIdx: number,
+    request: MockQuizRequest,
+  ): Promise<MockQuizResponse> {
+    const result = await MockAdapter.getMockQuiz(userIdx, request.idx)
+    return MockQuizResponse.of(result)
   }
 }

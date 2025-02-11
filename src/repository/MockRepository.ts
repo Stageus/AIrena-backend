@@ -228,7 +228,7 @@ const makeInsertManyValues = (mockIdx: UUID, quizzes: Quiz[]) => {
       quiz.type,
       quiz.title,
       quiz.description,
-      quiz.choices,
+      quiz.singleChoiceChoices,
       quiz.singleChoiceCorrectAnswer,
       quiz.textCorrectAnswer,
       quiz.reason,

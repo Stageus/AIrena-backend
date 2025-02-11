@@ -51,7 +51,7 @@ CREATE TABLE "quiz" (
     "created_at" TIMESTAMP NOT NULL
 );
 
-CREATE TABLE "answer" (
+CREATE TABLE "submit_answer" (
     "idx" serial NOT NULL,
     "member_idx" INTEGER NOT NULL,
     "quiz_idx" INTEGER NOT NULL,
@@ -106,7 +106,7 @@ ALTER TABLE "image" ADD CONSTRAINT "PK_IMAGE" PRIMARY KEY ("idx");
 
 ALTER TABLE "quiz" ADD CONSTRAINT "PK_QUIZ" PRIMARY KEY ("idx");
 
-ALTER TABLE "answer" ADD CONSTRAINT "PK_ANSWER" PRIMARY KEY ("idx");
+ALTER TABLE "submit_answer" ADD CONSTRAINT "PK_ANSWER" PRIMARY KEY ("idx");
 
 ALTER TABLE "member" ADD CONSTRAINT "PK_MEMBER" PRIMARY KEY ("idx");
 
@@ -140,8 +140,8 @@ ALTER TABLE "answer"
   FOREIGN KEY ("member_idx")
   REFERENCES "member"("idx");
 
-ALTER TABLE "answer"
-  ADD CONSTRAINT "FK_answer_quiz"
+ALTER TABLE "submit_answer"
+  ADD CONSTRAINT "FK_submitanswer_quiz"
   FOREIGN KEY ("quiz_idx")
   REFERENCES "quiz"("idx");
 

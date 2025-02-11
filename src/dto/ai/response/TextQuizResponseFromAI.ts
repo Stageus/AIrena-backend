@@ -28,6 +28,7 @@ export class TextQuiz {
 
   toQuiz() {
     return new Quiz(
+      0,
       this.title,
       'TEXT',
       this.description,
@@ -35,6 +36,8 @@ export class TextQuiz {
       null,
       this.correctAnswer,
       this.reason,
+      0,
+      0,
     )
   }
 }
