@@ -146,4 +146,16 @@ export default class MemberService {
       maxAge: 60 * 60 * 1000,
     })
   }
+
+  /** 이메일 재전송 서비스 로직 */
+  static async resendEmail(req: Request) {
+    //   const data: any = Token.getToken(req)
+    //   let mailSendCount: any = await redis.hget(data.email, 'send_count')
+    //   if (mailSendCount >= 5) {
+    //     throw ErrorRegistry.TOO_MUCH_VERIFY_ATTEMPT
+    //   }
+    //   await redis.hincrby(data.email, 'send_count', 1)
+    //   EmailSender.sendEmail(data.email, token)
+    // }
+  }
 }
