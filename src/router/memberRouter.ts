@@ -1,5 +1,6 @@
 import controller from '#controller'
 import FindPasswordRequest from '#dto/frontend/request/FindPasswordRequest'
+import PasswordChangeRequest from '#dto/frontend/request/PasswordChangeRequest'
 import SignupRequest from '#dto/frontend/request/SignupRequest'
 import SignupVerifyRequest from '#dto/frontend/request/SignupVerifyRequest'
 import MemberService from '#service/MemberService'
@@ -51,7 +52,7 @@ userRouter.post(
 //   },
 // )
 
-/** 비밀번호 변경 API */
+/** 비밀번호 찾기 API */
 userRouter.post(
   '/find/password',
   async (
@@ -59,9 +60,11 @@ userRouter.post(
     res: Response,
   ): Promise<any> => {
     await MemberService.findPassword(req.body)
-    // return res.sendStatus(201)
-    return res.send({
-      message: '성공',
-    })
+    return res.sendStatus(201)
   },
+)
+
+userRouter.patch(
+  '/change/password',
+  controller(null, null, PasswordChangeRequest, null)(async (req, res) => {}),
 )

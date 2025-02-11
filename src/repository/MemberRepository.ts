@@ -71,4 +71,21 @@ export default class MemberRepository {
       id,
     ])
   }
+
+  /** 비밀번호 값을 찾아옵니다.값없을 때 예외 처리 해야함함 */
+  static async getMemberPassword(id: string, email: string) {
+    return (
+      await postgres.query(
+        'SELECT * FROM member WHERE id = $1 AND email = $2',
+        [id, email],
+      )
+    ).rows[0].password
+  }
+
+  static async updateMemberPassword(password: string, id: string) {
+    await postgres.query('UPDATE FROM member SET password = $1 WHERE id = $2', [
+      password,
+      id,
+    ])
+  }
 }

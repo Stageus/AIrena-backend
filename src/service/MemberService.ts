@@ -1,7 +1,8 @@
-import { postgres } from '#config/postgres'
 import FindPasswordRequest from '#dto/frontend/request/FindPasswordRequest'
+import PasswordChangeRequest from '#dto/frontend/request/PasswordChangeRequest'
 import SignupRequest from '#dto/frontend/request/SignupRequest'
 import SignupVerifyRequest from '#dto/frontend/request/SignupVerifyRequest'
+import FindPasswordResponse from '#dto/frontend/response/FindPasswordResponse'
 import ErrorRegistry from '#error/ErrorRegistry'
 import MemberRepository from '#repository/MemberRepository'
 import dotenv from 'dotenv'
@@ -72,12 +73,19 @@ export default class UserService {
   //   await MemberRepository.changeNickname(nickname, data.userId)
   // }
 
-  /** 비밀번호 변경 서비스 로직 */
+  /** 비밀번호 검색 서비스 로직 */
   static async findPassword(findPasswordRequest: FindPasswordRequest) {
     const { id, email } = findPasswordRequest
-    await postgres.query(
-      'SELECT * FROM test.member WHERE id = $1 AND email = $2',
-      [id, email],
+    const passwordFindResult = await MemberRepository.getMemberPassword(
+      id,
+      email,
     )
+    return new FindPasswordResponse(passwordFindResult)
+  }
+  /** 비밀번호 변경 서비스 로직 */
+  static async changePassword(passwordChangeRequest: PasswordChangeRequest) {
+    const { password, passwordCheck } = passwordChangeRequest
+
+    await MemberRepository.updateMemberPassword(password, id)
   }
 }
