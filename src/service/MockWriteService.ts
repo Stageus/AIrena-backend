@@ -19,12 +19,13 @@ export default class MockWriteService {
       mockWriteRequest.title,
       mockWriteRequest.description,
       quizzes.length,
+      quizzes,
     )
 
     const image = new Image(mock.idx, mockWriteRequest.uploadUrls)
 
     await ImageAdapter.insertImage(image)
-    await MockAdapter.insertMockData(memberIdx, mock, quizzes)
+    await MockAdapter.insertMockData(memberIdx, mock)
 
     return new MockWriteResponse(mock.idx)
   }
