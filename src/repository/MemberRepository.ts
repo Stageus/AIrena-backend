@@ -7,7 +7,6 @@ export default class MemberRepository {
     const checkId = await postgres.query('SELECT * FROM member WHERE id = $1', [
       id,
     ])
-    console.log(checkId)
     if (checkId.rowCount == 1) {
       throw ErrorRegistry.DUPLICATED_ID
     }
@@ -48,8 +47,6 @@ export default class MemberRepository {
   /** 이메일 전송 횟수를 증가 시킵니다. */
   static async increaseEmailCount() {
     await redis.hincrby('email', 'sendCount', 1)
-    console.log(await redis.hget('email', 'address'))
-    console.log(await redis.hget('email', 'sendCount'))
   }
 
   /** redis에 해당 이메일이 있는지를 확인하여 인증합니다. */
@@ -66,25 +63,8 @@ export default class MemberRepository {
 
   /** 입력받은 닉네임으로 변경합니다. */
   static async changeNickname(nickname: string, id: string) {
-    await postgres.query('UPDATE FROM member SET nickname = $1 WHERE id = $2', [
+    await postgres.query('UPDATE member SET nickname = $1 WHERE id = $2', [
       nickname,
-      id,
-    ])
-  }
-
-  /** 비밀번호 값을 찾아옵니다.값없을 때 예외 처리 해야함함 */
-  static async getMemberPassword(id: string, email: string) {
-    return (
-      await postgres.query(
-        'SELECT * FROM member WHERE id = $1 AND email = $2',
-        [id, email],
-      )
-    ).rows[0].password
-  }
-
-  static async updateMemberPassword(password: string, id: string) {
-    await postgres.query('UPDATE FROM member SET password = $1 WHERE id = $2', [
-      password,
       id,
     ])
   }

@@ -1,15 +1,15 @@
 import controller from '#controller'
 import FindPasswordRequest from '#dto/frontend/request/FindPasswordRequest'
-import PasswordChangeRequest from '#dto/frontend/request/PasswordChangeRequest'
+import NicknameChangeRequest from '#dto/frontend/request/NicknameChangeRequest'
 import SignupRequest from '#dto/frontend/request/SignupRequest'
-import SignupVerifyRequest from '#dto/frontend/request/SignupVerifyRequest'
+import EmailVerifyRequest from '#dto/frontend/request/SignupVerifyRequest'
 import MemberService from '#service/MemberService'
 import express, { Request, Response } from 'express'
-
-export const userRouter = express.Router()
+import RandomNicknameGenerator from '../nickname/randomNicknameGenerator.js'
+export const memberRouter = express.Router()
 
 /** 회원가입 API */
-userRouter.post(
+memberRouter.post(
   '/signup',
   controller(
     null,
@@ -18,7 +18,7 @@ userRouter.post(
     null,
   )(async (req, res) => {
     // await MemberService.emailSend(req.body)
-    const token = await MemberService.emailSend(req.body)
+    await MemberService.emailSend(req.body)
     // return res.send({
     //   token: token,
     // })
@@ -26,45 +26,67 @@ userRouter.post(
   }),
 )
 
+/** 포스트맨 결과 값 받는 용 */
+memberRouter.post(
+  '/signup',
+  async (
+    req: Request<{}, {}, SignupRequest, {}>,
+    res: Response,
+  ): Promise<any> => {
+    const token = await MemberService.emailSend(req.body)
+    return res.send({
+      token: token,
+    })
+    // return res.sendStatus(201)
+  },
+)
 /** 회원가입 인증 API */
-userRouter.post(
+memberRouter.get(
   '/verify',
   controller(
+    EmailVerifyRequest,
     null,
     null,
-    SignupVerifyRequest,
     null,
   )(async (req, res) => {
-    await MemberService.userVerify(req.body) // 변수 이게 맞나?param으로 주면 이게 맞음 //query로 받으면 req.query 로로
-    return res.sendStatus(201)
+    await MemberService.verifySignup(req.query)
+    // return res.sendStatus(201)
+    return res.redirect(process.env.FRONTEND_SERVER_URL as string)
   }),
 )
 
 /** 닉네임 변경 API */
-// userRouter.patch(
-//   'change/nickname',
-//   async (
-//     req: Request<{}, {}, NicknameChangeRequest, {}>,
-//     res: Response,
-//   ): Promise<any> => {
-//     await MemberService.nicknameChange(req.header, req.body)
-//     return res.sendStatus(201)
-//   },
-// )
+memberRouter.patch(
+  '/change/nickname',
+  controller(
+    null,
+    null,
+    NicknameChangeRequest,
+    null,
+  )(async (req, res): Promise<any> => {
+    await MemberService.nicknameChange(req, req.body)
+    return res.sendStatus(201)
+  }),
+)
 
-/** 비밀번호 찾기 API */
-userRouter.post(
+/** 비밀번호 변경 API */
+memberRouter.post(
   '/find/password',
   async (
     req: Request<{}, {}, FindPasswordRequest, {}>,
     res: Response,
   ): Promise<any> => {
     await MemberService.findPassword(req.body)
-    return res.sendStatus(201)
+    // return res.sendStatus(201)
+    return res.send({
+      message: '성공',
+    })
   },
 )
 
-userRouter.patch(
-  '/change/password',
-  controller(null, null, PasswordChangeRequest, null)(async (req, res) => {}),
-)
+memberRouter.get('/test', async (req: Request, res: Response): Promise<any> => {
+  const nickname = RandomNicknameGenerator.generateNickname() // 랜덤 생성기 자리
+  return res.send({
+    name: nickname,
+  })
+})
