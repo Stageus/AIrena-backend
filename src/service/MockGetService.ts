@@ -58,7 +58,6 @@ export default class MockGetService {
     request: MockDetailRequest,
   ): Promise<MockDetailResponse> {
     const result = await MockAdapter.getMockDetail(request.idx)
-    console.log(result)
     return MockDetailResponse.of(result)
   }
 }

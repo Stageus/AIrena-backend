@@ -32,7 +32,6 @@ export default class MockDetail {
   }
 
   static of(mockResultFromDB: MockResultFromDB) {
-    console.log('mockResultFromDB:', mockResultFromDB)
     return new MockDetail(
       mockResultFromDB.idx,
       mockResultFromDB.title,
