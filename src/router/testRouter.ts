@@ -1,5 +1,5 @@
-import controller from '#core/controller/index'
-import ErrorRegistry from '#error/errorRegistry'
+import controller from '#controller'
+import ErrorRegistry from '#error/ErrorRegistry'
 import express from 'express'
 
 export const testRouter = express.Router()

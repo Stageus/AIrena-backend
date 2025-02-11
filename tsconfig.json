@@ -1,26 +1,26 @@
 {
   "compilerOptions": {
-    "target": "ES6", // 컴파일 후 지원할 JavaScript 버전
-    "module": "Node16", // Node.js에서 사용하는 모듈 시스템
-    "moduleResolution": "node16", // Node.js 방식으로 모듈 해석 (ES6 모듈과 호환)
-    "outDir": "./dist", // 컴파일된 파일 출력 디렉토리
-    "rootDir": ".", // 소스 코드 디렉토리
-    "strict": true, // 엄격한 타입 검사
-    "esModuleInterop": true, // ES6 모듈과 호환
+    "target": "ES6",
+    "module": "Node16",
+    "moduleResolution": "node16",
+    "outDir": "./dist",
+    "rootDir": ".",
+    "strict": true,
+    "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
       "#router/*": ["src/router/*.ts"],
+      "#controller/*": ["src/core/controller/index.ts"],
       "#service/*": ["src/service/*.ts"],
       "#adapter/*": ["src/adapter/*.ts"],
       "#repository/*": ["src/repository/*.ts"],
       "#dto/*": ["src/dto/*.ts"],
-      "#core/*": ["src/core/*.ts"],
       "#entity/*": ["src/entity/*.ts"],
-      "#database/*": ["src/core/config/database/*.ts"],
-      "#error/*": ["src/core/error/*.ts"],
-      "#asyncRouter": ["src/core/getAsyncRouter/index.ts"]
+      "#config/*": ["src/core/config/*.ts"],
+      "#util/*": ["src/core/util/*.ts"],
+      "#error/*": ["src/core/error/*.ts"]
     }
   },
-  "include": ["src/**/*.ts", "index.ts"], // 포함할 파일 및 폴더
-  "exclude": ["node_modules"] // 제외할 폴더
+  "include": ["src/**/*.ts", "index.ts"],
+  "exclude": ["node_modules"]
 }

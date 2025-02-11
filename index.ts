@@ -1,4 +1,4 @@
-import { testPostgresConnection } from '#database/postgres'
+import { testPostgresConnection } from '#config/postgres'
 import globalExceptionHandler from '#error/globalExceptionHandler'
 import { loginRouter } from '#router/loginRouter'
 import { memberRouter } from '#router/memberRouter'

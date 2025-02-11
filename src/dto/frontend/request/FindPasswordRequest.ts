@@ -9,9 +9,9 @@ export default class FindPasswordRequest {
   public email: string
   public token: string
 
-  constructor(parms: FindPasswordRequestParams) {
-    this.id = parms.id
-    this.email = parms.email
-    this.token = parms.token
+  constructor(params: FindPasswordRequestParams) {
+    this.id = params.id
+    this.email = params.email
+    this.token = params.token
   }
 }

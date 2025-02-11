@@ -1,5 +1,5 @@
 import LoginAdapter from '#adapter/OAuthAdapter'
-import LoginUserDataResponse from '#dto/response/loginUserDataResponse'
+import LoginUserDataResponse from '#dto/frontend/response/loginUserDataResponse'
 
 const kakaoOauthUserInfoUrl = process.env.KAKAO_OAUTH_USER_INFO_URL || ''
 const googleOauthUserInfoUrl = process.env.GOOGLE_OAUTH_USER_INFO_URL || ''
