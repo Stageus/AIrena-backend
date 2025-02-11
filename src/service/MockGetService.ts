@@ -6,7 +6,7 @@ import MockSearchRequest from '#dto/frontend/request/MockSearchRequest'
 import MockDetailResponse from '#dto/frontend/response/MockDetailResponse'
 import MockListResponse from '#dto/frontend/response/MockListResponse'
 import MockQuizResponse from '#dto/frontend/response/MockQuizResponse'
-import MockResultResponse from '#dto/frontend/response/MockResultReponse'
+import MockResultResponse from '#dto/frontend/response/MockResultResponse'
 
 export default class MockGetService {
   static async searchMock(
