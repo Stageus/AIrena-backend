@@ -2,7 +2,6 @@ import dotenv from 'dotenv'
 import { readFileSync } from 'fs'
 import nodemailer from 'nodemailer'
 import path from 'path'
-import { fileURLToPath } from 'url'
 dotenv.config()
 
 export default class EmailSender {
@@ -18,30 +17,30 @@ export default class EmailSender {
         pass: process.env.CONFIRM_EMAIL_PASSWORD,
       },
     })
-    const __filename = fileURLToPath(import.meta.url)
-    const __dirname = path.dirname(__filename)
-    let htmlContent = readFileSync(
-      path.join(__dirname, '../../../../src/email/templates/confirmMail.html'),
+
+    let htmlTemplatePath = readFileSync(
+      path.resolve(
+        process.cwd(),
+        'src/core/util/email/templates/confirmMail.html',
+      ),
       'utf-8',
     )
-    const verifyUrl = `${process.env.FRONTEND_SERVER_URL as string}/signup/verify?token=${token}`
-    console.log(verifyUrl)
-    htmlContent = htmlContent.replace('{{verifyUrl}}', verifyUrl)
-
-    const logoImageUrl = path.join(
-      __dirname,
-      '../../../../src/email/images/ai-rena-icon.png',
+    const imagePath = path.join(
+      process.cwd(),
+      'src/core/util/email/images/ai-rena-icon.png',
     )
+    const verifyUrl = `${process.env.FRONTEND_SERVER_URL as string}/signup/verify?token=${token}`
+    htmlTemplatePath = htmlTemplatePath.replace('{{verifyUrl}}', verifyUrl)
 
     const mailOption: nodemailer.SendMailOptions = {
       from: process.env.CONFIRM_EMAIL_SENDER,
       to: receiver,
       subject: 'AIrena 회원가입 인증 안내',
-      html: htmlContent,
+      html: htmlTemplatePath,
       attachments: [
         {
           filename: 'ai-rena-icon.png',
-          path: logoImageUrl,
+          path: imagePath,
           cid: 'logoImage',
         },
       ],

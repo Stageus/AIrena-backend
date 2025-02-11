@@ -1,3 +1,4 @@
+import EmailSender from '#core/util/email/mailSender/EmailSender'
 import { postgres } from '#database/postgres'
 import FindPasswordRequest from '#dto/request/FindPasswordRequest'
 import NicknameChangeRequest from '#dto/request/NicknameChangeRequest'
@@ -8,7 +9,6 @@ import MemberRepository from '#repository/MemberRepository'
 import dotenv from 'dotenv'
 import { Request } from 'express'
 import jwt from 'jsonwebtoken'
-import EmailSender from '../email/mailSender/EmailSender.js'
 import RandomNicknameGenerator from '../nickname/randomNicknameGenerator.js'
 dotenv.config()
 
