@@ -1,9 +1,11 @@
 import SingleChoiceQuizResponseFromAI, {
   SingleChoiceQuiz,
 } from '#dto/ai/response/SingleChoiceQuizResponseFromAI'
+import TextGradeResponseFromAI from '#dto/ai/response/TextGradeResponseFromAI'
 import TextQuizResponseFromAI, {
   TextQuiz,
 } from '#dto/ai/response/TextQuizResponseFromAI'
+import MockTextGrade from '#entity/MockTextGrade'
 import Quiz from '#entity/Quiz'
 import ErrorRegistry from '#error/ErrorRegistry'
 import dotenv from 'dotenv'
@@ -48,27 +50,28 @@ export default class AIAdapter {
     return quizInstances.map((quiz) => quiz.toQuiz())
   }
 
-  // static async gradeTextAnswer(
-  //   submitAnswerS: string[],
-  //   correctAnswer: string,
-  // ): Promise<number[]> {
-  //   const response = await fetch(`${aiServerUrl}/grade/text`, {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({
-  //       submitAnswer: submitAnswer,
-  //       correctAnswer: correctAnswer,
-  //     }),
-  //   })
+  static async gradeTextAnswer(
+    submitAnswers: string[],
+    correctAnswer: string,
+  ): Promise<MockTextGrade> {
+    const response = await fetch(`${aiServerUrl}/grade/text`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        submitAnswers: submitAnswers,
+        correctAnswer: correctAnswer,
+      }),
+    })
 
-  //   if (!response.ok) {
-  //     throw ErrorRegistry.AI_SERVER_CONNECTION_FAILED
-  //   }
+    if (!response.ok) {
+      throw ErrorRegistry.AI_SERVER_CONNECTION_FAILED
+    }
 
-  //   return response
-  // }
+    const textGradeData = (await response.json()) as TextGradeResponseFromAI
+    return MockTextGrade.of(textGradeData)
+  }
 }
 
 const aiServerUrl = process.env.AI_SERVER_URL as string

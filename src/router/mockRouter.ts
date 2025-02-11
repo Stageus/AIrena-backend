@@ -9,6 +9,7 @@ import AnswerSubmitResponse from '#dto/frontend/response/AnswerSubmitResponse'
 import MockDetailResponse from '#dto/frontend/response/MockDetailResponse'
 import MockListResponse from '#dto/frontend/response/MockListResponse'
 import MockQuizResponse from '#dto/frontend/response/MockQuizResponse'
+import MockResultResponse from '#dto/frontend/response/MockResultReponse'
 import MockWriteResponse from '#dto/frontend/response/MockWriteResponse'
 import AnswerSubmitService from '#service/AnswerSubmitService'
 import MockGetService from '#service/MockGetService'
@@ -90,5 +91,17 @@ mockRouter.post(
     return res.send(
       await AnswerSubmitService.submitAnswer(2, req.params, req.body),
     )
+  }),
+)
+
+mockRouter.get(
+  '/result/:idx',
+  controller(
+    null,
+    MockQuizRequest,
+    SubmitAnswerRequest,
+    MockResultResponse,
+  )(async (req, res) => {
+    return res.send(await MockGetService.getMockResult(2, req.params))
   }),
 )

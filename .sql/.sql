@@ -6,8 +6,10 @@ CREATE TYPE role_type AS ENUM ('ADMIN', 'USER');
 -- 2. 테이블 생성
 CREATE TABLE "mock_score" (
     "idx" serial NOT NULL,
+    "member_idx" INTEGER NOT NULL,
     "mock_idx" UUID NOT NULL,
-    "score" INTEGER DEFAULT 0 NOT NULL,
+    "score" INTEGER NOT NULL,
+    "max_score" INTEGER NOT NULL,
     "created_at" TIMESTAMP NOT NULL
 );
 
@@ -124,6 +126,11 @@ ALTER TABLE "mock_score"
   ADD CONSTRAINT "FK_mockscore_mock"
   FOREIGN KEY ("mock_idx")
   REFERENCES "mock"("idx");
+
+ALTER TABLE "mock_score"
+  ADD CONSTRAINT "FK_mockscore_member"
+  FOREIGN KEY ("member_idx")
+  REFERENCES "member"("idx");
 
 ALTER TABLE "like_history"
   ADD CONSTRAINT "FK_likehistory_member"

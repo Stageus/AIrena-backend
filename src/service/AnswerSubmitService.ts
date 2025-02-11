@@ -1,5 +1,7 @@
+import AIAdapter from '#adapter/AIAdapter'
 import AnswerSubmitAdapter from '#adapter/AnswerSubmitAdapter'
 import MockAdapter from '#adapter/MockAdapter'
+import MockScoreAdapter from '#adapter/MockScoreAdapter'
 import SubmitAnswerRequest from '#dto/frontend/request/AnswerSubmitRequest'
 import MockQuizRequest from '#dto/frontend/request/MockQuizRequest'
 import AnswerSubmitResponse from '#dto/frontend/response/AnswerSubmitResponse'
@@ -40,6 +42,10 @@ export default class AnswerSubmitService {
         quiz.singleChoiceChoices[quiz.singleChoiceCorrectAnswer]
 
       AnswerSubmitAdapter.saveAnswer(submitAnswer)
+      if (quiz.currentQuizIndex == quiz.totalQuizCount) {
+        await MockScoreAdapter.saveScore(memberIdx, quiz.idx)
+      }
+
       return new AnswerSubmitResponse(
         correctAnswer,
         quiz.reason,
@@ -55,10 +61,9 @@ export default class AnswerSubmitService {
       if (quiz.textCorrectAnswer == null) {
         throw ErrorRegistry.INTERNAL_SERVER_ERROR
       }
-      const score = 100
-      // (
-      //   await AIAdapter.gradeTextAnswer([textAnswer], quiz.textCorrectAnswer)
-      // )[0]
+      const score = (
+        await AIAdapter.gradeTextAnswer([textAnswer], quiz.textCorrectAnswer)
+      ).score
 
       const submitAnswer = new SubmitAnswer(
         memberIdx,
@@ -70,13 +75,18 @@ export default class AnswerSubmitService {
       )
 
       AnswerSubmitAdapter.saveAnswer(submitAnswer)
+      if (quiz.currentQuizIndex == quiz.totalQuizCount) {
+        await MockScoreAdapter.saveScore(memberIdx, quiz.idx)
+      }
+
       return new AnswerSubmitResponse(
         quiz.textCorrectAnswer,
         quiz.reason,
         submitAnswer.score,
         submitAnswer.maxScore,
       )
+    } else {
+      throw ErrorRegistry.INVALID_INPUT_FORMAT
     }
-    throw ErrorRegistry.INVALID_INPUT_FORMAT
   }
 }
