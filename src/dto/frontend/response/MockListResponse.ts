@@ -1,6 +1,6 @@
 import MockList from '#entity/MockList'
 
-export default class MockSearchResponse {
+export default class MockListResponse {
   firstPageNumber: number
   currentPageNumber: number
   lastPageNumber: number
@@ -12,8 +12,8 @@ export default class MockSearchResponse {
     likeCount: number
   }[]
 
-  public static of(mockList: MockList): MockSearchResponse {
-    return new MockSearchResponse(
+  public static of(mockList: MockList): MockListResponse {
+    return new MockListResponse(
       mockList.firstPageNumber,
       mockList.currentPageNumber,
       mockList.lastPageNumber,
@@ -21,8 +21,8 @@ export default class MockSearchResponse {
     )
   }
 
-  public static createEmpty(): MockSearchResponse {
-    return new MockSearchResponse(1, 1, 1, [])
+  public static createEmpty(): MockListResponse {
+    return new MockListResponse(1, 1, 1, [])
   }
 
   constructor(

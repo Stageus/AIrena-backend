@@ -1,5 +1,6 @@
 import FindPasswordRequest from '#dto/frontend/request/FindPasswordRequest'
 import NicknameChangeRequest from '#dto/frontend/request/NicknameChangeRequest'
+
 import NormalLoginRequest from '#dto/frontend/request/NormalLoginRequest'
 import PasswordChangeRequest from '#dto/frontend/request/PasswordChangeRequest'
 import SignupRequest from '#dto/frontend/request/SignupRequest'
@@ -11,6 +12,7 @@ import EmailSender from '#util/email/mailSender/EmailSender'
 import Token from '#util/token'
 import dotenv from 'dotenv'
 import { Request, Response } from 'express'
+
 import jwt from 'jsonwebtoken'
 import RandomNicknameGenerator from '../nickname/randomNicknameGenerator.js'
 dotenv.config()
@@ -40,7 +42,7 @@ export default class MemberService {
       },
       secretKey,
       {
-        issuer: 'rena',
+        issuer: 'ai-rena',
         expiresIn: '60m',
       },
     )
@@ -81,7 +83,6 @@ export default class MemberService {
     if (!token) {
       throw new Error('Token not provided or invalid.')
     }
-
     const secretKey = process.env.JWT_SIGNATURE_KEY || 'jwt-secret-key'
     const data: any = jwt.verify(token, secretKey)
     const { nickname } = nicknameChangeRequest
