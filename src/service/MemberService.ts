@@ -1,5 +1,6 @@
 import FindPasswordRequest from '#dto/frontend/request/FindPasswordRequest'
 import NicknameChangeRequest from '#dto/frontend/request/NicknameChangeRequest'
+import NormalLoginRequest from '#dto/frontend/request/NormalLoginRequest'
 import PasswordChangeRequest from '#dto/frontend/request/PasswordChangeRequest'
 import SignupRequest from '#dto/frontend/request/SignupRequest'
 import SignupVerifyRequest from '#dto/frontend/request/SignupVerifyRequest'
@@ -9,7 +10,7 @@ import MemberRepository from '#repository/MemberRepository'
 import EmailSender from '#util/email/mailSender/EmailSender'
 import Token from '#util/token'
 import dotenv from 'dotenv'
-import { Request } from 'express'
+import { Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
 import RandomNicknameGenerator from '../nickname/randomNicknameGenerator.js'
 dotenv.config()
@@ -39,7 +40,7 @@ export default class MemberService {
       },
       secretKey,
       {
-        issuer: 'gb6105',
+        issuer: 'rena',
         expiresIn: '60m',
       },
     )
@@ -104,6 +105,45 @@ export default class MemberService {
   ) {
     const { password } = passwordChangeRequest
     const data: any = Token.getToken(req)
+    console.log(data)
     await MemberRepository.updateMemberPassword(password, data.userId)
+  }
+
+  /** 일반 로그인 서브시 로직*/
+  static async normalLogin(
+    normalLoginRequest: NormalLoginRequest,
+    res: Response,
+  ) {
+    const { id, password } = normalLoginRequest
+    const memberData: any = await MemberRepository.getNormalLoginData(
+      id,
+      password,
+    )
+    if (!memberData) {
+      throw ErrorRegistry.CAN_NOT_FIND_USER
+    }
+    const secretKey: string = process.env.JWT_SIGNATURE_KEY || 'jwt-secret-key'
+    const loginToken = jwt.sign(
+      {
+        userId: memberData.id,
+        password: memberData.password,
+        email: memberData.email,
+        provider: memberData.provider,
+        role: memberData.role,
+      },
+      secretKey,
+      {
+        issuer: 'ai-rena',
+        expiresIn: '60m',
+      },
+    )
+    res.cookie('loginToken', loginToken, {
+      path: '/',
+      // domain: process.env.COOKIE_DOMAIN,
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      maxAge: 60 * 60 * 1000,
+    })
   }
 }

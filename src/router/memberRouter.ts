@@ -1,6 +1,7 @@
 import controller from '#controller'
 import FindPasswordRequest from '#dto/frontend/request/FindPasswordRequest'
 import NicknameChangeRequest from '#dto/frontend/request/NicknameChangeRequest'
+import NormalLoginRequest from '#dto/frontend/request/NormalLoginRequest'
 import PasswordChangeRequest from '#dto/frontend/request/PasswordChangeRequest'
 import SignupRequest from '#dto/frontend/request/SignupRequest'
 import EmailVerifyRequest from '#dto/frontend/request/SignupVerifyRequest'
@@ -18,7 +19,6 @@ memberRouter.post(
     SignupRequest,
     null,
   )(async (req, res) => {
-    // await MemberService.emailSend(req.body)
     await MemberService.emailSend(req.body)
     // return res.send({
     //   token: token,
@@ -27,20 +27,20 @@ memberRouter.post(
   }),
 )
 
-/** 포스트맨 결과 값 받는 용 */
-memberRouter.post(
-  '/signup',
-  async (
-    req: Request<{}, {}, SignupRequest, {}>,
-    res: Response,
-  ): Promise<any> => {
-    const token = await MemberService.emailSend(req.body)
-    return res.send({
-      token: token,
-    })
-    // return res.sendStatus(201)
-  },
-)
+// /** 포스트맨 결과 값 받는 용 */
+// memberRouter.post(
+//   '/signup',
+//   async (
+//     req: Request<{}, {}, SignupRequest, {}>,
+//     res: Response,
+//   ): Promise<any> => {
+//     const token = await MemberService.emailSend(req.body)
+//     return res.send({
+//       token: token,
+//     })
+//     // return res.sendStatus(201)
+//   },
+// )
 /** 회원가입 인증 API */
 memberRouter.get(
   '/verify',
@@ -92,6 +92,20 @@ memberRouter.patch(
     null,
   )(async (req, res) => {
     await MemberService.changePassword(req, req.body)
+    return res.sendStatus(201)
+  }),
+)
+
+/** 로그인 API */
+memberRouter.post(
+  '/login/normal',
+  controller(
+    null,
+    null,
+    NormalLoginRequest,
+    null,
+  )(async (req, res) => {
+    return res.send(await MemberService.normalLogin(req.body, res))
   }),
 )
 
