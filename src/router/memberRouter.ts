@@ -3,6 +3,7 @@ import FindPasswordRequest from '#dto/frontend/request/FindPasswordRequest'
 import NicknameChangeRequest from '#dto/frontend/request/NicknameChangeRequest'
 import NormalLoginRequest from '#dto/frontend/request/NormalLoginRequest'
 import PasswordChangeRequest from '#dto/frontend/request/PasswordChangeRequest'
+
 import SignupRequest from '#dto/frontend/request/SignupRequest'
 import EmailVerifyRequest from '#dto/frontend/request/SignupVerifyRequest'
 import MemberService from '#service/MemberService'
@@ -41,6 +42,7 @@ memberRouter.post(
 //     // return res.sendStatus(201)
 //   },
 // )
+
 /** 회원가입 인증 API */
 memberRouter.get(
   '/verify',

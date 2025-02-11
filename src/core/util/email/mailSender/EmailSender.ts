@@ -45,6 +45,7 @@ export default class EmailSender {
         },
       ],
     }
+
     transporter.sendMail(mailOption, (err, info) => {
       if (err) {
         console.error(err.stack)

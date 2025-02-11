@@ -1,4 +1,4 @@
-import GetLikeDescMockListResultFromDB from '#dto/db/GetLikeDescMockListResultFromDB'
+import GetLikeDescMockListResultFromDB from '#dto/db/PaginatedMockListResultFromDB'
 
 export default class MockList {
   firstPageNumber: number
@@ -22,7 +22,9 @@ export default class MockList {
     const firstPageNumber = Math.floor(currentPageNumber / 10) * 10 + 1
     const pageOffset = Math.min(
       9,
-      Math.floor((totalCount - firstPageNumber * displayCount) / displayCount),
+      Math.floor(
+        (totalCount - (firstPageNumber - 1) * displayCount) / displayCount,
+      ),
     )
     const lastPageNumber = firstPageNumber + pageOffset
 
