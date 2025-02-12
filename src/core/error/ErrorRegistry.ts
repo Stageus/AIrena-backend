@@ -47,7 +47,7 @@ export default class ErrorRegistry {
   static readonly TOO_MUCH_VERIFY_ATTEMPT = new CustomError(
     429,
     'US007',
-    '인증 요청 한도를 초과하였습니다. 내일 다시 시도하십시오오',
+    '인증 요청 한도를 초과하였습니다. 내일 다시 시도하십시오',
   )
 
   // Mock(MO)

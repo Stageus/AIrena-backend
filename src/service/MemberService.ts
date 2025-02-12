@@ -99,6 +99,19 @@ export default class MemberService {
       id,
       email,
     )
+    const secretKey: string = process.env.JWT_SIGNATURE_KEY || 'jwt-secret-key'
+    const Token = jwt.sign(
+      {
+        userId: id,
+        email: email,
+      },
+      secretKey,
+      {
+        issuer: 'ai-rena',
+        expiresIn: '60m',
+      },
+    )
+    EmailSender.sendEmail(email, Token)
     return new FindPasswordResponse(passwordFindResult)
   }
 
