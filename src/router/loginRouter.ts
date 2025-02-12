@@ -1,6 +1,6 @@
+import controller from '#controller'
 import LoginRequest from '#dto/frontend/request/LoginRequest'
 import LoginUserDataResponse from '#dto/frontend/response/loginUserDataResponse'
-import controller from '#controller'
 import LoginService from '#service/LoginService'
 import dotenv from 'dotenv'
 import express from 'express'
@@ -38,7 +38,8 @@ loginRouter.get(
     null,
     LoginUserDataResponse,
   )(async (req, res) => {
-    return res.send(await LoginService.getKakaoUserData(req.query.code))
+    await LoginService.checkKakaoUserDataAndSignin(req.query.code)
+    return res.redirect(process.env.FRONTEND_SERVER_URL as string)
   }),
 )
 
@@ -64,6 +65,8 @@ loginRouter.get(
     null,
     LoginUserDataResponse,
   )(async (req, res): Promise<any> => {
-    return res.send(await LoginService.getGoogleUserData(req.query.code))
+    await LoginService.checkGoogleUserDataAndSignin(req.query.code)
+
+    return res.redirect(process.env.FRONTEND_SERVER_URL as string)
   }),
 )
