@@ -13,6 +13,8 @@ import Token from '#util/Token'
 import dotenv from 'dotenv'
 import { Request, Response } from 'express'
 
+import { redis } from '#config/redis'
+import SignupResponse from '#dto/frontend/response/SignupResponse'
 import jwt from 'jsonwebtoken'
 import RandomNicknameGenerator from '../nickname/randomNicknameGenerator.js'
 dotenv.config()
@@ -32,7 +34,7 @@ export default class MemberService {
     await MemberRepository.saveEmailInfo(email)
     /** 토큰을 생성 */
     const secretKey: string = process.env.JWT_SIGNATURE_KEY || 'jwt-secret-key'
-    const Token = jwt.sign(
+    const loginToken = jwt.sign(
       {
         userId: id,
         password: password,
@@ -47,7 +49,8 @@ export default class MemberService {
       },
     )
     /** 토큰을 포함하여 인증 메일을 전송 */
-    EmailSender.sendEmail(email, Token)
+    EmailSender.sendEmail(email, loginToken)
+    return new SignupResponse(loginToken)
   }
 
   /** 회원가입 인증 서비스 로직 */
@@ -149,13 +152,15 @@ export default class MemberService {
 
   /** 이메일 재전송 서비스 로직 */
   static async resendEmail(req: Request) {
-    //   const data: any = Token.getToken(req)
-    //   let mailSendCount: any = await redis.hget(data.email, 'send_count')
-    //   if (mailSendCount >= 5) {
-    //     throw ErrorRegistry.TOO_MUCH_VERIFY_ATTEMPT
-    //   }
-    //   await redis.hincrby(data.email, 'send_count', 1)
-    //   EmailSender.sendEmail(data.email, token)
-    // }
+    console.log(req)
+    const data: any = Token.getToken(req)
+
+    console.log(data)
+    let mailSendCount: any = await redis.hget(data.email, 'send_count')
+    if (mailSendCount >= 5) {
+      throw ErrorRegistry.TOO_MUCH_VERIFY_ATTEMPT
+    }
+    await redis.hincrby(data.email, 'send_count', 1)
+    EmailSender.sendEmail(data.email, Token.returnToken(req))
   }
 }

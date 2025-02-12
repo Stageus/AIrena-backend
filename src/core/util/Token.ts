@@ -18,4 +18,13 @@ export default class Token {
       throw ErrorRegistry.TEST_ERROR
     }
   }
+
+  static returnToken(req: Request) {
+    const authHeader = req.headers['authorization']
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      throw ErrorRegistry.LOGIN_REQUIRED
+    }
+    const token = authHeader.slice(7)
+    return token
+  }
 }
