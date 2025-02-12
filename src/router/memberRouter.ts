@@ -20,28 +20,12 @@ memberRouter.post(
     SignupRequest,
     null,
   )(async (req, res) => {
-    await MemberService.emailSend(req.body)
-    // return res.send({
-    //   token: token,
-    // })
-    return res.sendStatus(201)
+    /**dev */
+    const result: any = await MemberService.emailSend(req.body)
+    return res.send(result)
+    // return res.sendStatus(201)
   }),
 )
-
-// /** 포스트맨 결과 값 받는 용 */
-// memberRouter.post(
-//   '/signup',
-//   async (
-//     req: Request<{}, {}, SignupRequest, {}>,
-//     res: Response,
-//   ): Promise<any> => {
-//     const token = await MemberService.emailSend(req.body)
-//     return res.send({
-//       token: token,
-//     })
-//     // return res.sendStatus(201)
-//   },
-// )
 
 /** 회원가입 인증 API */
 memberRouter.get(
@@ -119,3 +103,17 @@ memberRouter.get('/test', async (req: Request, res: Response): Promise<any> => {
     name: nickname,
   })
 })
+
+/** 인증 이메일 재전송 API */
+memberRouter.get(
+  '/send-email',
+  controller(
+    null,
+    null,
+    null,
+    null,
+  )(async (req, res) => {
+    await MemberService.resendEmail(req)
+    return res.sendStatus(201)
+  }),
+)

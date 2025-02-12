@@ -35,7 +35,7 @@ export default class EmailSender {
     const mailOption: nodemailer.SendMailOptions = {
       from: process.env.CONFIRM_EMAIL_SENDER,
       to: receiver,
-      subject: 'AIrena 회원가입 인증 안내',
+      subject: 'AIrena 비밀번호 변경 안내',
       html: htmlTemplatePath,
       attachments: [
         {
