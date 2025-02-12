@@ -1,13 +1,18 @@
-import { postgres } from '#config/postgres'
 import FindPasswordRequest from '#dto/frontend/request/FindPasswordRequest'
 import NicknameChangeRequest from '#dto/frontend/request/NicknameChangeRequest'
+
+import NormalLoginRequest from '#dto/frontend/request/NormalLoginRequest'
+import PasswordChangeRequest from '#dto/frontend/request/PasswordChangeRequest'
 import SignupRequest from '#dto/frontend/request/SignupRequest'
 import SignupVerifyRequest from '#dto/frontend/request/SignupVerifyRequest'
+import FindPasswordResponse from '#dto/frontend/response/FindPasswordResponse'
 import ErrorRegistry from '#error/ErrorRegistry'
 import MemberRepository from '#repository/MemberRepository'
 import EmailSender from '#util/email/mailSender/EmailSender'
+import Token from '#util/Token'
 import dotenv from 'dotenv'
-import { Request } from 'express'
+import { Request, Response } from 'express'
+
 import jwt from 'jsonwebtoken'
 import RandomNicknameGenerator from '../nickname/randomNicknameGenerator.js'
 dotenv.config()
@@ -37,7 +42,7 @@ export default class MemberService {
       },
       secretKey,
       {
-        issuer: 'gb6105',
+        issuer: 'ai-rena',
         expiresIn: '60m',
       },
     )
@@ -78,19 +83,67 @@ export default class MemberService {
     if (!token) {
       throw new Error('Token not provided or invalid.')
     }
-
     const secretKey = process.env.JWT_SIGNATURE_KEY || 'jwt-secret-key'
     const data: any = jwt.verify(token, secretKey)
     const { nickname } = nicknameChangeRequest
     await MemberRepository.changeNickname(nickname, data.userId)
   }
 
-  /** 비밀번호 변경 서비스 로직 */
+  /** 비밀번호 검색 서비스 로직 */
   static async findPassword(findPasswordRequest: FindPasswordRequest) {
     const { id, email } = findPasswordRequest
-    await postgres.query(
-      'SELECT * FROM test.member WHERE id = $1 AND email = $2',
-      [id, email],
+    const passwordFindResult = await MemberRepository.getMemberPassword(
+      id,
+      email,
     )
+    return new FindPasswordResponse(passwordFindResult)
+  }
+
+  /** 비밀번호 변경 서비스 로직 */
+  static async changePassword(
+    req: Request,
+    passwordChangeRequest: PasswordChangeRequest,
+  ) {
+    const { password } = passwordChangeRequest
+    const data: any = Token.getToken(req)
+    await MemberRepository.updateMemberPassword(password, data.userId)
+  }
+
+  /** 일반 로그인 서브시 로직*/
+  static async attemptNormalLogin(
+    normalLoginRequest: NormalLoginRequest,
+    res: Response,
+  ) {
+    const { id, password } = normalLoginRequest
+    const memberData: any = await MemberRepository.getNormalLoginData(
+      id,
+      password,
+    )
+    if (!memberData) {
+      throw ErrorRegistry.CAN_NOT_FIND_USER
+    }
+    const secretKey: string = process.env.JWT_SIGNATURE_KEY || 'jwt-secret-key'
+    const loginToken = jwt.sign(
+      {
+        userId: memberData.id,
+        password: memberData.password,
+        email: memberData.email,
+        provider: memberData.provider,
+        role: memberData.role,
+      },
+      secretKey,
+      {
+        issuer: 'ai-rena',
+        expiresIn: '60m',
+      },
+    )
+    res.cookie('loginToken', loginToken, {
+      path: '/',
+      // domain: process.env.COOKIE_DOMAIN,
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      maxAge: 60 * 60 * 1000,
+    })
   }
 }

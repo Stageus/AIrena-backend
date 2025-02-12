@@ -1,6 +1,9 @@
 import controller from '#controller'
 import FindPasswordRequest from '#dto/frontend/request/FindPasswordRequest'
 import NicknameChangeRequest from '#dto/frontend/request/NicknameChangeRequest'
+import NormalLoginRequest from '#dto/frontend/request/NormalLoginRequest'
+import PasswordChangeRequest from '#dto/frontend/request/PasswordChangeRequest'
+
 import SignupRequest from '#dto/frontend/request/SignupRequest'
 import EmailVerifyRequest from '#dto/frontend/request/SignupVerifyRequest'
 import MemberService from '#service/MemberService'
@@ -17,7 +20,6 @@ memberRouter.post(
     SignupRequest,
     null,
   )(async (req, res) => {
-    // await MemberService.emailSend(req.body)
     await MemberService.emailSend(req.body)
     // return res.send({
     //   token: token,
@@ -26,20 +28,21 @@ memberRouter.post(
   }),
 )
 
-/** 포스트맨 결과 값 받는 용 */
-memberRouter.post(
-  '/signup',
-  async (
-    req: Request<{}, {}, SignupRequest, {}>,
-    res: Response,
-  ): Promise<any> => {
-    const token = await MemberService.emailSend(req.body)
-    return res.send({
-      token: token,
-    })
-    // return res.sendStatus(201)
-  },
-)
+// /** 포스트맨 결과 값 받는 용 */
+// memberRouter.post(
+//   '/signup',
+//   async (
+//     req: Request<{}, {}, SignupRequest, {}>,
+//     res: Response,
+//   ): Promise<any> => {
+//     const token = await MemberService.emailSend(req.body)
+//     return res.send({
+//       token: token,
+//     })
+//     // return res.sendStatus(201)
+//   },
+// )
+
 /** 회원가입 인증 API */
 memberRouter.get(
   '/verify',
@@ -69,19 +72,45 @@ memberRouter.patch(
   }),
 )
 
-/** 비밀번호 변경 API */
+/** 비밀번호 찾기 API */
 memberRouter.post(
   '/find/password',
-  async (
-    req: Request<{}, {}, FindPasswordRequest, {}>,
-    res: Response,
-  ): Promise<any> => {
+  controller(
+    null,
+    null,
+    FindPasswordRequest,
+    null,
+  )(async (req, res): Promise<any> => {
     await MemberService.findPassword(req.body)
-    // return res.sendStatus(201)
-    return res.send({
-      message: '성공',
-    })
-  },
+    return res.sendStatus(201)
+  }),
+)
+
+/** 비밀번호 변경 API */
+memberRouter.patch(
+  '/change/password',
+  controller(
+    null,
+    null,
+    PasswordChangeRequest,
+    null,
+  )(async (req, res) => {
+    await MemberService.changePassword(req, req.body)
+    return res.sendStatus(201)
+  }),
+)
+
+/** 로그인 API */
+memberRouter.post(
+  '/login/normal',
+  controller(
+    null,
+    null,
+    NormalLoginRequest,
+    null,
+  )(async (req, res) => {
+    return res.send(await MemberService.attemptNormalLogin(req.body, res))
+  }),
 )
 
 memberRouter.get('/test', async (req: Request, res: Response): Promise<any> => {

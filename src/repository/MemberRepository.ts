@@ -68,4 +68,34 @@ export default class MemberRepository {
       id,
     ])
   }
+
+  /** 비밀번호 값을 찾아옵니다. 값 없을 때 예외 처리 해야함함 */
+  static async getMemberPassword(id: string, email: string) {
+    return (
+      await postgres.query(
+        'SELECT * FROM member WHERE id = $1 AND email = $2',
+        [id, email],
+      )
+    ).rows[0].password
+  }
+
+  /** 비밀번호 값을 변경합니다. */
+  static async updateMemberPassword(password: string, id: string) {
+    return (
+      await postgres.query('UPDATE member SET password = $1 WHERE id = $2', [
+        password,
+        id,
+      ])
+    ).rows[0]
+  }
+
+  /** 로그인 계정 데이터를 가져옵니다. */
+  static async getNormalLoginData(id: string, password: string) {
+    return (
+      await postgres.query(
+        'SELECT * FROM member WHERE id = $1 AND password = $2',
+        [id, password],
+      )
+    ).rows[0]
+  }
 }
