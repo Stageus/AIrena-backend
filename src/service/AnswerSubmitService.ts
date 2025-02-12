@@ -9,11 +9,28 @@ import SubmitAnswer from '#entity/SubmitAnswer'
 import ErrorRegistry from '#error/ErrorRegistry'
 
 export default class AnswerSubmitService {
+  static async getGradingResult(
+    memberIdx: number,
+    path: MockQuizRequest,
+  ): Promise<AnswerSubmitResponse> {
+    const gradingResult = await AnswerSubmitAdapter.getAnswer(
+      memberIdx,
+      path.idx,
+    )
+    return new AnswerSubmitResponse(
+      gradingResult.submitAnswer,
+      gradingResult.correctAnswer,
+      gradingResult.score,
+      gradingResult.maxScore,
+      gradingResult.reason,
+    )
+  }
+
   static async submitAnswer(
     memberIdx: number,
     path: MockQuizRequest,
     body: SubmitAnswerRequest,
-  ): Promise<AnswerSubmitResponse> {
+  ): Promise<void> {
     const quiz = await MockAdapter.getMockQuiz(memberIdx, path.idx)
 
     const type = quiz.type
@@ -23,68 +40,47 @@ export default class AnswerSubmitService {
       if (singleChoiceAnswer == null) {
         throw ErrorRegistry.INVALID_INPUT_FORMAT
       }
-      if (quiz.singleChoiceCorrectAnswer == null) {
-        throw ErrorRegistry.INTERNAL_SERVER_ERROR
-      }
 
       const submitAnswer = SubmitAnswer.gradeSingleChoiceAnswer(
         memberIdx,
-        quiz.idx,
+        quiz,
         singleChoiceAnswer,
-        quiz.singleChoiceCorrectAnswer,
       )
 
       if (quiz.singleChoiceChoices == null) {
         throw ErrorRegistry.INTERNAL_SERVER_ERROR
       }
 
-      const correctAnswer =
-        quiz.singleChoiceChoices[quiz.singleChoiceCorrectAnswer]
-
       AnswerSubmitAdapter.saveAnswer(submitAnswer)
       if (quiz.currentQuizIndex == quiz.totalQuizCount) {
         await MockScoreAdapter.saveScore(memberIdx, quiz.idx)
       }
-
-      return new AnswerSubmitResponse(
-        correctAnswer,
-        quiz.reason,
-        submitAnswer.score,
-        submitAnswer.maxScore,
-      )
-    }
-    if (type == 'TEXT') {
+    } else if (type == 'TEXT') {
       const textAnswer = body.textAnswer
       if (textAnswer == null) {
         throw ErrorRegistry.INVALID_INPUT_FORMAT
       }
-      if (quiz.textCorrectAnswer == null) {
+
+      const correctAnswer = quiz.textCorrectAnswer
+      if (correctAnswer == null) {
         throw ErrorRegistry.INTERNAL_SERVER_ERROR
       }
+
       const score = (
-        await AIAdapter.gradeTextAnswer([textAnswer], quiz.textCorrectAnswer)
+        await AIAdapter.gradeTextAnswer([textAnswer], correctAnswer)
       ).score
 
-      const submitAnswer = new SubmitAnswer(
+      const submitAnswer = SubmitAnswer.gradeTextAnswer(
         memberIdx,
-        quiz.idx,
-        null,
+        quiz,
         textAnswer,
         score,
-        100,
       )
 
       AnswerSubmitAdapter.saveAnswer(submitAnswer)
       if (quiz.currentQuizIndex == quiz.totalQuizCount) {
         await MockScoreAdapter.saveScore(memberIdx, quiz.idx)
       }
-
-      return new AnswerSubmitResponse(
-        quiz.textCorrectAnswer,
-        quiz.reason,
-        submitAnswer.score,
-        submitAnswer.maxScore,
-      )
     } else {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }

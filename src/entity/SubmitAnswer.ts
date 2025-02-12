@@ -1,42 +1,71 @@
+import ErrorRegistry from '#error/ErrorRegistry'
+import Quiz from './Quiz.js'
+
 export default class SubmitAnswer {
+  static MAX_SCORE: number = 100
   memberIdx: number
   quizIdx: number
-  submitSingleChoiceAnswer: number | null
-  submitTextAnswer: string | null
+  submitAnswer: string
+  correctAnswer: string
   score: number
-  maxScore: number
 
   constructor(
     memberIdx: number,
     quizIdx: number,
-    submitSingleChoiceAnswer: number | null,
-    submitTextAnswer: string | null,
+    submitAnswer: string,
+    correctAnswer: string,
     score: number,
-    maxScore: number,
   ) {
     this.memberIdx = memberIdx
     this.quizIdx = quizIdx
-    this.submitSingleChoiceAnswer = submitSingleChoiceAnswer
-    this.submitTextAnswer = submitTextAnswer
+    this.submitAnswer = submitAnswer
+    this.correctAnswer = correctAnswer
     this.score = score
-    this.maxScore = maxScore
   }
 
   static gradeSingleChoiceAnswer(
     memberIdx: number,
-    quizIdx: number,
+    quiz: Quiz,
     submitSingleChoiceAnswer: number,
-    correctAnswer: number,
-    maxScore: number = 100,
   ): SubmitAnswer {
-    const score = submitSingleChoiceAnswer === correctAnswer ? maxScore : 0
+    if (quiz.singleChoiceCorrectAnswer == null) {
+      throw ErrorRegistry.INTERNAL_SERVER_ERROR
+    }
+    if (quiz.singleChoiceChoices == null) {
+      throw ErrorRegistry.INTERNAL_SERVER_ERROR
+    }
+
+    const correctAnswer = quiz.singleChoiceCorrectAnswer
+    const score =
+      submitSingleChoiceAnswer === correctAnswer ? this.MAX_SCORE : 0
+
+    const textSubmitAnswer = quiz.singleChoiceChoices[submitSingleChoiceAnswer]
+    const textCorrectAnswer = quiz.singleChoiceChoices[correctAnswer]
     return new SubmitAnswer(
       memberIdx,
-      quizIdx,
-      submitSingleChoiceAnswer,
-      null,
+      quiz.idx,
+      textSubmitAnswer,
+      textCorrectAnswer,
       score,
-      maxScore,
+    )
+  }
+
+  static gradeTextAnswer(
+    memberIdx: number,
+    quiz: Quiz,
+    submitAnswer: string,
+    score: number,
+  ): SubmitAnswer {
+    if (quiz.textCorrectAnswer == null) {
+      throw ErrorRegistry.INTERNAL_SERVER_ERROR
+    }
+
+    return new SubmitAnswer(
+      memberIdx,
+      quiz.idx,
+      submitAnswer,
+      quiz.textCorrectAnswer,
+      score,
     )
   }
 }

@@ -53,12 +53,12 @@ CREATE TABLE "quiz" (
     "created_at" TIMESTAMP NOT NULL
 );
 
-CREATE TABLE "submit_answer" (
+CREATE TABLE "answer_submit" (
     "idx" serial NOT NULL,
     "member_idx" INTEGER NOT NULL,
     "quiz_idx" INTEGER NOT NULL,
-    "submit_single_choice_answer" INTEGER NULL,
-    "submit_text_answer" VARCHAR(255) NULL,
+    "submit_answer" TEXT NULL,
+    "correct_answer" TEXT NULL,
     "score" INTEGER DEFAULT 0 NOT NULL,
     "max_score" INTEGER NOT NULL,
     "created_at" TIMESTAMP DEFAULT NOW() NOT NULL
@@ -108,7 +108,7 @@ ALTER TABLE "image" ADD CONSTRAINT "PK_IMAGE" PRIMARY KEY ("idx");
 
 ALTER TABLE "quiz" ADD CONSTRAINT "PK_QUIZ" PRIMARY KEY ("idx");
 
-ALTER TABLE "submit_answer" ADD CONSTRAINT "PK_ANSWER" PRIMARY KEY ("idx");
+ALTER TABLE "answer_submit" ADD CONSTRAINT "PK_ANSWER" PRIMARY KEY ("idx");
 
 ALTER TABLE "member" ADD CONSTRAINT "PK_MEMBER" PRIMARY KEY ("idx");
 
@@ -147,10 +147,15 @@ ALTER TABLE "answer"
   FOREIGN KEY ("member_idx")
   REFERENCES "member"("idx");
 
-ALTER TABLE "submit_answer"
-  ADD CONSTRAINT "FK_submitanswer_quiz"
+ALTER TABLE "answer_submit"
+  ADD CONSTRAINT "FK_answersubmit_quiz"
   FOREIGN KEY ("quiz_idx")
   REFERENCES "quiz"("idx");
+
+ALTER TABLE "answer_submit"
+  ADD CONSTRAINT "FK_answersubmit_member"
+  FOREIGN KEY ("member_idx")
+  REFERENCES "member"("idx");
 
 ALTER TABLE "notice"
   ADD CONSTRAINT "FK_notice_member"

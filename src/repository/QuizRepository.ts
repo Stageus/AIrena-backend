@@ -11,7 +11,7 @@ export default class QuizRepository {
           SELECT
             *
           FROM quiz
-          WHERE quiz.mock_idx = $1
+          WHERE mock_idx = $1
         ),
         submit_count AS(
           SELECT count(*) as submit_count

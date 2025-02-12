@@ -1,30 +1,48 @@
 import { postgres } from '#config/postgres'
-import QuizResultFormDB from '#dto/db/QuizResultFormDB'
+import AnswerSubmitResultFromDB from '#dto/db/AnswerSubmitResultFromDB'
+import { UUID } from 'crypto'
 
 export default class AnswerSubmitRepository {
   static async insertAnswerSubmit(
     memberIdx: number,
     quizIdx: number,
-    submitSingleChoiceAnswer: number | null,
-    submitTextAnswer: string | null,
+    submitAnswer: string,
+    correctAnswer: string,
     score: number,
     maxScore: number,
   ) {
+    return await postgres.query(
+      `
+      INSERT INTO answer_submit (member_idx, quiz_idx, submit_answer, correct_answer, score, max_score)
+      VALUES ($1, $2, $3, $4, $5, $6)
+      `,
+      [memberIdx, quizIdx, submitAnswer, correctAnswer, score, maxScore],
+    )
+  }
+
+  static async selectAnswerSubmit(memberIdx: number, mockIdx: UUID) {
     return (
       await postgres.query(
         `
-        INSERT INTO answer_submit (member_idx, quiz_idx, submit_single_choice_answer, submit_text_answer, score, max_score)
-        VALUES ($1, $2, $3, $4, $5, $6)
+        WITH quiz AS (
+          SELECT idx, reason
+          FROM quiz
+          WHERE mock_idx = $1
+        )
+        SELECT 
+          answer_submit.submit_answer AS "submitAnswer",
+          answer_submit.correct_answer AS "correctAnswer",
+          answer_submit.score,
+          answer_submit.max_score AS "maxScore",
+          quiz.reason
+        FROM answer_submit
+        JOIN quiz ON answer_submit.quiz_idx = quiz.idx
+        WHERE answer_submit.member_idx = $2
+        ORDER BY created_at DESC
+        LIMIT 1;
         `,
-        [
-          memberIdx,
-          quizIdx,
-          submitSingleChoiceAnswer,
-          submitTextAnswer,
-          score,
-          maxScore,
-        ],
+        [mockIdx, memberIdx],
       )
-    ).rows[0] as QuizResultFormDB
+    ).rows[0] as AnswerSubmitResultFromDB
   }
 }

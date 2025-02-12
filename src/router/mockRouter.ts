@@ -86,11 +86,22 @@ mockRouter.post(
     null,
     MockQuizRequest,
     SubmitAnswerRequest,
+    null,
+  )(async (req, res) => {
+    await AnswerSubmitService.submitAnswer(2, req.params, req.body)
+    res.sendStatus(201)
+  }),
+)
+
+mockRouter.get(
+  '/grading/:idx',
+  controller(
+    null,
+    MockQuizRequest,
+    null,
     AnswerSubmitResponse,
   )(async (req, res) => {
-    return res.send(
-      await AnswerSubmitService.submitAnswer(2, req.params, req.body),
-    )
+    return res.send(await AnswerSubmitService.getGradingResult(2, req.params))
   }),
 )
 
