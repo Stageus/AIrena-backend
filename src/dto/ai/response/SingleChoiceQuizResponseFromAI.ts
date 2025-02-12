@@ -32,6 +32,7 @@ export class SingleChoiceQuiz {
 
   toQuiz() {
     return new Quiz(
+      0,
       this.title,
       'SINGLE_CHOICE',
       this.description,
@@ -39,6 +40,8 @@ export class SingleChoiceQuiz {
       this.correctChoice,
       null,
       this.reason,
+      0,
+      0,
     )
   }
 }

@@ -21,6 +21,6 @@
       "#error/*": ["src/core/error/*.ts"]
     }
   },
-  "include": ["src/**/*.ts", "index.ts"],
+  "include": ["src/**/*.ts", "index.ts", "src/dto/frontend/response/MockScore"],
   "exclude": ["node_modules"]
 }

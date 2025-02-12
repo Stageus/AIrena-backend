@@ -1,7 +1,11 @@
 import Mock from '#entity/Mock'
 import MockDetail from '#entity/MockDetail'
 import MockList from '#entity/MockList'
+import MockResult from '#entity/MockScore'
+import Quiz from '#entity/Quiz'
 import MockRepository from '#repository/MockRepository'
+import MockScoreRepository from '#repository/MockScoreRepository'
+import QuizRepository from '#repository/QuizRepository'
 import { UUID } from 'crypto'
 
 export default class MockAdapter {
@@ -59,5 +63,18 @@ export default class MockAdapter {
   static async getMockDetail(idx: UUID): Promise<MockDetail> {
     const result = await MockRepository.getMock(idx)
     return MockDetail.of(result)
+  }
+
+  static async getMockQuiz(memberIdx: number, mockIdx: UUID): Promise<Quiz> {
+    const result = await QuizRepository.getMockQuizForMember(memberIdx, mockIdx)
+    return Quiz.of(result)
+  }
+
+  static async getMockResult(
+    memberIdx: number,
+    mockIdx: UUID,
+  ): Promise<MockResult> {
+    const result = await MockScoreRepository.getScore(memberIdx, mockIdx)
+    return MockResult.of(result)
   }
 }

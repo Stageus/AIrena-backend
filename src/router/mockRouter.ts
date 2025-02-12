@@ -1,11 +1,17 @@
 import controller from '#controller'
+import SubmitAnswerRequest from '#dto/frontend/request/AnswerSubmitRequest'
 import MockDetailRequest from '#dto/frontend/request/MockDetailRequest'
 import MockListRequest from '#dto/frontend/request/MockListRequest'
+import MockQuizRequest from '#dto/frontend/request/MockQuizRequest'
 import MockSearchRequest from '#dto/frontend/request/MockSearchRequest'
 import MockWriteRequest from '#dto/frontend/request/MockWriteRequest'
-import MockDetailResponse from '#dto/frontend/response/MockDeatailResponse'
+import AnswerSubmitResponse from '#dto/frontend/response/AnswerSubmitResponse'
+import MockDetailResponse from '#dto/frontend/response/MockDetailResponse'
 import MockListResponse from '#dto/frontend/response/MockListResponse'
+import MockQuizResponse from '#dto/frontend/response/MockQuizResponse'
+import MockResultResponse from '#dto/frontend/response/MockResultResponse'
 import MockWriteResponse from '#dto/frontend/response/MockWriteResponse'
+import AnswerSubmitService from '#service/AnswerSubmitService'
 import MockGetService from '#service/MockGetService'
 import MockWriteService from '#service/MockWriteService'
 import multipartParser from '#util/multipartParser'
@@ -59,5 +65,54 @@ mockRouter.get(
     MockDetailResponse,
   )(async (req, res) => {
     return res.send(await MockGetService.getMockDetail(req.params))
+  }),
+)
+
+mockRouter.get(
+  '/solve/:idx',
+  controller(
+    null,
+    MockQuizRequest,
+    null,
+    MockQuizResponse,
+  )(async (req, res) => {
+    return res.send(await MockGetService.getMockQuiz(2, req.params))
+  }),
+)
+
+mockRouter.post(
+  '/solve/:idx',
+  controller(
+    null,
+    MockQuizRequest,
+    SubmitAnswerRequest,
+    null,
+  )(async (req, res) => {
+    await AnswerSubmitService.submitAnswer(2, req.params, req.body)
+    res.sendStatus(201)
+  }),
+)
+
+mockRouter.get(
+  '/grading/:idx',
+  controller(
+    null,
+    MockQuizRequest,
+    null,
+    AnswerSubmitResponse,
+  )(async (req, res) => {
+    return res.send(await AnswerSubmitService.getGradingResult(2, req.params))
+  }),
+)
+
+mockRouter.get(
+  '/result/:idx',
+  controller(
+    null,
+    MockQuizRequest,
+    null,
+    MockResultResponse,
+  )(async (req, res) => {
+    return res.send(await MockGetService.getMockResult(2, req.params))
   }),
 )

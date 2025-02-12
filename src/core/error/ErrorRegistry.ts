@@ -46,7 +46,7 @@ export default class ErrorRegistry {
   )
 
   // Mock(MO)
-  static readonly CAN_NOT_FIND_TEST = new CustomError(
+  static readonly CAN_NOT_FIND_MOCK = new CustomError(
     404,
     'MO001',
     '모의고사가 존재하지 않습니다',

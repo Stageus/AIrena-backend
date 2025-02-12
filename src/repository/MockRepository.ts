@@ -59,8 +59,10 @@ export default class MockRepository {
         )
         SELECT json_build_object(
             'totalCount', (SELECT COUNT(*) FROM total_mock),
-            'mocks', (SELECT json_agg(p) 
-            FROM nickname_added as p)
+            'mocks', (
+              SELECT json_agg(p ORDER BY p."createdAt" DESC) 
+              FROM nickname_added as p
+            )
         )
         `,
         [displayCount, offset],
@@ -104,8 +106,10 @@ export default class MockRepository {
         )
         SELECT json_build_object(
           'totalCount', (SELECT COUNT(*) FROM filtered),
-          'mocks', (SELECT json_agg(p)
-          FROM nickname_added as p)
+          'mocks', (
+            SELECT json_agg(p ORDER BY p."likeCount" DESC)
+            FROM nickname_added as p
+          )
         );
         `,
         [titleToSearch, displayCount, offset],
@@ -149,8 +153,10 @@ export default class MockRepository {
         )
         SELECT json_build_object(
             'totalCount', (SELECT COUNT(*) FROM filtered),
-            'mocks', (SELECT json_agg(p) 
-            FROM nickname_added as p)
+            'mocks', (
+              SELECT json_agg(p) 
+              FROM nickname_added as p(ORDER BY p."createdAt" DESC)
+            )
         )
         `,
         [titleToSearch, displayCount, offset],
@@ -228,7 +234,7 @@ const makeInsertManyValues = (mockIdx: UUID, quizzes: Quiz[]) => {
       quiz.type,
       quiz.title,
       quiz.description,
-      quiz.choices,
+      quiz.singleChoiceChoices,
       quiz.singleChoiceCorrectAnswer,
       quiz.textCorrectAnswer,
       quiz.reason,
