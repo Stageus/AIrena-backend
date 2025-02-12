@@ -25,7 +25,11 @@ export default class AnswerSubmitRepository {
       await postgres.query(
         `
         WITH quiz AS (
-          SELECT idx, reason
+          SELECT 
+            idx,
+            reason,
+            row_number() OVER (ORDER BY created_at ASC) AS row_num,
+            count(*) OVER () AS quiz_count                          
           FROM quiz
           WHERE mock_idx = $1
         )
@@ -34,7 +38,9 @@ export default class AnswerSubmitRepository {
           answer_submit.correct_answer AS "correctAnswer",
           answer_submit.score,
           answer_submit.max_score AS "maxScore",
-          quiz.reason
+          quiz.reason,
+          quiz.row_num AS "currentQuizIndex",
+          quiz.quiz_count "totalQuizCount"
         FROM answer_submit
         JOIN quiz ON answer_submit.quiz_idx = quiz.idx
         WHERE answer_submit.member_idx = $2

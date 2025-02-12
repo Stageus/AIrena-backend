@@ -1,4 +1,5 @@
 import QuizResultFormDB from '#dto/db/QuizResultFormDB'
+import ErrorRegistry from '#error/ErrorRegistry'
 
 export default class Quiz {
   public idx: number
@@ -37,6 +38,9 @@ export default class Quiz {
   }
 
   static of(params: QuizResultFormDB) {
+    if (!params) {
+      throw ErrorRegistry.CAN_NOT_FIND_MOCK
+    }
     return new Quiz(
       params.idx,
       params.title,

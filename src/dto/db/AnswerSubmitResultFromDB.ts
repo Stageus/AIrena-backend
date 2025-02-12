@@ -4,4 +4,6 @@ export default interface AnswerSubmitResultFromDB {
   score: number
   maxScore: number
   reason: string
+  currentQuizIndex: number
+  totalQuizCount: number
 }

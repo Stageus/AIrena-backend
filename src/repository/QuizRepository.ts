@@ -12,6 +12,7 @@ export default class QuizRepository {
             *
           FROM quiz
           WHERE mock_idx = $1
+          ORDER BY idx ASC
         ),
         submit_count AS(
           SELECT count(*) as submit_count

@@ -110,7 +110,7 @@ mockRouter.get(
   controller(
     null,
     MockQuizRequest,
-    SubmitAnswerRequest,
+    null,
     MockResultResponse,
   )(async (req, res) => {
     return res.send(await MockGetService.getMockResult(2, req.params))

@@ -23,6 +23,8 @@ export default class AnswerSubmitService {
       gradingResult.score,
       gradingResult.maxScore,
       gradingResult.reason,
+      gradingResult.currentQuizIndex,
+      gradingResult.totalQuizCount,
     )
   }
 
@@ -38,6 +40,7 @@ export default class AnswerSubmitService {
     if (type == 'SINGLE_CHOICE') {
       const singleChoiceAnswer = body.singleChoiceAnswer
       if (singleChoiceAnswer == null) {
+        console.log('singleChoiceAnswer is null')
         throw ErrorRegistry.INVALID_INPUT_FORMAT
       }
 
