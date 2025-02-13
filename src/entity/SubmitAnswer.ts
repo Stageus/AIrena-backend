@@ -1,5 +1,5 @@
 import ErrorRegistry from '#error/ErrorRegistry'
-import Quiz from './Quiz.js'
+import Quiz from '../mock/entity/dto/Quiz.js'
 
 export default class SubmitAnswer {
   static MAX_SCORE: number = 100
@@ -56,10 +56,6 @@ export default class SubmitAnswer {
     submitAnswer: string,
     score: number,
   ): SubmitAnswer {
-    if (quiz.textCorrectAnswer == null) {
-      throw ErrorRegistry.INTERNAL_SERVER_ERROR
-    }
-
     return new SubmitAnswer(
       memberIdx,
       quiz.idx,

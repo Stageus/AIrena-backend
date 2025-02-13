@@ -1,4 +1,3 @@
-import AIAdapter from '#adapter/AIAdapter'
 import AnswerSubmitAdapter from '#adapter/AnswerSubmitAdapter'
 import MockAdapter from '#adapter/MockAdapter'
 import MockScoreAdapter from '#adapter/MockScoreAdapter'
@@ -7,6 +6,7 @@ import MockQuizRequest from '#dto/frontend/request/MockQuizRequest'
 import AnswerSubmitResponse from '#dto/frontend/response/AnswerSubmitResponse'
 import SubmitAnswer from '#entity/SubmitAnswer'
 import ErrorRegistry from '#error/ErrorRegistry'
+import AIAdapter from 'src/core/adapter/AIAdapter.js'
 
 export default class AnswerSubmitService {
   static async getGradingResult(

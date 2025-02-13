@@ -21,7 +21,7 @@ CREATE TABLE "like_history" (
 );
 
 CREATE TABLE "mock" (
-    "idx" UUID NOT NULL,
+    "idx" UUID DEFAULT gen_random_uuid() NOT NULL,
     "member_idx" INTEGER NOT NULL,
     "title" TEXT NOT NULL,
     "description" TEXT NOT NULL,
@@ -79,7 +79,7 @@ CREATE TABLE "member" (
 );
 
 CREATE TABLE "notice" (
-    "idx" UUID NOT NULL,
+    "idx" UUID DEFAULT gen_random_uuid() NOT NULL,
     "member_idx" INTEGER NOT NULL,
     "title" TEXT NOT NULL,
     "content" TEXT NOT NULL,

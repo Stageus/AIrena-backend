@@ -1,5 +1,3 @@
-import GetLikeDescMockListResultFromDB from '#dto/db/PaginatedMockListResultFromDB'
-
 export default class MockList {
   firstPageNumber: number
   currentPageNumber: number
@@ -11,30 +9,6 @@ export default class MockList {
     createdAt: string
     likeCount: number
   }[]
-
-  static from(
-    currentPageNumber: number,
-    displayCount: number,
-    dbResult: GetLikeDescMockListResultFromDB,
-  ) {
-    const totalCount = dbResult.totalCount
-
-    const firstPageNumber = Math.floor(currentPageNumber / 10) * 10 + 1
-    const pageOffset = Math.min(
-      9,
-      Math.floor(
-        (totalCount - (firstPageNumber - 1) * displayCount) / displayCount,
-      ),
-    )
-    const lastPageNumber = firstPageNumber + pageOffset
-
-    return new MockList(
-      firstPageNumber,
-      currentPageNumber,
-      lastPageNumber,
-      dbResult.mocks,
-    )
-  }
 
   constructor(
     firstPageNumber: number,
