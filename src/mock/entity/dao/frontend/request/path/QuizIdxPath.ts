@@ -1,11 +1,9 @@
-import { UUID } from 'crypto'
-
 interface QuizIdxPathParams {
-  idx: UUID
+  idx: number
 }
 
 export default class QuizIdxPath {
-  public idx: UUID
+  public idx: number
 
   constructor(params: QuizIdxPathParams) {
     this.idx = params.idx

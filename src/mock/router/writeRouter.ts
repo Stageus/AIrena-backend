@@ -8,7 +8,7 @@ import WriteService from '../service/WriteService.js'
 export const writeRouter = express.Router()
 
 writeRouter.post(
-  '/write',
+  '/',
   multipartParser('image', 1),
   controller(
     null,

@@ -1,6 +1,6 @@
-import MockList from '#entity/MockList'
+import MockList from 'src/mock/entity/dto/MockList.js'
 
-export default class MockListResponse {
+export default class ListResponse {
   firstPageNumber: number
   currentPageNumber: number
   lastPageNumber: number
@@ -12,8 +12,8 @@ export default class MockListResponse {
     likeCount: number
   }[]
 
-  public static of(mockList: MockList): MockListResponse {
-    return new MockListResponse(
+  public static of(mockList: MockList): ListResponse {
+    return new ListResponse(
       mockList.firstPageNumber,
       mockList.currentPageNumber,
       mockList.lastPageNumber,
@@ -21,8 +21,8 @@ export default class MockListResponse {
     )
   }
 
-  public static createEmpty(): MockListResponse {
-    return new MockListResponse(1, 1, 1, [])
+  public static createEmpty(): ListResponse {
+    return new ListResponse(1, 1, 1, [])
   }
 
   constructor(

@@ -2,6 +2,8 @@ import ErrorRegistry from '#error/ErrorRegistry'
 import dotenv from 'dotenv'
 dotenv.config()
 
+const aiServerUrl = process.env.AI_SERVER_URL as string
+
 export interface SingleChoiceQuizResponseFromAI {
   quizzes: {
     title: string
@@ -82,8 +84,6 @@ export default class AIAdapter {
     return (await response.json()) as TextGradeResponseFromAI
   }
 }
-
-const aiServerUrl = process.env.AI_SERVER_URL as string
 
 const fetchQuizFromAI = async (
   quizType: 'single-choice' | 'text',

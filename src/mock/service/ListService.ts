@@ -1,6 +1,7 @@
-import MockRepository from 'src/mock/repository/MockRepository.js'
 import ListQuery from '../entity/dao/request/query/ListRequest.js'
+import SearchQuery from '../entity/dao/request/query/SearchRequest.js'
 import ListResponse from '../entity/dao/response/ListResponse.js'
+import MockRepository from '../repository/MockRepository.js'
 
 export default class ListService {
   static async getMockList(query: ListQuery): Promise<ListResponse> {
@@ -13,13 +14,12 @@ export default class ListService {
       offset,
     )
 
-    const totalCount = dbResult.totalCount
-
     const firstPageNumber = Math.floor(currentPageNumber / 10) * 10 + 1
     const pageOffset = Math.min(
       9,
       Math.floor(
-        (totalCount - (firstPageNumber - 1) * displayCount) / displayCount,
+        (dbResult.totalCount - (firstPageNumber - 1) * displayCount) /
+          displayCount,
       ),
     )
     const lastPageNumber = firstPageNumber + pageOffset
@@ -30,5 +30,64 @@ export default class ListService {
       lastPageNumber,
       dbResult.mocks,
     )
+  }
+
+  static async searchMock(query: SearchQuery): Promise<ListResponse> {
+    const currentPageNumber = query.current
+    const displayCount = query.display
+    const offset = (currentPageNumber - 1) * displayCount
+    const title = '%' + query.title + '%'
+
+    if (query.sort === 'new') {
+      const dbResult = await MockRepository.getFilteredNewMockList(
+        title,
+        displayCount,
+        offset,
+      )
+
+      const firstPageNumber = Math.floor(currentPageNumber / 10) * 10 + 1
+      const pageOffset = Math.min(
+        9,
+        Math.floor(
+          (dbResult.totalCount - (firstPageNumber - 1) * displayCount) /
+            displayCount,
+        ),
+      )
+      const lastPageNumber = firstPageNumber + pageOffset
+
+      return new ListResponse(
+        firstPageNumber,
+        currentPageNumber,
+        lastPageNumber,
+        dbResult.mocks,
+      )
+    }
+
+    if (query.sort === 'like') {
+      const dbResult = await MockRepository.getFilteredLikeDescMockList(
+        title,
+        displayCount,
+        offset,
+      )
+
+      const firstPageNumber = Math.floor(currentPageNumber / 10) * 10 + 1
+      const pageOffset = Math.min(
+        9,
+        Math.floor(
+          (dbResult.totalCount - (firstPageNumber - 1) * displayCount) /
+            displayCount,
+        ),
+      )
+      const lastPageNumber = firstPageNumber + pageOffset
+
+      return new ListResponse(
+        firstPageNumber,
+        currentPageNumber,
+        lastPageNumber,
+        dbResult.mocks,
+      )
+    }
+
+    return ListResponse.createEmpty()
   }
 }

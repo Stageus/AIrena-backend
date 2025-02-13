@@ -1,5 +1,3 @@
-import MockList from '#entity/MockList'
-
 export default class ListResponse {
   firstPageNumber: number
   currentPageNumber: number
@@ -11,15 +9,6 @@ export default class ListResponse {
     createdAt: string
     likeCount: number
   }[]
-
-  public static of(mockList: MockList): ListResponse {
-    return new ListResponse(
-      mockList.firstPageNumber,
-      mockList.currentPageNumber,
-      mockList.lastPageNumber,
-      mockList.mocks,
-    )
-  }
 
   public static createEmpty(): ListResponse {
     return new ListResponse(1, 1, 1, [])

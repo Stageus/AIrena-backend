@@ -1,9 +1,6 @@
 import { testPostgresConnection } from '#config/postgres'
 import globalExceptionHandler from '#error/globalExceptionHandler'
-import { loginRouter } from '#router/loginRouter'
-import { memberRouter } from '#router/memberRouter'
-import { mockRouter } from '#router/mockRouter'
-import { testRouter } from '#router/testRouter'
+import { mockRouter } from '#mock/router'
 import cors from 'cors'
 import { configDotenv } from 'dotenv'
 import express from 'express'
@@ -19,10 +16,7 @@ app.use(
 )
 
 app.use(express.json())
-app.use('/member', memberRouter)
-app.use('/login', loginRouter)
 app.use('/mock', mockRouter)
-app.use('/test', testRouter)
 app.use(globalExceptionHandler)
 
 app.listen(3000, async () => {

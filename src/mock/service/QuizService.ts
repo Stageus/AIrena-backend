@@ -1,15 +1,12 @@
-import MockAdapter from '#adapter/MockAdapter'
 import MockQuizResponse from '#dto/frontend/response/MockQuizResponse'
 import ErrorRegistry from '#error/ErrorRegistry'
+import AIAdapter from 'src/core/adapter/AIAdapter.js'
 import AnswerSubmitRepository from 'src/mock/repository/AnswerSubmitRepository.js'
+import MockScoreRepository from 'src/mock/repository/MockScoreRepository.js'
 import QuizRepository from 'src/mock/repository/QuizRepository.js'
-import { Q } from 'node_modules/@upstash/redis/zmscore-C3G81zLz.mjs'
 import SolveRequest from '../entity/dao/request/body/SolveRequest.js'
 import QuizIdxPath from '../entity/dao/request/path/QuizIdxPath.js'
 import QuizResponse from '../entity/dao/response/QuizResponse.js'
-import ResultResponse from '../entity/dao/response/ResultResponse.js'
-import MockScoreRepository from 'src/mock/repository/MockScoreRepository.js'
-import AIAdapter from 'src/core/adapter/AIAdapter.js'
 import SolveResponse from '../entity/dao/response/SolveResponse.js'
 
 export default class QuizService {
@@ -39,7 +36,10 @@ export default class QuizService {
     path: QuizIdxPath,
     body: SolveRequest,
   ): Promise<void> {
-    const dbResult = await QuizRepository.getMockQuizForMember(memberIdx, path.)
+    const dbResult = await QuizRepository.getMockQuizForMember(
+      memberIdx,
+      path.idx,
+    )
 
     const type = dbResult.type
 
@@ -57,14 +57,15 @@ export default class QuizService {
       if (body.singleChoiceAnswer == null) {
         throw ErrorRegistry.INTERNAL_SERVER_ERROR
       }
-    
+
       const correctAnswer = dbResult.singleChoiceCorrectAnswer
       const score =
         body.singleChoiceAnswer === correctAnswer ? QuizService.MAX_SCORE : 0
-  
-      const textSubmitAnswer = dbResult.singleChoiceChoices[body.singleChoiceAnswer]
+
+      const textSubmitAnswer =
+        dbResult.singleChoiceChoices[body.singleChoiceAnswer]
       const textCorrectAnswer = dbResult.singleChoiceChoices[correctAnswer]
-  
+
       await AnswerSubmitRepository.insertAnswerSubmit(
         memberIdx,
         dbResult.idx,
@@ -77,13 +78,11 @@ export default class QuizService {
       if (dbResult.currentQuizIndex == dbResult.totalQuizCount) {
         await MockScoreRepository.insertScore(memberIdx, dbResult.idx)
       }
-    } 
-    
-    else if (type == 'TEXT') {
+    } else if (type == 'TEXT') {
       if (body.textAnswer == null) {
         throw ErrorRegistry.INVALID_INPUT_FORMAT
       }
-      if(body.textAnswer == null) {
+      if (body.textAnswer == null) {
         throw ErrorRegistry.INVALID_INPUT_FORMAT
       }
       if (dbResult.textCorrectAnswer == null) {
@@ -94,9 +93,11 @@ export default class QuizService {
       }
 
       const score = (
-        await AIAdapter.gradeTextAnswer([body.textAnswer], dbResult.textCorrectAnswer)
-      ).score
-
+        await AIAdapter.gradeTextAnswer(
+          [body.textAnswer],
+          dbResult.textCorrectAnswer,
+        )
+      ).scores[0]
 
       await AnswerSubmitRepository.insertAnswerSubmit(
         memberIdx,
@@ -119,9 +120,10 @@ export default class QuizService {
     memberIdx: number,
     path: QuizIdxPath,
   ): Promise<SolveResponse> {
-
-    const dbResult = await AnswerSubmitRepository.selectAnswerSubmit( memberIdx,
-      path.idx)
+    const dbResult = await AnswerSubmitRepository.selectAnswerSubmit(
+      memberIdx,
+      path.idx,
+    )
 
     return new SolveResponse(
       dbResult.submitAnswer,

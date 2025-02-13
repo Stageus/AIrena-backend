@@ -33,7 +33,7 @@ export default class Quiz {
   ): Quiz {
     return new Quiz(
       title,
-      'SINGLE_CHOICE',
+      'TEXT',
       description,
       null,
       null,

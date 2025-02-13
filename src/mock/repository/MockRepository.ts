@@ -1,14 +1,14 @@
 import { postgres } from '#config/postgres'
 import MockResultFromDB from '#dto/db/MockResultFromDB'
 import PaginatedMockListResultFromDB from '#dto/db/PaginatedMockListResultFromDB'
-import Quiz from '#entity/Quiz'
 import { UUID } from 'crypto'
+import Quiz from '../entity/dto/Quiz.js'
 
 export default class MockRepository {
   static async getMock(idx: UUID) {
     return (
       await postgres.query(
-        `
+        ` 
         SELECT
             mock.idx,
             mock.title,
@@ -154,8 +154,8 @@ export default class MockRepository {
         SELECT json_build_object(
             'totalCount', (SELECT COUNT(*) FROM filtered),
             'mocks', (
-              SELECT json_agg(p) 
-              FROM nickname_added as p(ORDER BY p."createdAt" DESC)
+              SELECT json_agg(p ORDER BY p."createdAt" DESC) 
+              FROM nickname_added as p
             )
         )
         `,
@@ -166,34 +166,50 @@ export default class MockRepository {
 
   static async insertMockData(
     memberIdx: number,
-    mockIdx: UUID,
     title: string,
     description: string,
     quizCount: number,
     quizzes: Quiz[],
+    urls: string[],
   ) {
-    await postgres.query(
-      `
-      WITH mock_insert AS(
-        INSERT INTO mock (idx, member_idx, title, description, quiz_count, created_at)
-          VALUES($1, $2, $3, $4, $5, NOW())
-      )
-      ${makeInsertManyQuery(6, quizzes.length)}
+    return (
+      await postgres.query(
+        `
+        ${makeInsertManyQuery(quizzes.length)}
       `,
-      [
-        mockIdx,
-        memberIdx,
-        title,
-        description,
-        quizCount,
-        ...makeInsertManyValues(mockIdx, quizzes),
-      ],
-    )
+        [
+          memberIdx,
+          title,
+          description,
+          quizCount,
+          urls,
+          ...quizzes.flatMap((quiz) => [
+            quiz.type,
+            quiz.title,
+            quiz.description,
+            quiz.singleChoiceChoices,
+            quiz.singleChoiceCorrectAnswer,
+            quiz.textCorrectAnswer,
+            quiz.reason,
+          ]),
+        ],
+      )
+    ).rows[0].mock_idx as UUID
   }
 }
 
-const makeInsertManyQuery = (startIndex: number, quizzesLength: number) => {
-  const query = `
+const makeInsertManyQuery = (quizzesLength: number) => {
+  let lastIndex = 5
+  return `
+    WITH mock_insert AS(
+      INSERT INTO mock (member_idx, title, description, quiz_count, created_at)
+      VALUES($1, $2, $3, $4, NOW())
+      RETURNING idx
+    ),
+    image_insert AS(
+      INSERT INTO image (article_idx, urls, created_at)
+      VALUES((SELECT idx FROM mock_insert), $5, NOW())
+    )
     INSERT INTO quiz (
       mock_idx, 
       type, 
@@ -205,39 +221,31 @@ const makeInsertManyQuery = (startIndex: number, quizzesLength: number) => {
       reason,
       created_at
     )
+    SELECT
+      mi.idx,
+      v.type,
+      v.title,
+      v.description,
+      v.single_choice_choices,
+      v.single_choice_correct_answer,
+      v.text_correct_answer,
+      v.reason,
+      NOW()
+    FROM mock_insert mi
+    CROSS JOIN(
       VALUES
-  `
-
-  let currentIndex = startIndex
-  const mockIdxIndex = startIndex
-  const values = Array.from({ length: quizzesLength }, () => {
-    return `(
-        $${mockIdxIndex},
-        $${++currentIndex}, 
-        $${++currentIndex}, 
-        $${++currentIndex}, 
-        $${++currentIndex}, 
-        $${++currentIndex}, 
-        $${++currentIndex}, 
-        $${++currentIndex}, 
-        NOW()
+    ${Array.from({ length: quizzesLength }, () => {
+      return `(
+        $${++lastIndex}::choice_type, 
+        $${++lastIndex}, 
+        $${++lastIndex}, 
+        $${++lastIndex}::text[], 
+        $${++lastIndex}::integer, 
+        $${++lastIndex},
+        $${++lastIndex}
       )`
-  })
-
-  return query + values.join(',') + ';'
-}
-
-const makeInsertManyValues = (mockIdx: UUID, quizzes: Quiz[]) => {
-  return [
-    mockIdx,
-    ...quizzes.flatMap((quiz) => [
-      quiz.type,
-      quiz.title,
-      quiz.description,
-      quiz.singleChoiceChoices,
-      quiz.singleChoiceCorrectAnswer,
-      quiz.textCorrectAnswer,
-      quiz.reason,
-    ]),
-  ]
+    }).join(',')})
+    AS v(type, title, description, single_choice_choices, single_choice_correct_answer, text_correct_answer, reason)
+    RETURNING mock_idx
+  `
 }
