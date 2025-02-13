@@ -1,6 +1,8 @@
-import MockRepository from 'src/mock/repository/MockRepository.js'
-import MockIdxPath from '../entity/dao/request/path/MockIdxPath.js'
-import DetailResponse from '../entity/dao/response/DetailResponse.js'
+import MockIdxPath from '../entity/dao/frontend/request/path/MockIdxPath.js'
+import DetailResponse from '../entity/dao/frontend/response/DetailResponse.js'
+import ResultResponse from '../entity/dao/frontend/response/ResultResponse.js'
+import MockRepository from '../repository/MockRepository.js'
+import MockScoreRepository from '../repository/MockScoreRepository.js'
 
 export default class MockItemService {
   static async getMockDetail(path: MockIdxPath): Promise<DetailResponse> {
@@ -13,6 +15,25 @@ export default class MockItemService {
       result.quizCount,
       result.writerNickname,
       result.images,
+      result.quizIdxes,
     )
+  }
+
+  static async getMockResult(
+    userIdx: number,
+    path: MockIdxPath,
+  ): Promise<ResultResponse> {
+    const result = await MockScoreRepository.getScore(userIdx, path.idx)
+
+    const topPercentile =
+      (result.greaterEqualCandidateCount / result.totalCandidateCount) * 100
+    return new ResultResponse(result.score, result.maxScore, topPercentile)
+  }
+
+  static async saveMockResult(
+    userIdx: number,
+    path: MockIdxPath,
+  ): Promise<void> {
+    await MockScoreRepository.saveScore(userIdx, path.idx)
   }
 }

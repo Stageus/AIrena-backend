@@ -1,6 +1,6 @@
 import AIAdapter from '#adapter/AIAdapter'
-import WriteRequest from '../entity/dao/request/body/WriteRequest.js'
-import WriteResponse from '../entity/dao/response/WriteResponse.js'
+import WriteRequest from '../entity/dao/frontend/request/body/WriteRequest.js'
+import WriteResponse from '../entity/dao/frontend/response/WriteResponse.js'
 import Quiz from '../entity/dto/Quiz.js'
 import MockRepository from '../repository/MockRepository.js'
 

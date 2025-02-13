@@ -1,11 +1,9 @@
-export default class SolveResponse {
+export default class QuizSolveResponse {
   submitAnswer: string
   correctAnswer: string
   score: number
   maxScore: number
   reason: string
-  currentQuizIndex: number
-  totalQuizCount: number
 
   constructor(
     submitAnswer: string,
@@ -13,15 +11,11 @@ export default class SolveResponse {
     score: number,
     maxScore: number,
     reason: string,
-    currentQuizIndex: number,
-    totalQuizCount: number,
   ) {
     this.submitAnswer = submitAnswer
     this.correctAnswer = correctAnswer
     this.score = score
     this.maxScore = maxScore
     this.reason = reason
-    this.currentQuizIndex = currentQuizIndex
-    this.totalQuizCount = totalQuizCount
   }
 }

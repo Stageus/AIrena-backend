@@ -1,14 +1,14 @@
 import { postgres } from '#config/postgres'
-import MockResultFromDB from '#dto/db/MockResultFromDB'
-import PaginatedMockListResultFromDB from '#dto/db/PaginatedMockListResultFromDB'
 import { UUID } from 'crypto'
+import MockResultFromDB from '../entity/dao/db/MockResultFromDB.js'
+import PaginatedMockListResultFromDB from '../entity/dao/db/PaginatedMockListResultFromDB.js'
 import Quiz from '../entity/dto/Quiz.js'
 
 export default class MockRepository {
   static async getMock(idx: UUID) {
     return (
       await postgres.query(
-        ` 
+        `
         SELECT
             mock.idx,
             mock.title,
@@ -17,16 +17,28 @@ export default class MockRepository {
             mock.quiz_count as "quizCount",
             mock.like_count as "likeCount",
             member.nickname as "writerNickname",
-            image.urls as images
+            image.urls as images,
+            json_agg(quiz.idx) AS "quizIdxes"
         FROM mock
         JOIN member ON member.idx = mock.member_idx
         JOIN image ON image.article_idx = mock.idx
+        JOIN quiz ON quiz.mock_idx = mock.idx
         WHERE mock.idx = $1 AND mock.is_deleted = false
+        GROUP BY 
+          mock.idx,
+          mock.title,
+          mock.description,
+          mock.created_at,
+          mock.quiz_count,
+          mock.like_count,
+          member.nickname,
+          image.urls;
         `,
         [idx],
       )
     ).rows[0] as MockResultFromDB
   }
+
   static async getPaginatedMockList(displayCount: number, offset: number) {
     return (
       await postgres.query(

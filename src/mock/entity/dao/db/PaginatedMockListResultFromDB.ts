@@ -1,4 +1,4 @@
-export default interface GetPaginatedMockListResultFromDB {
+export default interface PaginatedMockListResultFromDB {
   totalCount: number
   mocks: {
     idx: number

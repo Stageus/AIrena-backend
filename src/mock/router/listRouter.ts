@@ -1,8 +1,9 @@
 import controller from '#controller'
 import express from 'express'
-import ListQuery from '../entity/dao/request/query/ListRequest.js'
-import SearchQuery from '../entity/dao/request/query/SearchRequest.js'
-import ListResponse from '../entity/dao/response/ListResponse.js'
+
+import ListQuery from '../entity/dao/frontend/request/query/ListRequest.js'
+import SearchQuery from '../entity/dao/frontend/request/query/SearchRequest.js'
+import ListResponse from '../entity/dao/frontend/response/ListResponse.js'
 import ListService from '../service/ListService.js'
 
 export const listRouter = express.Router()
