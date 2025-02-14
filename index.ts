@@ -7,6 +7,7 @@ import express from 'express'
 configDotenv()
 
 const app = express()
+app.use(cookieParser())
 app.use(
   cors({
     origin: process.env.FRONTEND_SERVER_URL, // 허용할 출처

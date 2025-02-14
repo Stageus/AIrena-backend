@@ -20,25 +20,25 @@ memberRouter.post(
     SignupRequest,
     null,
   )(async (req, res) => {
-    /**dev */
+    /** dev */
     const result: any = await MemberService.emailSend(req.body)
-    return res.send(result)
-    // return res.sendStatus(201)
+    // return res.send(result)
+    return res.sendStatus(201)
   }),
 )
 
 /** 회원가입 인증 API */
-memberRouter.get(
-  '/verify',
+memberRouter.post(
+  '/signup/verify',
   controller(
+    null,
+    null,
     EmailVerifyRequest,
     null,
-    null,
-    null,
   )(async (req, res) => {
-    await MemberService.verifySignup(req.query)
-    // return res.sendStatus(201)
-    return res.redirect(process.env.FRONTEND_SERVER_URL as string)
+    await MemberService.verifySignup(req.body)
+    return res.sendStatus(201)
+    // return res.redirect(process.env.FRONTEND_SERVER_URL as string)
   }),
 )
 
@@ -52,7 +52,7 @@ memberRouter.patch(
     null,
   )(async (req, res): Promise<any> => {
     await MemberService.nicknameChange(req, req.body)
-    return res.sendStatus(201)
+    return res.sendStatus(200)
   }),
 )
 
@@ -66,7 +66,7 @@ memberRouter.post(
     null,
   )(async (req, res): Promise<any> => {
     await MemberService.findPassword(req.body)
-    return res.sendStatus(201)
+    return res.sendStatus(200)
   }),
 )
 
@@ -80,7 +80,7 @@ memberRouter.patch(
     null,
   )(async (req, res) => {
     await MemberService.changePassword(req, req.body)
-    return res.sendStatus(201)
+    return res.sendStatus(200)
   }),
 )
 
@@ -114,6 +114,34 @@ memberRouter.get(
     null,
   )(async (req, res) => {
     await MemberService.resendEmail(req)
-    return res.sendStatus(201)
+    return res.sendStatus(200)
+  }),
+)
+
+/** 로그인 상태 확인 API */
+memberRouter.get(
+  '/login/check',
+  controller(
+    null,
+    null,
+    null,
+    null,
+  )(async (req, res) => {
+    await MemberService.checkLogin(req)
+    return res.sendStatus(200)
+  }),
+)
+
+/** 로그아웃 API */
+memberRouter.get(
+  '/logout',
+  controller(
+    null,
+    null,
+    null,
+    null,
+  )(async (req, res) => {
+    await MemberService.logout(res)
+    return res.sendStatus(200)
   }),
 )

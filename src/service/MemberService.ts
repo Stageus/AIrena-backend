@@ -176,4 +176,27 @@ export default class MemberService {
     await redis.hincrby(data.email, 'send_count', 1)
     EmailSender.sendEmail(data.email, Token.returnToken(req))
   }
+
+  /** 로그인 상태 체크 */
+  static async checkLogin(req: Request) {
+    if (!req.cookies) {
+      throw ErrorRegistry.LOGIN_REQUIRED
+    }
+    if (!req.cookies.loginToken) {
+      throw ErrorRegistry.LOGIN_REQUIRED
+    }
+    if (!process.env.JWT_SIGNATURE_KEY) {
+      throw ErrorRegistry.INTERNAL_SERVER_ERROR
+    }
+    try {
+      jwt.verify(req.cookies.loginToken, process.env.JWT_SIGNATURE_KEY)
+      return
+    } catch (e) {
+      throw ErrorRegistry.LOGIN_REQUIRED
+    }
+  }
+
+  static async logout(res: Response) {
+    res.clearCookie('loginToken')
+  }
 }
