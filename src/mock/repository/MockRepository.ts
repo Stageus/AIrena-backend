@@ -18,21 +18,17 @@ export default class MockRepository {
             mock.like_count as "likeCount",
             member.nickname as "writerNickname",
             image.urls as images,
-            json_agg(quiz.idx) AS "quizIdxes"
+            (
+                SELECT quiz.idx
+                FROM quiz
+                WHERE quiz.mock_idx = mock.idx
+                ORDER BY quiz.created_at ASC
+                LIMIT 1
+            ) AS "firstQuizIdx"
         FROM mock
         JOIN member ON member.idx = mock.member_idx
         JOIN image ON image.article_idx = mock.idx
-        JOIN quiz ON quiz.mock_idx = mock.idx
         WHERE mock.idx = $1 AND mock.is_deleted = false
-        GROUP BY 
-          mock.idx,
-          mock.title,
-          mock.description,
-          mock.created_at,
-          mock.quiz_count,
-          mock.like_count,
-          member.nickname,
-          image.urls;
         `,
         [idx],
       )
@@ -242,11 +238,11 @@ const makeInsertManyQuery = (quizzesLength: number) => {
       v.single_choice_correct_answer,
       v.text_correct_answer,
       v.reason,
-      NOW()
+      NOW() + (v.index * interval '1 millisecond')
     FROM mock_insert mi
     CROSS JOIN(
       VALUES
-    ${Array.from({ length: quizzesLength }, () => {
+    ${Array.from({ length: quizzesLength }, (_, i) => {
       return `(
         $${++lastIndex}::choice_type, 
         $${++lastIndex}, 
@@ -254,10 +250,11 @@ const makeInsertManyQuery = (quizzesLength: number) => {
         $${++lastIndex}::text[], 
         $${++lastIndex}::integer, 
         $${++lastIndex},
-        $${++lastIndex}
+        $${++lastIndex},
+        ${i}::integer
       )`
     }).join(',')})
-    AS v(type, title, description, single_choice_choices, single_choice_correct_answer, text_correct_answer, reason)
+    AS v(type, title, description, single_choice_choices, single_choice_correct_answer, text_correct_answer, reason, index)
     RETURNING mock_idx
   `
 }

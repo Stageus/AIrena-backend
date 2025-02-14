@@ -1,4 +1,5 @@
 import { postgres } from '#config/postgres'
+import { UUID } from 'crypto'
 import AnswerSubmitResultFromDB from '../entity/dao/db/AnswerSubmitResultFromDB.js'
 
 export default class AnswerSubmitRepository {
@@ -23,18 +24,25 @@ export default class AnswerSubmitRepository {
     )
   }
 
-  static async selectAnswerSubmit(memberIdx: number, quizIdx: number) {
+  static async selectAnswerSubmit(memberIdx: number, quizIdx: UUID) {
     return (
       await postgres.query(
         `
-        SELECT 
+        SELECT
           answer_submit.submit_answer AS "submitAnswer",
           answer_submit.correct_answer AS "correctAnswer",
           answer_submit.score,
           answer_submit.max_score AS "maxScore",
-          quiz.reason
-        FROM answer_submit
-        JOIN quiz ON answer_submit.quiz_idx = quiz.idx
+          current_quiz.reason,
+          (
+            SELECT nextQuiz.idx
+            FROM quiz nextQuiz
+            WHERE nextQuiz.created_at > current_quiz.created_at
+            ORDER BY nextQuiz.created_at ASC
+            LIMIT 1
+          ) AS "nextQuizIdx"
+        FROM answer_submit answer_submit
+        JOIN quiz current_quiz ON answer_submit.quiz_idx = current_quiz.idx
         WHERE answer_submit.quiz_idx = $1 AND answer_submit.member_idx = $2
         `,
         [quizIdx, memberIdx],

@@ -9,5 +9,5 @@ export default interface MockResultFromDB {
   likeCount: number
   writerNickname: string
   images: string[]
-  quizIdxes: number[]
+  firstQuizIdx: UUID
 }

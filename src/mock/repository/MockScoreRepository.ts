@@ -13,7 +13,6 @@ export default class MockScoreRepository {
           WHERE member_idx = $1
             AND mock_idx = $2
           ORDER BY created_at DESC
-          LIMIT 1
         )
         SELECT
           cm.score,
@@ -50,7 +49,11 @@ export default class MockScoreRepository {
         total_score,
         total_max_score,
         NOW()
-      FROM score_sum_cte;
+      FROM score_sum_cte
+      WHERE NOT EXISTS (
+          SELECT 1 FROM mock_score
+          WHERE member_idx = $2 AND mock_idx = $1
+      );
       `,
       [mockIdx, memberIdx],
     )

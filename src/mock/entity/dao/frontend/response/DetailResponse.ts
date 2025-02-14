@@ -1,3 +1,5 @@
+import { UUID } from 'crypto'
+
 export default class DetailResponse {
   title: string
   description: string
@@ -5,7 +7,7 @@ export default class DetailResponse {
   quizCount: number
   writerNickname: string
   images: string[]
-  quizIdxes: number[]
+  firstQuizIdx: UUID
 
   constructor(
     title: string,
@@ -14,7 +16,7 @@ export default class DetailResponse {
     quizCount: number,
     writerNickname: string,
     images: string[],
-    quizIdxes: number[],
+    firstQuizIdx: UUID,
   ) {
     this.title = title
     this.description = description
@@ -22,6 +24,6 @@ export default class DetailResponse {
     this.quizCount = quizCount
     this.writerNickname = writerNickname
     this.images = images
-    this.quizIdxes = quizIdxes
+    this.firstQuizIdx = firstQuizIdx
   }
 }

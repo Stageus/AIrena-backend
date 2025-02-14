@@ -2,7 +2,7 @@ import controller from '#controller'
 import express from 'express'
 import SolveRequest from '../entity/dao/frontend/request/body/SolveRequest.js'
 import QuizIdxPath from '../entity/dao/frontend/request/path/QuizIdxPath.js'
-import { default as MockQuizResponse } from '../entity/dao/frontend/response/QuizResponse.js'
+import QuizResponse from '../entity/dao/frontend/response/QuizResponse.js'
 import QuizSolveResponse from '../entity/dao/frontend/response/QuizSolveResponse.js'
 import QuizService from '../service/QuizService.js'
 
@@ -14,7 +14,7 @@ quizRouter.get(
     null,
     QuizIdxPath,
     null,
-    MockQuizResponse,
+    QuizResponse,
   )(async (req, res) => {
     return res.send(await QuizService.getQuiz(req.params))
   }),

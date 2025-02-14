@@ -1,8 +1,9 @@
 import { postgres } from '#config/postgres'
+import { UUID } from 'crypto'
 import QuizResultFormDB from '../entity/dao/db/QuizResultFormDB.js'
 
 export default class QuizRepository {
-  static async getQuiz(quizIdx: number) {
+  static async getQuiz(quizIdx: UUID) {
     return (
       await postgres.query(
         `

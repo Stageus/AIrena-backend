@@ -125,6 +125,7 @@ export default class QuizService {
       dbResult.score,
       dbResult.maxScore,
       dbResult.reason,
+      dbResult.nextQuizIdx,
     )
   }
 }

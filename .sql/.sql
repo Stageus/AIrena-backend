@@ -29,7 +29,7 @@ CREATE TABLE "mock" (
     "like_count" INTEGER DEFAULT 0 NOT NULL,
     "created_at" TIMESTAMP NOT NULL,
     "updated_at" TIMESTAMP DEFAULT NOW() NOT NULL,
-    "is_deleted" BOOLEAN DEFAULT FALSE NOT NULL,
+    "is_deleted" BOOLEAN DEFAULT FALSE NOT NULL
 );
 
 CREATE TABLE "image" (
@@ -41,7 +41,7 @@ CREATE TABLE "image" (
 );
 
 CREATE TABLE "quiz" (
-    "idx" serial NOT NULL,
+    "idx" UUID DEFAULT gen_random_uuid() NOT NULL,
     "mock_idx" UUID NOT NULL,
     "type" choice_type NOT NULL,        
     "title" TEXT NOT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE "quiz" (
 CREATE TABLE "answer_submit" (
     "idx" serial NOT NULL,
     "member_idx" INTEGER NOT NULL,
-    "quiz_idx" INTEGER NOT NULL,
+    "quiz_idx" UUID NOT NULL,
     "submit_answer" TEXT NULL,
     "correct_answer" TEXT NULL,
     "score" INTEGER DEFAULT 0 NOT NULL,
