@@ -22,7 +22,6 @@ memberRouter.post(
   )(async (req, res) => {
     /** dev */
     const result: any = await MemberService.emailSend(req.body)
-    // return res.send(result)
     return res.sendStatus(201)
   }),
 )
@@ -38,7 +37,6 @@ memberRouter.post(
   )(async (req, res) => {
     await MemberService.verifySignup(req.body)
     return res.sendStatus(201)
-    // return res.redirect(process.env.FRONTEND_SERVER_URL as string)
   }),
 )
 
