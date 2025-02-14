@@ -23,10 +23,11 @@
     "pg": "8.13.1"
   },
   "imports": {
+    "#mock/*": "./dist/src/mock/*/index.js",
     "#router/*": "./dist/src/router/*.js",
     "#controller": "./dist/src/core/controller/index.js",
     "#service/*": "./dist/src/service/*.js",
-    "#adapter/*": "./dist/src/adapter/*.js",
+    "#adapter/*": "./dist/src/core/adapter/*.js",
     "#repository/*": "./dist/src/repository/*.js",
     "#dto/*": "./dist/src/dto/*.js",
     "#entity/*": "./dist/src/entity/*.js",

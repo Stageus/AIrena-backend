@@ -9,10 +9,11 @@
     "esModuleInterop": true,
     "baseUrl": ".",
     "paths": {
+      "#mock/*": ["src/mock/*/index.ts"],
       "#router/*": ["src/router/*.ts"],
       "#controller/*": ["src/core/controller/index.ts"],
       "#service/*": ["src/service/*.ts"],
-      "#adapter/*": ["src/adapter/*.ts"],
+      "#adapter/*": ["src/core/adapter/*.ts"],
       "#repository/*": ["src/repository/*.ts"],
       "#dto/*": ["src/dto/*.ts"],
       "#entity/*": ["src/entity/*.ts"],
