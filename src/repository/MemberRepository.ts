@@ -86,10 +86,12 @@ export default class MemberRepository {
   }
   /** 유저 정보 탐색 */
   static async checkMemberPassword(id: string, email: string) {
-    return await postgres.query(
-      'SELECT 1 FROM member WHERE id = $1 AND email = $2',
-      [id, email],
-    )
+    return (
+      await postgres.query(
+        'SELECT 1 FROM member WHERE id = $1 AND email = $2',
+        [id, email],
+      )
+    ).rowCount
   }
   /** 비밀번호 변경
    * 비밀번호 값을 변경합니다. */

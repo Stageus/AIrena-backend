@@ -54,6 +54,11 @@ export default class ErrorRegistry {
     'US007',
     '인증 요청 한도를 초과하였습니다. 내일 다시 시도하십시오',
   )
+  static readonly PASSWORD_CHANGE_FAILED = new CustomError(
+    400,
+    'US008',
+    '비밀번호 변경에 실패했습니다. 비밀번호 찾기를 다시 시도해주세요',
+  )
 
   // Mock(MO)
   static readonly CAN_NOT_FIND_MOCK = new CustomError(

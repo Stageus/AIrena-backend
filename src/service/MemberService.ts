@@ -94,8 +94,9 @@ export default class MemberService {
   /** 비밀번호 검색 서비스 로직 */
   static async findPassword(findPasswordRequest: FindPasswordRequest) {
     const { id, email } = findPasswordRequest
-    const checkResult = MemberRepository.checkMemberPassword(id, email)
-    if (!checkResult) {
+    const checkResult = await MemberRepository.checkMemberPassword(id, email)
+    console.log(checkResult)
+    if (checkResult == 0) {
       throw ErrorRegistry.CAN_NOT_FIND_USER
     }
     const secretKey: string = process.env.JWT_SIGNATURE_KEY || 'jwt-secret-key'
@@ -110,6 +111,7 @@ export default class MemberService {
         expiresIn: '60m',
       },
     )
+    console.log(Token)
     EmailSender.sendEmail(email, Token)
   }
 
@@ -118,9 +120,18 @@ export default class MemberService {
     req: Request,
     passwordChangeRequest: PasswordChangeRequest,
   ) {
-    const { password } = passwordChangeRequest
-    const data: any = Token.getToken(req)
-    await MemberRepository.updateMemberPassword(password, data.userId)
+    const { token, password } = passwordChangeRequest
+    if (!process.env.JWT_SIGNATURE_KEY) {
+      throw ErrorRegistry.INTERNAL_SERVER_ERROR
+    }
+    try {
+      const data = jwt.verify(token, process.env.JWT_SIGNATURE_KEY) as any
+      console.log(data)
+      await MemberRepository.updateMemberPassword(password, data.userId)
+      return
+    } catch (e) {
+      throw ErrorRegistry.PASSWORD_CHANGE_FAILED
+    }
   }
 
   /** 일반 로그인 서브시 로직*/
