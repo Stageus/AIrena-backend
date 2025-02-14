@@ -55,9 +55,10 @@ export default class MemberService {
 
   /** 회원가입 인증 서비스 로직 */
   static async verifySignup(signupVerifyRequest: SignupVerifyRequest) {
-    const { token } = signupVerifyRequest
-    const secretKey = process.env.JWT_SIGNATURE_KEY || 'jwt-secret-key'
-    const data: any = jwt.verify(token, secretKey)
+    const { token } = signupVerifyRequest // 쿼리에 포함된 토큰
+    if (!process.env.JWT_SIGNATURE_KEY)
+      throw ErrorRegistry.INTERNAL_SERVER_ERROR
+    const data: any = jwt.verify(token, process.env.JWT_SIGNATURE_KEY)
     const nickname = await RandomNicknameGenerator.generateNickname() // 랜덤 생성기 자리
     /** 이메일 인증 확인 */
     await MemberRepository.emailCheck(data.email)

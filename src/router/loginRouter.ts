@@ -65,7 +65,7 @@ loginRouter.get(
     null,
     LoginUserDataResponse,
   )(async (req, res): Promise<any> => {
-    await LoginService.checkGoogleUserDataAndSignin(req.query.code)
+    await LoginService.checkGoogleUserDataAndSignin(req.query.code, res)
 
     return res.redirect(process.env.FRONTEND_SERVER_URL as string)
   }),

@@ -21,6 +21,16 @@ export default class MemberRepository {
       throw ErrorRegistry.DUPLICATED_EMAIL
     }
   }
+
+  static async checkIdAndEmailDuplicate(id: string, email: string) {
+    const checkResult = await postgres.query(
+      'SELECT CASE WHEN EXISTS(SELECT 1 FROM member WHERE id = $1) THEN $2 ELSE $3 END AS id_status, CASE WHEN EXISTS(SELECT 1 FROM member WHERE email = $4) THEN $5 ELSE $6 END AS email_status',
+      [id, 'ID_EXIST', 'ID_NOT_EXIST', email, 'EMAIL_EXIST', 'EMAIL_NOT_EXIST'],
+    )
+    if ((checkResult as any) === 'ID_EXIT') {
+      throw ErrorRegistry.DUPLICATED_ID
+    }
+  }
   /** 회원 가입
    * 저장한 회원 정보를 DB에 저장합니다. */
   static async insertNormalMember(
