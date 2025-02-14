@@ -2,33 +2,18 @@ import { postgres } from '#config/postgres'
 import { redis } from '#config/redis'
 import ErrorRegistry from '#error/ErrorRegistry'
 export default class MemberRepository {
-  /**아이디 중복 체크 */
-  static async checkIdDuplicate(id: string) {
-    const checkId = await postgres.query('SELECT * FROM member WHERE id = $1', [
-      id,
-    ])
-    if (checkId.rowCount == 1) {
-      throw ErrorRegistry.DUPLICATED_ID
-    }
-  }
-  /** 이메일 중복 체크 */
-  static async checkEmailDuplicate(email: string) {
-    const checkEmail = await postgres.query(
-      'SELECT * FROM member WHERE email = $1',
-      [email],
-    )
-    if (checkEmail.rowCount == 1) {
-      throw ErrorRegistry.DUPLICATED_EMAIL
-    }
-  }
-
+  /** 아이디 & 이메일 중복 체크 */
   static async checkIdAndEmailDuplicate(id: string, email: string) {
     const checkResult = await postgres.query(
       'SELECT CASE WHEN EXISTS(SELECT 1 FROM member WHERE id = $1) THEN $2 ELSE $3 END AS id_status, CASE WHEN EXISTS(SELECT 1 FROM member WHERE email = $4) THEN $5 ELSE $6 END AS email_status',
       [id, 'ID_EXIST', 'ID_NOT_EXIST', email, 'EMAIL_EXIST', 'EMAIL_NOT_EXIST'],
     )
-    if ((checkResult as any) === 'ID_EXIT') {
+    console.log(checkResult.rows[0].id_status)
+    console.log(checkResult.rows[0].email_status)
+    if ((checkResult.rows[0].id_status as any) === 'ID_EXIST') {
       throw ErrorRegistry.DUPLICATED_ID
+    } else if ((checkResult.rows[0].email_status as any) === 'EMAIL_EXIST') {
+      throw ErrorRegistry.DUPLICATED_EMAIL
     }
   }
   /** 회원 가입
@@ -99,7 +84,13 @@ export default class MemberRepository {
       )
     ).rows[0].password
   }
-
+  /** 유저 정보 탐색 */
+  static async checkMemberPassword(id: string, email: string) {
+    return await postgres.query(
+      'SELECT 1 FROM member WHERE id = $1 AND email = $2',
+      [id, email],
+    )
+  }
   /** 비밀번호 변경
    * 비밀번호 값을 변경합니다. */
   static async updateMemberPassword(password: string, id: string) {

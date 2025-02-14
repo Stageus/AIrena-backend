@@ -5,7 +5,6 @@ import NormalLoginRequest from '#dto/frontend/request/NormalLoginRequest'
 import PasswordChangeRequest from '#dto/frontend/request/PasswordChangeRequest'
 import SignupRequest from '#dto/frontend/request/SignupRequest'
 import SignupVerifyRequest from '#dto/frontend/request/SignupVerifyRequest'
-import FindPasswordResponse from '#dto/frontend/response/FindPasswordResponse'
 import ErrorRegistry from '#error/ErrorRegistry'
 import MemberRepository from '#repository/MemberRepository'
 import EmailSender from '#util/email/mailSender/EmailSender'
@@ -28,8 +27,7 @@ export default class MemberService {
       throw ErrorRegistry.PASSWORD_NOT_EQUAL
     }
     /** 중복 처리 구간 */
-    await MemberRepository.checkIdDuplicate(id)
-    await MemberRepository.checkEmailDuplicate(email)
+    await MemberRepository.checkIdAndEmailDuplicate(id, email)
     /** redis에 이메일 정보를 저장합니다.*/
     await MemberRepository.saveEmailInfo(email)
     /** 토큰을 생성 */
@@ -96,10 +94,10 @@ export default class MemberService {
   /** 비밀번호 검색 서비스 로직 */
   static async findPassword(findPasswordRequest: FindPasswordRequest) {
     const { id, email } = findPasswordRequest
-    const passwordFindResult = await MemberRepository.getMemberPassword(
-      id,
-      email,
-    )
+    const checkResult = MemberRepository.checkMemberPassword(id, email)
+    if (!checkResult) {
+      throw ErrorRegistry.CAN_NOT_FIND_USER
+    }
     const secretKey: string = process.env.JWT_SIGNATURE_KEY || 'jwt-secret-key'
     const Token = jwt.sign(
       {
@@ -113,7 +111,6 @@ export default class MemberService {
       },
     )
     EmailSender.sendEmail(email, Token)
-    return new FindPasswordResponse(passwordFindResult)
   }
 
   /** 비밀번호 변경 서비스 로직 */
