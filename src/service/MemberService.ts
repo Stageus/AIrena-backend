@@ -32,7 +32,7 @@ export default class MemberService {
     await MemberRepository.saveEmailInfo(email)
     /** 토큰을 생성 */
     const secretKey: string = process.env.JWT_SIGNATURE_KEY || 'jwt-secret-key'
-    const loginToken = jwt.sign(
+    const token = jwt.sign(
       {
         userId: id,
         password: password,
@@ -47,8 +47,8 @@ export default class MemberService {
       },
     )
     /** 토큰을 포함하여 인증 메일을 전송 */
-    EmailSender.sendEmail(email, loginToken)
-    return new SignupResponse(loginToken)
+    EmailSender.sendEmail(email, token)
+    return new SignupResponse(token)
   }
 
   /** 회원가입 인증 서비스 로직 */
@@ -163,10 +163,10 @@ export default class MemberService {
 
   /** 이메일 재전송 서비스 로직 */
   static async resendEmail(req: Request) {
-    console.log(req)
+    // console.log(req)
     const data: any = Token.getToken(req)
 
-    console.log(data)
+    // console.log(data)
     let mailSendCount: any = await redis.hget(data.email, 'send_count')
     if (mailSendCount >= 5) {
       throw ErrorRegistry.TOO_MUCH_VERIFY_ATTEMPT

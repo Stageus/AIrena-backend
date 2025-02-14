@@ -12,6 +12,11 @@ export default class ErrorRegistry {
     'GL002',
     '입력 형식이 올바르지 않습니다',
   )
+  static readonly TOKEN_REQUIRED = new CustomError(
+    401,
+    'GL003',
+    '토큰이 필요합니다.',
+  )
 
   // User(US)
   static readonly CAN_NOT_FIND_USER = new CustomError(
