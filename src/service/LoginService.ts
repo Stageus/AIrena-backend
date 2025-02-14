@@ -1,14 +1,18 @@
 import LoginAdapter from '#adapter/OAuthAdapter'
-import LoginUserDataResponse from '#dto/frontend/response/loginUserDataResponse'
 import MemberRepository from '#repository/MemberRepository'
+import dotenv from 'dotenv'
+dotenv.config()
 import { Response } from 'express'
 import jwt from 'jsonwebtoken'
 
 const kakaoOauthUserInfoUrl = process.env.KAKAO_OAUTH_USER_INFO_URL || ''
 const googleOauthUserInfoUrl = process.env.GOOGLE_OAUTH_USER_INFO_URL || ''
 
+const signupRedirectUrl = `${process.env.FRONTEND_SERVER_URL}/signup/redirect`
+const loginRedirectUrl = `${process.env.FRONTEND_SERVER_URL}/login/redirect`
+
 export default class LoginService {
-  static async checkKakaoUserDataAndSignin(code: string) {
+  static async checkKakaoUserDataAndSignin(code: string): Promise<string> {
     const loginToken = await LoginAdapter.getKakaoToken(code)
     const userData = await LoginAdapter.getUserDataByToken(
       loginToken,
@@ -26,14 +30,13 @@ export default class LoginService {
         userData.id as string,
         userData.properties.nickname,
       )
-      console.log('회원가입함')
+      return signupRedirectUrl
     }
-    console.log('로그인 됨')
-    return new LoginUserDataResponse(userData)
+    return loginRedirectUrl
   }
 
-  static async checkGoogleUserDataAndSignin(code: string, res: Response) {
-    const googleLoginToken = await LoginAdapter.getGoogleToken(code)
+  static async checkGoogleUserDataAndSignin(code: string): Promise<string> {
+    const loginToken = await LoginAdapter.getGoogleToken(code)
     const userData = await LoginAdapter.getUserDataByToken(
       googleLoginToken,
       googleOauthUserInfoUrl,
@@ -51,7 +54,7 @@ export default class LoginService {
         userData.name,
         userData.email,
       )
-      console.log('회원가입함')
+      return signupRedirectUrl
     }
     const secretKey: string = process.env.JWT_SIGNATURE_KEY || 'jwt-secret-key'
     const loginToken = jwt.sign(

@@ -36,10 +36,10 @@ loginRouter.get(
     LoginRequest,
     null,
     null,
-    LoginUserDataResponse,
+    null,
   )(async (req, res) => {
-    await LoginService.checkKakaoUserDataAndSignin(req.query.code)
-    return res.redirect(process.env.FRONTEND_SERVER_URL as string)
+    const url = await LoginService.checkKakaoUserDataAndSignin(req.query.code)
+    return res.redirect(url)
   }),
 )
 
@@ -65,8 +65,7 @@ loginRouter.get(
     null,
     LoginUserDataResponse,
   )(async (req, res): Promise<any> => {
-    await LoginService.checkGoogleUserDataAndSignin(req.query.code, res)
-
-    return res.redirect(process.env.FRONTEND_SERVER_URL as string)
+    const url = await LoginService.checkGoogleUserDataAndSignin(req.query.code)
+    return res.redirect(url)
   }),
 )
