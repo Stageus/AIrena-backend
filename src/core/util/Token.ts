@@ -22,7 +22,7 @@ export default class Token {
   static returnToken(req: Request) {
     const authHeader = req.headers['authorization']
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      throw ErrorRegistry.LOGIN_REQUIRED
+      throw ErrorRegistry.TOKEN_REQUIRED
     }
     const token = authHeader.slice(7)
     return token
