@@ -34,6 +34,7 @@ export default class MockItemService {
     userIdx: number,
     path: MockIdxPath,
   ): Promise<void> {
+    await MockScoreRepository.saveScoreForRank(userIdx, path.idx)
     await MockScoreRepository.saveScore(userIdx, path.idx)
   }
 }

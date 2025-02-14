@@ -7,6 +7,7 @@ export default class QuizSolveResponse {
   maxScore: number
   reason: string
   nextQuizIdx: UUID
+  mockIdx: UUID
 
   constructor(
     submitAnswer: string,
@@ -15,6 +16,7 @@ export default class QuizSolveResponse {
     maxScore: number,
     reason: string,
     nextQuizIdx: UUID,
+    mockIdx: UUID,
   ) {
     this.submitAnswer = submitAnswer
     this.correctAnswer = correctAnswer
@@ -22,5 +24,6 @@ export default class QuizSolveResponse {
     this.maxScore = maxScore
     this.reason = reason
     this.nextQuizIdx = nextQuizIdx
+    this.mockIdx = mockIdx
   }
 }

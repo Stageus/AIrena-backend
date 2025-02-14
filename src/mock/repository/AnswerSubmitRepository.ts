@@ -15,10 +15,6 @@ export default class AnswerSubmitRepository {
       `
       INSERT INTO answer_submit (member_idx, quiz_idx, submit_answer, correct_answer, score, max_score)
       SELECT $1, $2, $3, $4, $5, $6
-      WHERE NOT EXISTS (
-          SELECT 1 FROM answer_submit
-          WHERE member_idx = $1 AND quiz_idx = $2
-      );
       `,
       [memberIdx, quizIdx, submitAnswer, correctAnswer, score, maxScore],
     )
@@ -29,10 +25,10 @@ export default class AnswerSubmitRepository {
       await postgres.query(
         `
         SELECT
-          answer_submit.submit_answer AS "submitAnswer",
-          answer_submit.correct_answer AS "correctAnswer",
-          answer_submit.score,
-          answer_submit.max_score AS "maxScore",
+          asm.submit_answer AS "submitAnswer",
+          asm.correct_answer AS "correctAnswer",
+          asm.score,
+          asm.max_score AS "maxScore",
           current_quiz.reason,
           (
             SELECT nextQuiz.idx
@@ -40,10 +36,13 @@ export default class AnswerSubmitRepository {
             WHERE nextQuiz.created_at > current_quiz.created_at
             ORDER BY nextQuiz.created_at ASC
             LIMIT 1
-          ) AS "nextQuizIdx"
-        FROM answer_submit answer_submit
-        JOIN quiz current_quiz ON answer_submit.quiz_idx = current_quiz.idx
-        WHERE answer_submit.quiz_idx = $1 AND answer_submit.member_idx = $2
+          ) AS "nextQuizIdx",
+        current_quiz.mock_idx AS "mockIdx"
+      FROM answer_submit asm
+      JOIN quiz current_quiz ON asm.quiz_idx = current_quiz.idx
+      WHERE asm.quiz_idx = $1 AND asm.member_idx = $2
+      ORDER BY asm.created_at DESC
+      LIMIT 1
         `,
         [quizIdx, memberIdx],
       )

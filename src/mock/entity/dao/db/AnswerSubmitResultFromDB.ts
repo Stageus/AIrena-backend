@@ -7,4 +7,5 @@ export default interface AnswerSubmitResultFromDB {
   maxScore: number
   reason: string
   nextQuizIdx: UUID
+  mockIdx: UUID
 }
