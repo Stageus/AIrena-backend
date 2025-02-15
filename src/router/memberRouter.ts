@@ -3,12 +3,16 @@ import FindPasswordRequest from '#dto/frontend/request/FindPasswordRequest'
 import NicknameChangeRequest from '#dto/frontend/request/NicknameChangeRequest'
 import NormalLoginRequest from '#dto/frontend/request/NormalLoginRequest'
 import PasswordChangeRequest from '#dto/frontend/request/PasswordChangeRequest'
+import SendFindPasswordEmailRequest from '#dto/frontend/request/SendFindPasswordEmailRequest'
+import SendVerifyEmailRequest from '#dto/frontend/request/SendVerifyEmailRequest'
 
 import SignupRequest from '#dto/frontend/request/SignupRequest'
-import EmailVerifyRequest from '#dto/frontend/request/SignupVerifyRequest'
+import {
+  default as EmailVerifyRequest,
+  default as SignupVerifyRequest,
+} from '#dto/frontend/request/SignupVerifyRequest'
 import MemberService from '#service/MemberService'
-import express, { Request, Response } from 'express'
-import RandomNicknameGenerator from '../nickname/randomNicknameGenerator.js'
+import express from 'express'
 export const memberRouter = express.Router()
 
 /** 회원가입 API */
@@ -21,7 +25,7 @@ memberRouter.post(
     null,
   )(async (req, res) => {
     /** dev */
-    const result: any = await MemberService.emailSend(req.body)
+    await MemberService.emailSend(req.body)
     return res.sendStatus(201)
   }),
 )
@@ -30,12 +34,12 @@ memberRouter.post(
 memberRouter.post(
   '/signup/verify',
   controller(
-    null,
+    SignupVerifyRequest,
     null,
     EmailVerifyRequest,
     null,
   )(async (req, res) => {
-    await MemberService.verifySignup(req.body)
+    await MemberService.verifySignup(req.query)
     return res.sendStatus(201)
   }),
 )
@@ -95,23 +99,30 @@ memberRouter.post(
   }),
 )
 
-memberRouter.get('/test', async (req: Request, res: Response): Promise<any> => {
-  const nickname = RandomNicknameGenerator.generateNickname() // 랜덤 생성기 자리
-  return res.send({
-    name: nickname,
-  })
-})
-
-/** 인증 이메일 재전송 API */
+/** 회원가입 인증 이메일 재전송 API */
 memberRouter.get(
-  '/send-email',
+  '/signup/email',
   controller(
-    null,
+    SendVerifyEmailRequest,
     null,
     null,
     null,
   )(async (req, res) => {
-    await MemberService.resendEmail(req)
+    await MemberService.sendVerifyEmail(req.query)
+    return res.sendStatus(200)
+  }),
+)
+
+/** 비밀번호 찾기 인증 이메일 재전송 API */
+memberRouter.get(
+  '/change/password/email',
+  controller(
+    SendFindPasswordEmailRequest,
+    null,
+    null,
+    null,
+  )(async (req, res) => {
+    await MemberService.sendPasswordFindEmail(req.query)
     return res.sendStatus(200)
   }),
 )
