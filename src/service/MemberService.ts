@@ -103,8 +103,8 @@ export default class MemberService {
     sendFindPasswordEmailRequest: SendFindPasswordEmailRequest,
   ) {
     const { id, email } = sendFindPasswordEmailRequest
-    await MemberRepository.checkFindPasswordEmailDataFromRedis(email)
     const token = Token.generateVerifyToken(id, email)
+    await MemberRepository.checkFindPasswordEmailDataFromRedis(email, token)
     EmailSender.sendFindPasswordVerifyEmail(email, token)
   }
 

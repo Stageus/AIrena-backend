@@ -15,7 +15,7 @@ export default class MemberRepository {
     }
   }
 
-  /** 이메일 인증을 위하여 입력받은 정보를 redis에 저장해둡니다.  */
+  /** 회원가입 시, 이메일 인증을 위하여 입력받은 정보를 redis에 저장해둡니다.  */
   static async insertMemberDataAtRedis(
     id: string,
     password: string,
@@ -173,12 +173,16 @@ export default class MemberRepository {
   /**
    * 비밀번호 찾기 인증 이메일 정보를 저장합니다.
    */
-  static async checkFindPasswordEmailDataFromRedis(email: string) {
+  static async checkFindPasswordEmailDataFromRedis(
+    email: string,
+    token: string,
+  ) {
     const checkHashData = await redis.exists(email)
     if (checkHashData == 0) {
       const now = new Date()
       await redis.hset(email, {
         send_count: 1,
+        token: token,
         created_at: now,
       })
       now.setHours(24, 0, 0, 0)
