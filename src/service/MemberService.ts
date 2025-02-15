@@ -26,10 +26,7 @@ export default class MemberService {
     if (password != passwordCheck) {
       throw ErrorRegistry.PASSWORD_NOT_EQUAL
     }
-    /** 중복 처리 구간 */
     await MemberRepository.checkIdAndEmailDuplicate(id, email)
-    /** redis에 이메일 정보를 저장합니다.*/
-    console.log(id, password, email)
     await MemberRepository.insertMemberDataAtRedis(id, password, email)
     const token = Token.generateToken(id, email)
     EmailSender.sendSignupVerifyEmail(email, token)
@@ -43,11 +40,11 @@ export default class MemberService {
       throw ErrorRegistry.INTERNAL_SERVER_ERROR
     const data: any = jwt.verify(token, process.env.JWT_SIGNATURE_KEY)
     const nickname = await RandomNicknameGenerator.generateNickname() // 랜덤 생성기 자리
-    await MemberRepository.emailCheck(data.email)
+    await MemberRepository.checkVerifyEmailDataFromRedis(data.email)
     const memberHashData: any = await MemberRepository.getHashDataFromRedis(
       data.email,
     )
-    await MemberRepository.insertNormalMember(
+    await MemberRepository.insertNormalMemberData(
       memberHashData.id,
       memberHashData.password,
       data.email,
@@ -57,8 +54,8 @@ export default class MemberService {
   /** 회원가입 인증 이메일 재전송 서비스 로직 */
   static async sendVerifyEmail(sendVerifyEmailRequest: SendVerifyEmailRequest) {
     const { id, email } = sendVerifyEmailRequest
-    await MemberRepository.checkVerifyEmailDataFromRedis(email)
-    const token = Token.generateToken(id, email)
+    await MemberRepository.increaseVerifyEmailDataFromRedis(email)
+    const token = Token.generateVerifyToken(id, email)
     EmailSender.sendSignupVerifyEmail(email, token)
   }
 
@@ -75,11 +72,14 @@ export default class MemberService {
   /** 비밀번호 검색 서비스 로직 */
   static async findPassword(findPasswordRequest: FindPasswordRequest) {
     const { id, email } = findPasswordRequest
-    const checkResult = await MemberRepository.checkMemberPassword(id, email)
+    const checkResult = await MemberRepository.checkMemberPasswordFromDb(
+      id,
+      email,
+    )
     if (checkResult == 0) {
       throw ErrorRegistry.CAN_NOT_FIND_USER
     }
-    const token = Token.generateToken(id, email)
+    const token = Token.generateVerifyToken(id, email)
     EmailSender.sendFindPasswordVerifyEmail(email, token)
   }
 
@@ -104,7 +104,7 @@ export default class MemberService {
   ) {
     const { id, email } = sendFindPasswordEmailRequest
     await MemberRepository.checkFindPasswordEmailDataFromRedis(email)
-    const token = Token.generateToken(id, email)
+    const token = Token.generateVerifyToken(id, email)
     EmailSender.sendFindPasswordVerifyEmail(email, token)
   }
 

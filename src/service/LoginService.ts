@@ -31,7 +31,7 @@ export default class LoginService {
     Token.generateCookie('loginToken', loginToken, res)
 
     if (!checkResult.rows[0] || checkResult.rows[0] == undefined) {
-      await MemberRepository.insertKakaoLoginMember(
+      await MemberRepository.insertKakaoLoginMemberData(
         userData.id as string,
         userData.properties.nickname,
       )
@@ -60,7 +60,7 @@ export default class LoginService {
     Token.generateCookie('loginToken', loginToken, res)
 
     if (!checkResult.rows[0] || checkResult.rows[0] == undefined) {
-      await MemberRepository.insertGoogleLoginMember(
+      await MemberRepository.insertGoogleLoginMemberData(
         userData.id as string,
         userData.name,
         userData.email,

@@ -14,25 +14,8 @@ export default class MemberRepository {
       throw ErrorRegistry.DUPLICATED_EMAIL
     }
   }
-  /** 회원 가입
-   * 저장한 회원 정보를 DB에 저장합니다. */
-  static async insertNormalMember(
-    id: string,
-    password: string,
-    email: string,
-    nickname: string,
-  ) {
-    let checkApprove = await redis.hget('email', 'is_approved')
-    if (checkApprove != true) {
-      let datetime = new Date()
-      await postgres.query(
-        'INSERT INTO member (id, provider, password, email, nickname,created_at) VALUES ($1, $2, $3, $4, $5, $6)',
-        [id, 'NORMAL', password, email, nickname, datetime],
-      )
-    }
-  }
-  /** 이메일 인증
-   * 회원가입 인증 이메일 정보를 저장합니다.  */
+
+  /** 이메일 인증을 위하여 입력받은 정보를 redis에 저장해둡니다.  */
   static async insertMemberDataAtRedis(
     id: string,
     password: string,
@@ -51,8 +34,7 @@ export default class MemberRepository {
     await redis.expireat(email, expireTime)
   }
 
-  /** 닉네임 변경
-   * 입력받은 닉네임으로 변경합니다. */
+  /** 입력받은 닉네임으로 닉네임을 변경합니다. */
   static async changeNickname(nickname: string, id: string) {
     await postgres.query('UPDATE member SET nickname = $1 WHERE id = $2', [
       nickname,
@@ -60,10 +42,8 @@ export default class MemberRepository {
     ])
   }
 
-  /** 비밀번호 찾기
-   * 비밀번호 값을 찾아옵니다. 값 없을 때 예외 처리 해야함함 */
-
-  static async checkMemberPassword(id: string, email: string) {
+  /** 비밀번호 찾기 */
+  static async checkMemberPasswordFromDb(id: string, email: string) {
     return (
       await postgres.query(
         'SELECT 1 FROM member WHERE id = $1 AND email = $2',
@@ -101,8 +81,26 @@ export default class MemberRepository {
       socialId,
     ])
   }
+
+  /** 저장한 회원 정보를 DB에 저장합니다. */
+  static async insertNormalMemberData(
+    id: string,
+    password: string,
+    email: string,
+    nickname: string,
+  ) {
+    let checkApprove = await redis.hget('email', 'is_approved')
+    if (checkApprove != true) {
+      let datetime = new Date()
+      await postgres.query(
+        'INSERT INTO member (id, provider, password, email, nickname,created_at) VALUES ($1, $2, $3, $4, $5, $6)',
+        [id, 'NORMAL', password, email, nickname, datetime],
+      )
+    }
+  }
+
   /** 카카오 소셜로그인 회원가입 */
-  static async insertKakaoLoginMember(socialId: string, nickname: string) {
+  static async insertKakaoLoginMemberData(socialId: string, nickname: string) {
     let dateTime = new Date()
     await postgres
       .query(
@@ -122,7 +120,7 @@ export default class MemberRepository {
   }
 
   /** 구글 소셜로그인 회원가입 */
-  static async insertGoogleLoginMember(
+  static async insertGoogleLoginMemberData(
     socialId: string,
     nickname: string,
     email: string,
@@ -151,7 +149,7 @@ export default class MemberRepository {
 
   /** 이메일 인증
    * redis에 해당 이메일이 있는지를 확인하여 인증합니다. */
-  static async emailCheck(email: string) {
+  static async checkVerifyEmailDataFromRedis(email: string) {
     let emailCheckResult = await redis.hget('email', 'is_approved')
     if (emailCheckResult == 'nil') {
       throw ErrorRegistry.ACCESS_DENIED
@@ -164,7 +162,7 @@ export default class MemberRepository {
 
   /** 인증 이메일 재전송
    *  이메일 전송 횟수를 확인하고 횟수를 증가시킵니다.*/
-  static async checkVerifyEmailDataFromRedis(email: string) {
+  static async increaseVerifyEmailDataFromRedis(email: string) {
     let mailSendCount: any = await redis.hget(email, 'send_count')
     if (mailSendCount >= 5) {
       throw ErrorRegistry.TOO_MUCH_VERIFY_ATTEMPT
