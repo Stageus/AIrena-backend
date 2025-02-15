@@ -19,7 +19,9 @@
       "#entity/*": ["src/entity/*.ts"],
       "#config/*": ["src/core/config/*.ts"],
       "#util/*": ["src/core/util/*.ts"],
-      "#error/*": ["src/core/error/*.ts"]
+      "#error/*": ["src/core/error/*.ts"],
+      "#member/*": ["src/member/*/index.ts"],
+      "#socialLogin/*": ["src/socialLogin/*/index.ts"]
     }
   },
   "include": [

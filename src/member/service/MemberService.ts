@@ -5,7 +5,7 @@ import ErrorRegistry from '#error/ErrorRegistry'
 import EmailSender from '#util/email/mailSender/index'
 import Token from '#util/token/index'
 import dotenv from 'dotenv'
-import { Request, Response } from 'express'
+import { Request, response, Response } from 'express'
 import NormalLoginRequest from 'src/member/dao/frontend/request/NormalLoginRequest.js'
 import PasswordChangeRequest from 'src/member/dao/frontend/request/PasswordChangeRequest.js'
 import SignupRequest from 'src/member/dao/frontend/request/SignupRequest.js'
@@ -53,7 +53,8 @@ export default class MemberService {
       data.email,
       nickname,
     )
-
+    const signupToken = Token.generateToken(memberHashData.id, data.email)
+    Token.generateCookie('signup', signupToken, response)
     return signupRedirectUrl
   }
   /** 회원가입 인증 이메일 재전송 서비스 로직 */
