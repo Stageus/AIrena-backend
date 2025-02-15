@@ -39,23 +39,15 @@ export default class MemberRepository {
     email: string,
   ): Promise<void> {
     const now = new Date() // 현재 시간
-    console.log('리포')
-    now.setHours(0, 0, 0, 0) // 현재 시간에서 다음날 00시로 설정
-    const expireTime = Math.floor(now.getTime() / 1000) // Unix 타임스탬프 (초 단위)
     const result = await redis.hset(email, {
       id: id,
       password: password,
       send_count: 1,
       is_approved: false,
-      // created_at: now,
+      created_at: now,
     })
-    console.log(result)
-    await redis.hset(email, { id: id })
-    await redis.hset(email, { password: password })
-    await redis.hset(email, { send_count: 1 })
-    await redis.hset(email, { is_approved: false })
-
-    console.log('리포 2')
+    now.setHours(24, 0, 0, 0) // 현재 시간에서 다음날 00시로 설정
+    const expireTime = Math.floor(now.getTime() / 1000) // Unix 타임스탬프 (초 단위)
     await redis.expireat(email, expireTime)
   }
 
