@@ -3,6 +3,9 @@ import { Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
 
 export default class Token {
+  /** 쿠키로부터 토큰을 얻어옵니다.
+   *  기본적으로 string 입니다.
+   */
   static getTokenFromCookie(req: Request) {
     const token = req.cookies.token
     if (!token) {
@@ -10,7 +13,9 @@ export default class Token {
     }
     return token
   }
-
+  /** 토큰에서 data를 추출합니다.
+   *  기본적으로 object를 반환합니다.
+   */
   static getDataFromToken(req: Request) {
     const token = req.cookies.token
     if (!token) {
@@ -24,6 +29,12 @@ export default class Token {
     return data
   }
 
+  /**토큰을 생성합니다.
+   *  @params {string} id
+   *  - 사용자 아이디 입니다.
+   *  @params {string} email
+   *  - 사용자 이메일 주소입니다.
+   */
   static generateToken(id: string, email: string) {
     if (!process.env.JWT_SIGNATURE_KEY) {
       throw ErrorRegistry.INTERNAL_SERVER_ERROR
@@ -43,9 +54,12 @@ export default class Token {
     return token
   }
   /** 로그인 토큰을 생성합니다.
-   *  @id string
-   *  @email string
-   *  @role string
+   *  @params {string} id
+   *  - 사용자 아이디 입니다.
+   *  @params {string} email
+   *  - 사용자 이메일 주소입니다.
+   *  @params {string} role
+   *  - 사용자 권한입니다.
    */
   static generateLoginToken(id: string, email: string, role: string) {
     if (!process.env.JWT_SIGNATURE_KEY) {
@@ -66,7 +80,30 @@ export default class Token {
     )
     return token
   }
-  static generateVerifyToken() {}
+  /** 인증 토큰을 생성합니다.
+   *  @params {string} id
+   *  - 사용자 아이디 입니다.
+   *  @params {string} email
+   *  - 사용자 이메일 주소입니다.
+   */
+  static generateVerifyToken(id: string, email: string) {
+    if (!process.env.JWT_SIGNATURE_KEY) {
+      throw ErrorRegistry.INTERNAL_SERVER_ERROR
+    }
+    const secretKey: string = process.env.JWT_SIGNATURE_KEY
+    const token = jwt.sign(
+      {
+        userId: id,
+        email: email,
+      },
+      secretKey,
+      {
+        issuer: 'ai-rena',
+        expiresIn: '60m',
+      },
+    )
+    return token
+  }
 
   /** 쿠키를 생성합니다.
    *  @params {string} name
