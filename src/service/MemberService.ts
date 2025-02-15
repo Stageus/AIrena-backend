@@ -19,6 +19,9 @@ import jwt from 'jsonwebtoken'
 import RandomNicknameGenerator from '../nickname/randomNicknameGenerator.js'
 dotenv.config()
 
+const signupRedirectUrl = `${process.env.FRONTEND_SERVER_URL}/redirect/signup`
+const loginRedirectUrl = `${process.env.FRONTEND_SERVER_URL}/redirect/login`
+
 export default class MemberService {
   /** 인증 이메일 전송 서비스 로직 */
   static async emailSend(signupRequest: SignupRequest) {
@@ -50,6 +53,8 @@ export default class MemberService {
       data.email,
       nickname,
     )
+
+    return signupRedirectUrl
   }
   /** 회원가입 인증 이메일 재전송 서비스 로직 */
   static async sendVerifyEmail(sendVerifyEmailRequest: SendVerifyEmailRequest) {
@@ -127,6 +132,7 @@ export default class MemberService {
       memberData.role,
     )
     Token.generateCookie('loginToken', loginToken, res)
+    return loginRedirectUrl
   }
 
   /** 로그인 상태 체크 */
@@ -148,7 +154,7 @@ export default class MemberService {
     }
   }
 
-  /** 로그아웃웃 */
+  /** 로그아웃 */
   static async logout(res: Response) {
     res.clearCookie('loginToken')
   }

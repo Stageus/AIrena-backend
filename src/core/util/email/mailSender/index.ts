@@ -29,7 +29,7 @@ export default class EmailSender {
     //   process.cwd(),
     //   'src/core/util/email/images/ai-rena-icon.png',
     // )
-    const verifyUrl = `${process.env.FRONTEND_SERVER_URL as string}/signup/verify?token=${token}`
+    const verifyUrl = `${process.env.FRONTEND_SERVER_URL as string}/redirect/signup/verify?token=${token}`
     htmlTemplatePath = htmlTemplatePath.replace('{{verifyUrl}}', verifyUrl)
 
     const mailOption: nodemailer.SendMailOptions = {
@@ -81,7 +81,7 @@ export default class EmailSender {
       process.cwd(),
       'src/core/util/email/images/ai-rena-icon.png',
     )
-    const verifyUrl = `${process.env.FRONTEND_SERVER_URL as string}/signup/verify?token=${token}`
+    const verifyUrl = `${process.env.FRONTEND_SERVER_URL as string}/redirect/change/password?token=${token}`
     htmlTemplatePath = htmlTemplatePath.replace('{{verifyUrl}}', verifyUrl)
 
     const mailOption: nodemailer.SendMailOptions = {

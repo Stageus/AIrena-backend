@@ -7,8 +7,8 @@ dotenv.config()
 
 const kakaoOauthUserInfoUrl = process.env.KAKAO_OAUTH_USER_INFO_URL || ''
 const googleOauthUserInfoUrl = process.env.GOOGLE_OAUTH_USER_INFO_URL || ''
-const signupRedirectUrl = `${process.env.FRONTEND_SERVER_URL}/signup/redirect`
-const loginRedirectUrl = `${process.env.FRONTEND_SERVER_URL}/login/redirect`
+const signupRedirectUrl = `${process.env.FRONTEND_SERVER_URL}/redirect/signup`
+const loginRedirectUrl = `${process.env.FRONTEND_SERVER_URL}/redirect/login`
 
 export default class LoginService {
   static async checkKakaoUserDataAndSignin(

@@ -39,8 +39,8 @@ memberRouter.post(
     EmailVerifyRequest,
     null,
   )(async (req, res) => {
-    await MemberService.verifySignup(req.query)
-    return res.sendStatus(201)
+    const url = await MemberService.verifySignup(req.query)
+    return res.redirect(url)
   }),
 )
 
@@ -95,7 +95,8 @@ memberRouter.post(
     NormalLoginRequest,
     null,
   )(async (req, res) => {
-    return res.send(await MemberService.attemptNormalLogin(req.body, res))
+    const url = await MemberService.attemptNormalLogin(req.body, res)
+    res.redirect(url)
   }),
 )
 
