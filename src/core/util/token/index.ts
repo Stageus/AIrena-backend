@@ -42,7 +42,11 @@ export default class Token {
     )
     return token
   }
-
+  /** 로그인 토큰을 생성합니다.
+   *  @id string
+   *  @email string
+   *  @role string
+   */
   static generateLoginToken(id: string, email: string, role: string) {
     if (!process.env.JWT_SIGNATURE_KEY) {
       throw ErrorRegistry.INTERNAL_SERVER_ERROR
@@ -64,6 +68,14 @@ export default class Token {
   }
   static generateVerifyToken() {}
 
+  /** 쿠키를 생성합니다.
+   *  @params {string} name
+   *  - 생성할 쿠키의 이름입니다.
+   *  @params {string} token
+   *  - 쿠키에 포함할 token 입니다.
+   *  @params {string} response
+   *  - response로 전달하기 위한 객체입니다. 기본값으로 res를 사용합니다.
+   */
   static generateCookie(name: string, token: string, res: Response) {
     res.cookie(name, token, {
       path: '/',

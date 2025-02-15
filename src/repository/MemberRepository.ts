@@ -39,7 +39,7 @@ export default class MemberRepository {
     email: string,
   ): Promise<void> {
     const now = new Date() // 현재 시간
-    const result = await redis.hset(email, {
+    await redis.hset(email, {
       id: id,
       password: password,
       send_count: 1,
@@ -131,7 +131,7 @@ export default class MemberRepository {
     await postgres
       .query(
         'INSERT INTO member (id, provider, password, email, nickname,created_at) VALUES ($1, $2, $3, $4, $5, $6)',
-        [socialId, 'KAKAO', socialId, email, nickname, dateTime],
+        [socialId, 'GOOGLE', socialId, email, nickname, dateTime],
       )
       .catch((err) => {
         console.log(err)
@@ -179,12 +179,12 @@ export default class MemberRepository {
     const checkHashData = await redis.exists(email)
     if (checkHashData == 0) {
       const now = new Date()
-      now.setHours(0, 0, 0, 0)
-      const expireTime = Math.floor(now.getTime() / 1000)
       await redis.hset(email, {
         send_count: 1,
         created_at: now,
       })
+      now.setHours(24, 0, 0, 0)
+      const expireTime = Math.floor(now.getTime() / 1000)
       await redis.expireat(email, expireTime)
     } else {
       let mailSendCount: any = await redis.hget(email, 'send_count')
