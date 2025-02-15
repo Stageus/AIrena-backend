@@ -1,8 +1,8 @@
 import LoginAdapter from '#adapter/OAuthAdapter'
-import MemberRepository from '#repository/MemberRepository'
 import Token from '#util/token/index'
 import dotenv from 'dotenv'
 import { Response } from 'express'
+import MemberRepository from 'src/member/repository/MemberRepository.js'
 dotenv.config()
 
 const kakaoOauthUserInfoUrl = process.env.KAKAO_OAUTH_USER_INFO_URL || ''

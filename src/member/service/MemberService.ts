@@ -1,22 +1,22 @@
-import FindPasswordRequest from '#dto/frontend/request/FindPasswordRequest'
-import NicknameChangeRequest from '#dto/frontend/request/NicknameChangeRequest'
+import FindPasswordRequest from 'src/member/dao/frontend/request/FindPasswordRequest.js'
+import NicknameChangeRequest from 'src/member/dao/frontend/request/NicknameChangeRequest.js'
 
-import NormalLoginRequest from '#dto/frontend/request/NormalLoginRequest'
-import PasswordChangeRequest from '#dto/frontend/request/PasswordChangeRequest'
-import SignupRequest from '#dto/frontend/request/SignupRequest'
-import SignupVerifyRequest from '#dto/frontend/request/SignupVerifyRequest'
 import ErrorRegistry from '#error/ErrorRegistry'
-import MemberRepository from '#repository/MemberRepository'
 import EmailSender from '#util/email/mailSender/index'
 import Token from '#util/token/index'
 import dotenv from 'dotenv'
 import { Request, Response } from 'express'
+import NormalLoginRequest from 'src/member/dao/frontend/request/NormalLoginRequest.js'
+import PasswordChangeRequest from 'src/member/dao/frontend/request/PasswordChangeRequest.js'
+import SignupRequest from 'src/member/dao/frontend/request/SignupRequest.js'
+import SignupVerifyRequest from 'src/member/dao/frontend/request/SignupVerifyRequest.js'
+import MemberRepository from 'src/member/repository/MemberRepository.js'
 
-import SendFindPasswordEmailRequest from '#dto/frontend/request/SendFindPasswordEmailRequest'
-import SendVerifyEmailRequest from '#dto/frontend/request/SendVerifyEmailRequest'
-import SignupResponse from '#dto/frontend/response/SignupResponse'
 import jwt from 'jsonwebtoken'
-import RandomNicknameGenerator from '../nickname/randomNicknameGenerator.js'
+import SendFindPasswordEmailRequest from 'src/member/dao/frontend/request/SendFindPasswordEmailRequest.js'
+import SendVerifyEmailRequest from 'src/member/dao/frontend/request/SendVerifyEmailRequest.js'
+import SignupResponse from 'src/member/dao/frontend/response/SignupResponse.js'
+import RandomNicknameGenerator from '../../core/util/nickname/nicknameGenerator/index.js'
 dotenv.config()
 
 const signupRedirectUrl = `${process.env.FRONTEND_SERVER_URL}/redirect/signup`

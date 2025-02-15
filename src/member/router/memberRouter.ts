@@ -1,18 +1,18 @@
 import controller from '#controller'
-import FindPasswordRequest from '#dto/frontend/request/FindPasswordRequest'
-import NicknameChangeRequest from '#dto/frontend/request/NicknameChangeRequest'
-import NormalLoginRequest from '#dto/frontend/request/NormalLoginRequest'
-import PasswordChangeRequest from '#dto/frontend/request/PasswordChangeRequest'
-import SendFindPasswordEmailRequest from '#dto/frontend/request/SendFindPasswordEmailRequest'
-import SendVerifyEmailRequest from '#dto/frontend/request/SendVerifyEmailRequest'
+import FindPasswordRequest from 'src/member/dao/frontend/request/FindPasswordRequest.js'
+import NicknameChangeRequest from 'src/member/dao/frontend/request/NicknameChangeRequest.js'
+import NormalLoginRequest from 'src/member/dao/frontend/request/NormalLoginRequest.js'
+import PasswordChangeRequest from 'src/member/dao/frontend/request/PasswordChangeRequest.js'
+import SendFindPasswordEmailRequest from 'src/member/dao/frontend/request/SendFindPasswordEmailRequest.js'
+import SendVerifyEmailRequest from 'src/member/dao/frontend/request/SendVerifyEmailRequest.js'
 
-import SignupRequest from '#dto/frontend/request/SignupRequest'
+import express from 'express'
+import SignupRequest from 'src/member/dao/frontend/request/SignupRequest.js'
 import {
   default as EmailVerifyRequest,
   default as SignupVerifyRequest,
-} from '#dto/frontend/request/SignupVerifyRequest'
-import MemberService from '#service/MemberService'
-import express from 'express'
+} from 'src/member/dao/frontend/request/SignupVerifyRequest.js'
+import MemberService from 'src/member/service/MemberService.js'
 export const memberRouter = express.Router()
 
 /** 회원가입 API */

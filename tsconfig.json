@@ -10,18 +10,22 @@
     "baseUrl": ".",
     "paths": {
       "#mock/*": ["src/mock/*/index.ts"],
-      "#router/*": ["src/router/*.ts"],
+      "#router/*": ["src/socialLogin/router/*.ts"],
       "#controller/*": ["src/core/controller/index.ts"],
-      "#service/*": ["src/service/*.ts"],
+      "#service/*": ["src/socialLogin/service/*.ts"],
       "#adapter/*": ["src/core/adapter/*.ts"],
       "#repository/*": ["src/repository/*.ts"],
-      "#dto/*": ["src/dto/*.ts"],
+      "#dto/*": ["src/socialLogin/dto/*.ts"],
       "#entity/*": ["src/entity/*.ts"],
       "#config/*": ["src/core/config/*.ts"],
       "#util/*": ["src/core/util/*.ts"],
       "#error/*": ["src/core/error/*.ts"]
     }
   },
-  "include": ["src/**/*.ts", "index.ts", "src/dto/frontend/response/MockScore"],
+  "include": [
+    "src/**/*.ts",
+    "index.ts",
+    "src/socialLogin/dto/frontend/response/MockScore"
+  ],
   "exclude": ["node_modules"]
 }
