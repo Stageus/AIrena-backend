@@ -27,12 +27,12 @@ export default class LoginService {
     if (!memberData) {
       throw ErrorRegistry.CAN_NOT_FIND_USER
     }
-    const loginToken: string = Token.generateLoginToken(
+    const token: string = Token.generateLoginToken(
       memberData.userId,
       memberData.email,
       memberData.role,
     )
-    Token.generateCookie('loginToken', loginToken, res)
+    Token.generateCookie('loginToken', token, res)
     return loginRedirectUrl
   }
   /** 카카오 로그인 시도 , 정보 없으면 회원가입 진행 */
@@ -48,12 +48,12 @@ export default class LoginService {
     const checkResult: any = await MemberLoginRepository.checkMemberDataFromDb(
       userData.id,
     )
-    const loginToken = Token.generateLoginToken(
+    const token = Token.generateLoginToken(
       userData.id,
       userData.email,
       userData.role,
     )
-    Token.generateCookie('loginToken', loginToken, res)
+    Token.generateCookie('loginToken', token, res)
 
     if (!checkResult.rows[0] || checkResult.rows[0] == undefined) {
       await MemberLoginRepository.insertKakaoLoginMemberData(
@@ -77,12 +77,12 @@ export default class LoginService {
     const checkResult: any = await MemberLoginRepository.checkMemberDataFromDb(
       userData.id,
     )
-    const loginToken = Token.generateLoginToken(
+    const token = Token.generateLoginToken(
       userData.id,
       userData.email,
       userData.role,
     )
-    Token.generateCookie('loginToken', loginToken, res)
+    Token.generateCookie('loginToken', token, res)
 
     if (!checkResult.rows[0] || checkResult.rows[0] == undefined) {
       await MemberLoginRepository.insertGoogleLoginMemberData(

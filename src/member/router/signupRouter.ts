@@ -8,7 +8,7 @@ export const signupRouter = express.Router()
 
 /** 회원가입 API */
 signupRouter.post(
-  '/signup',
+  '/',
   controller(
     null,
     null,
@@ -23,21 +23,21 @@ signupRouter.post(
 
 /** 회원가입 인증 API */
 signupRouter.post(
-  '/signup/verify',
+  '/verify',
   controller(
     SignupVerifyRequest,
     null,
     null,
     null,
   )(async (req, res) => {
-    const url = await SignupService.verifySignup(req.query)
+    const url = await SignupService.verifySignup(req.query, res)
     return res.redirect(url)
   }),
 )
 
 /** 회원가입 인증 이메일 재전송 API */
 signupRouter.get(
-  '/signup/email',
+  '/email',
   controller(
     SendVerifyEmailRequest,
     null,

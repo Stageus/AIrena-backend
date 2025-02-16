@@ -27,6 +27,7 @@ loginRouter.post(
     null,
   )(async (req, res) => {
     const url = await LoginService.attemptNormalLogin(req.body, res)
+    console.log('로그인 됨')
     res.redirect(url)
   }),
 )

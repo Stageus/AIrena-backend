@@ -31,7 +31,7 @@ export default class MemberLoginRepository {
           socialId,
           'KAKAO',
           socialId,
-          'KAKAOUSER@kakao.com',
+          `${socialId}@kakao.com`,
           nickname,
           dateTime,
         ],

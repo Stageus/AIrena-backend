@@ -1,7 +1,8 @@
 import ErrorRegistry from '#error/ErrorRegistry'
+import dotenv from 'dotenv'
 import { Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
-
+dotenv.config()
 export default class Token {
   /** 쿠키로부터 토큰을 얻어옵니다.
    *  기본적으로 string 입니다.

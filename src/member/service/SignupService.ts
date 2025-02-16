@@ -2,7 +2,7 @@ import ErrorRegistry from '#error/ErrorRegistry'
 import EmailSender from '#util/email/mailSender/index'
 import RandomNicknameGenerator from '#util/nickname/nicknameGenerator/index'
 import Token from '#util/token/index'
-import { response } from 'express'
+import { Response } from 'express'
 import jwt from 'jsonwebtoken'
 import SendVerifyEmailRequest from '../entity/dao/frontend/request/SendVerifyEmailRequest.js'
 import SignupRequest from '../entity/dao/frontend/request/SignupRequest.js'
@@ -28,13 +28,15 @@ export default class SignupService {
   }
 
   /** 회원가입 인증 서비스 로직 */
-  static async verifySignup(signupVerifyRequest: SignupVerifyRequest) {
-    const { token } = signupVerifyRequest // 쿼리에 포함된 토큰
+  static async verifySignup(
+    signupVerifyRequest: SignupVerifyRequest,
+    res: Response,
+  ) {
+    const getToken = signupVerifyRequest.token // 쿼리에 포함된 토큰
     if (!process.env.JWT_SIGNATURE_KEY)
       throw ErrorRegistry.INTERNAL_SERVER_ERROR
-    const data: any = jwt.verify(token, process.env.JWT_SIGNATURE_KEY)
+    const data: any = jwt.verify(getToken, process.env.JWT_SIGNATURE_KEY)
     const nickname = await RandomNicknameGenerator.generateNickname() // 랜덤 생성기 자리
-    // 래디스에 데이터가 있는지 확인 부터 함함
     const checkRedis =
       await RedisEmailRepository.checkVerifyEmailDataFromRedis()
     if (!checkRedis) {
@@ -43,17 +45,14 @@ export default class SignupService {
     const memberHashData: any = await RedisEmailRepository.getHashDataFromRedis(
       data.email,
     )
-    //////////////////////////////////////////////////////////////
     await MemberSignupRepository.insertNormalMemberData(
-      //수정 필요
       memberHashData.id,
       memberHashData.password,
       data.email,
       nickname,
     )
-    /////////////////////////////////////////////////////////////
-    const signupToken = Token.generateToken(memberHashData.id, data.email)
-    Token.generateCookie('signup', signupToken, response)
+    const token = Token.generateToken(memberHashData.id, data.email)
+    Token.generateCookie('signup', token, res)
     return signupRedirectUrl
   }
   /** 회원가입 인증 이메일 재전송 서비스 로직 */
