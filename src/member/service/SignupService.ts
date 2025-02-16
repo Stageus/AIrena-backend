@@ -9,7 +9,7 @@ import SignupRequest from '../entity/dao/frontend/request/SignupRequest.js'
 import SignupVerifyRequest from '../entity/dao/frontend/request/SignupVerifyRequest.js'
 import SignupResponse from '../entity/dao/frontend/response/SignupResponse.js'
 import MemberSignupRepository from '../repository/MemberSignupRepository.js'
-import RedisEmailRepository from '../repository/RedisEmailSignupRepository.js'
+import RedisEmailSignupRepository from '../repository/RedisEmailSignupRepository.js'
 
 const signupRedirectUrl = `${process.env.FRONTEND_SERVER_URL}/redirect/signup`
 
@@ -21,7 +21,11 @@ export default class SignupService {
       throw ErrorRegistry.PASSWORD_NOT_EQUAL
     }
     await MemberSignupRepository.checkIdAndEmailDuplicate(id, email)
-    await RedisEmailRepository.insertMemberDataAtRedis(id, password, email)
+    await RedisEmailSignupRepository.insertMemberDataAtRedis(
+      id,
+      password,
+      email,
+    )
     const token = Token.generateToken(id, email)
     EmailSender.sendSignupVerifyEmail(email, token)
     return new SignupResponse(token)
@@ -38,13 +42,12 @@ export default class SignupService {
     const data: any = jwt.verify(getToken, process.env.JWT_SIGNATURE_KEY)
     const nickname = await RandomNicknameGenerator.generateNickname() // 랜덤 생성기 자리
     const checkRedis =
-      await RedisEmailRepository.checkVerifyEmailDataFromRedis()
+      await RedisEmailSignupRepository.checkVerifyEmailDataFromRedis()
     if (!checkRedis) {
       throw ErrorRegistry.INTERNAL_SERVER_ERROR
     }
-    const memberHashData: any = await RedisEmailRepository.getHashDataFromRedis(
-      data.email,
-    )
+    const memberHashData: any =
+      await RedisEmailSignupRepository.getHashDataFromRedis(data.email)
     await MemberSignupRepository.insertNormalMemberData(
       memberHashData.id,
       memberHashData.password,
@@ -58,7 +61,7 @@ export default class SignupService {
   /** 회원가입 인증 이메일 재전송 서비스 로직 */
   static async sendVerifyEmail(sendVerifyEmailRequest: SendVerifyEmailRequest) {
     const { id, email } = sendVerifyEmailRequest
-    await RedisEmailRepository.increaseVerifyEmailDataFromRedis(email)
+    await RedisEmailSignupRepository.increaseVerifyEmailDataFromRedis(email)
     const token = Token.generateVerifyToken(id, email)
     EmailSender.sendSignupVerifyEmail(email, token)
   }

@@ -1,17 +1,15 @@
 import { redis } from '#config/redis'
 import ErrorRegistry from '#error/ErrorRegistry'
 
-export default class RedisSignupRepository {
-  /** 회원가입 시, 이메일 인증을 위하여 입력받은 정보를 redis에 저장해둡니다.  */
+export default class RedisEmailFindRepository {
+  /** 비밀번호 변경 시도 시, 이메일 인증을 위하여 입력받은 정보를 redis에 저장해둡니다.  */
   static async insertMemberDataAtRedis(
     id: string,
-    password: string,
     email: string,
   ): Promise<void> {
     const now = new Date() // 현재 시간
     await redis.hset(email, {
       id: id,
-      password: password,
       send_count: 1,
       is_approved: false,
       created_at: now,
@@ -29,7 +27,6 @@ export default class RedisSignupRepository {
     }
     return true
   }
-
   /** Redis에 저장된 필드값을 모두 가져옵니다.  */
   static async getHashDataFromRedis(email: string) {
     const hashData = await redis.hgetall(email)
@@ -37,15 +34,5 @@ export default class RedisSignupRepository {
       throw ErrorRegistry.INTERNAL_SERVER_ERROR
     }
     return hashData
-  }
-
-  /** 인증 이메일 재전송
-   *  이메일 전송 횟수를 확인하고 횟수를 증가시킵니다.*/
-  static async increaseVerifyEmailDataFromRedis(email: string) {
-    let mailSendCount: any = await redis.hget(email, 'send_count')
-    if (mailSendCount >= 5) {
-      throw ErrorRegistry.TOO_MUCH_VERIFY_ATTEMPT
-    }
-    await redis.hincrby(email, 'send_count', 1)
   }
 }

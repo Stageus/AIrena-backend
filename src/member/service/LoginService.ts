@@ -27,7 +27,6 @@ export default class LoginService {
     if (!memberData) {
       throw ErrorRegistry.CAN_NOT_FIND_USER
     }
-    console.log(memberData.id, '아이디 제대로 받는지')
     const token: string = Token.generateLoginToken(
       memberData.id,
       memberData.email,

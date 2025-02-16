@@ -13,7 +13,6 @@ export default class Token {
     if (!tokenKey || !req.cookies[tokenKey]) {
       throw ErrorRegistry.TOKEN_REQUIRED
     }
-    console.log(req.cookies[tokenKey])
     return req.cookies[tokenKey] // 찾은 토큰 값을 반환
     // const token = req.cookies.token
     // if (!token) {
@@ -30,7 +29,6 @@ export default class Token {
     if (!tokenKey || !req.cookies[tokenKey]) {
       throw ErrorRegistry.TOKEN_REQUIRED
     }
-    console.log(req.cookies[tokenKey])
     if (!process.env.JWT_SIGNATURE_KEY) {
       throw ErrorRegistry.INTERNAL_SERVER_ERROR
     }
