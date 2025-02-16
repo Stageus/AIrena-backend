@@ -1,8 +1,8 @@
 import controller from '#controller'
 import express from 'express'
-import SendVerifyEmailRequest from '../dao/frontend/request/SendVerifyEmailRequest.js'
-import SignupRequest from '../dao/frontend/request/SignupRequest.js'
-import SignupVerifyRequest from '../dao/frontend/request/SignupVerifyRequest.js'
+import SendVerifyEmailRequest from '../entity/dao/frontend/request/SendVerifyEmailRequest.js'
+import SignupRequest from '../entity/dao/frontend/request/SignupRequest.js'
+import SignupVerifyRequest from '../entity/dao/frontend/request/SignupVerifyRequest.js'
 import SignupService from '../service/SignupService.js'
 export const signupRouter = express.Router()
 

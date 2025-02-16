@@ -1,8 +1,8 @@
 import controller from '#controller'
 import express from 'express'
-import NicknameChangeRequest from '../dao/frontend/request/NicknameChangeRequest.js'
-import PasswordChangeRequest from '../dao/frontend/request/PasswordChangeRequest.js'
-import SendFindPasswordEmailRequest from '../dao/frontend/request/SendFindPasswordEmailRequest.js'
+import NicknameChangeRequest from '../entity/dao/frontend/request/NicknameChangeRequest.js'
+import PasswordChangeRequest from '../entity/dao/frontend/request/PasswordChangeRequest.js'
+import SendFindPasswordEmailRequest from '../entity/dao/frontend/request/SendFindPasswordEmailRequest.js'
 import ChangeService from '../service/ChangeService.js'
 export const changeRouter = express.Router()
 

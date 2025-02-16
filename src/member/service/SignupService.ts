@@ -4,10 +4,10 @@ import RandomNicknameGenerator from '#util/nickname/nicknameGenerator/index'
 import Token from '#util/token/index'
 import { response } from 'express'
 import jwt from 'jsonwebtoken'
-import SendVerifyEmailRequest from '../dao/frontend/request/SendVerifyEmailRequest.js'
-import SignupRequest from '../dao/frontend/request/SignupRequest.js'
-import SignupVerifyRequest from '../dao/frontend/request/SignupVerifyRequest.js'
-import SignupResponse from '../dao/frontend/response/SignupResponse.js'
+import SendVerifyEmailRequest from '../entity/dao/frontend/request/SendVerifyEmailRequest.js'
+import SignupRequest from '../entity/dao/frontend/request/SignupRequest.js'
+import SignupVerifyRequest from '../entity/dao/frontend/request/SignupVerifyRequest.js'
+import SignupResponse from '../entity/dao/frontend/response/SignupResponse.js'
 import MemberSignupRepository from '../repository/MemberSignupRepository.js'
 import RedisEmailRepository from '../repository/RedisEmailSignupRepository.js'
 
@@ -34,17 +34,24 @@ export default class SignupService {
       throw ErrorRegistry.INTERNAL_SERVER_ERROR
     const data: any = jwt.verify(token, process.env.JWT_SIGNATURE_KEY)
     const nickname = await RandomNicknameGenerator.generateNickname() // 랜덤 생성기 자리
-    await RedisEmailRepository.checkVerifyEmailDataFromRedis(data.email)
+    // 래디스에 데이터가 있는지 확인 부터 함함
+    const checkRedis =
+      await RedisEmailRepository.checkVerifyEmailDataFromRedis()
+    if (!checkRedis) {
+      throw ErrorRegistry.INTERNAL_SERVER_ERROR
+    }
     const memberHashData: any = await RedisEmailRepository.getHashDataFromRedis(
       data.email,
     )
-    await RedisEmailRepository.insertNormalMemberData(
+    //////////////////////////////////////////////////////////////
+    await MemberSignupRepository.insertNormalMemberData(
       //수정 필요
       memberHashData.id,
       memberHashData.password,
       data.email,
       nickname,
     )
+    /////////////////////////////////////////////////////////////
     const signupToken = Token.generateToken(memberHashData.id, data.email)
     Token.generateCookie('signup', signupToken, response)
     return signupRedirectUrl

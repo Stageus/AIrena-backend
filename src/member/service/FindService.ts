@@ -1,13 +1,13 @@
 import ErrorRegistry from '#error/ErrorRegistry'
 import EmailSender from '#util/email/mailSender/index'
 import Token from '#util/token/index'
-import FindPasswordRequest from '../dao/frontend/request/FindPasswordRequest.js'
-
+import FindPasswordRequest from '../entity/dao/frontend/request/FindPasswordRequest.js'
+import MemberFindRepository from '../repository/MemberFindRepository.js'
 export default class FindService {
   /** 비밀번호 검색 서비스 로직 */
   static async findPassword(findPasswordRequest: FindPasswordRequest) {
     const { id, email } = findPasswordRequest
-    const checkResult = await MemberRepository.checkMemberPasswordFromDb(
+    const checkResult = await MemberFindRepository.checkMemberPasswordFromDb(
       id,
       email,
     )

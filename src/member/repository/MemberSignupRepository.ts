@@ -14,4 +14,17 @@ export default class MemberSignupRepository {
       throw ErrorRegistry.DUPLICATED_EMAIL
     }
   }
+  /** 저장한 회원정보를 DB에 저장 */
+  static async insertNormalMemberData(
+    id: string,
+    password: string,
+    email: string,
+    nickname: string,
+  ) {
+    let datetime = new Date()
+    await postgres.query(
+      'INSERT INTO member (id, provider, password, email, nickname,created_at) VALUES ($1, $2, $3, $4, $5, $6)',
+      [id, 'NORMAL', password, email, nickname, datetime],
+    )
+  }
 }

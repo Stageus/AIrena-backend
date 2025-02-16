@@ -4,7 +4,7 @@ import Token from '#util/token/index'
 import dotenv from 'dotenv'
 import { Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
-import NormalLoginRequest from '../dao/frontend/request/NormalLoginRequest.js'
+import NormalLoginRequest from '../entity/dao/frontend/request/NormalLoginRequest.js'
 import MemberLoginRepository from '../repository/MemberLoginRepository.js'
 dotenv.config()
 

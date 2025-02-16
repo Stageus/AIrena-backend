@@ -22,17 +22,21 @@ export default class RedisSignupRepository {
   }
   /** 이메일 인증
    * redis에 해당 이메일이 있는지를 확인하여 인증합니다. */
-  static async checkVerifyEmailDataFromRedis(email: string) {
+  static async checkVerifyEmailDataFromRedis() {
     let emailCheckResult = await redis.hget('email', 'is_approved')
     if (emailCheckResult == 'nil') {
       throw ErrorRegistry.ACCESS_DENIED
     }
+    return true
+  }
+
+  /** 이메일 인증을 위한 데이터를 redis에 저장합니다. */
+  static async func(email: string) {
     await redis.hset(email, {
       send_count: 1,
       is_approved: true,
     })
   }
-
   /** Redis에 저장된 필드값을 모두 가져옵니다.  */
   static async getHashDataFromRedis(email: string) {
     const hashData = await redis.hgetall(email)
@@ -40,25 +44,6 @@ export default class RedisSignupRepository {
       throw ErrorRegistry.INTERNAL_SERVER_ERROR
     }
     return hashData
-  }
-
-  /** 저장한 회원 정보를 DB에 저장합니다.
-   * 서비스 나누기 redis랑 postgre랑
-   */
-  static async insertNormalMemberData(
-    id: string,
-    password: string,
-    email: string,
-    nickname: string,
-  ) {
-    let checkApprove = await redis.hget('email', 'is_approved')
-    if (checkApprove != true) {
-      let datetime = new Date()
-      await postgres.query(
-        'INSERT INTO member (id, provider, password, email, nickname,created_at) VALUES ($1, $2, $3, $4, $5, $6)',
-        [id, 'NORMAL', password, email, nickname, datetime],
-      )
-    }
   }
 
   /** 인증 이메일 재전송
