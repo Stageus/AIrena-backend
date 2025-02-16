@@ -52,7 +52,7 @@ export default class SignupService {
       nickname,
     )
     const token = Token.generateToken(memberHashData.id, data.email)
-    Token.generateCookie('signup', token, res)
+    Token.generateCookie('signupToken', token, res)
     return signupRedirectUrl
   }
   /** 회원가입 인증 이메일 재전송 서비스 로직 */

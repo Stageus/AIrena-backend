@@ -14,7 +14,9 @@ export default class ChangeService {
     nicknameChangeRequest: NicknameChangeRequest,
   ) {
     const data = Token.getDataFromToken(req)
+    console.log(data, '여기서 데이터 받음')
     const { nickname } = nicknameChangeRequest
+    console.log(nickname, '닉네임 받음')
     await MemberChangeRepository.changeNickname(nickname, data.userId)
   }
 

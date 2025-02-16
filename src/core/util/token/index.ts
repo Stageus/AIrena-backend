@@ -8,25 +8,34 @@ export default class Token {
    *  기본적으로 string 입니다.
    */
   static getTokenFromCookie(req: Request) {
-    const token = req.cookies.token
-    if (!token) {
+    const tokenKey = Object.keys(req.cookies).find((key) => /token/i.test(key))
+
+    if (!tokenKey || !req.cookies[tokenKey]) {
       throw ErrorRegistry.TOKEN_REQUIRED
     }
-    return token
+    console.log(req.cookies[tokenKey])
+    return req.cookies[tokenKey] // 찾은 토큰 값을 반환
+    // const token = req.cookies.token
+    // if (!token) {
+    //   throw ErrorRegistry.TOKEN_REQUIRED
+    // }
+    // return token
   }
   /** 토큰에서 data를 추출합니다.
    *  기본적으로 object를 반환합니다.
    */
   static getDataFromToken(req: Request) {
-    const token = req.cookies.token
-    if (!token) {
+    const tokenKey = Object.keys(req.cookies).find((key) => /token/i.test(key))
+
+    if (!tokenKey || !req.cookies[tokenKey]) {
       throw ErrorRegistry.TOKEN_REQUIRED
     }
+    console.log(req.cookies[tokenKey])
     if (!process.env.JWT_SIGNATURE_KEY) {
       throw ErrorRegistry.INTERNAL_SERVER_ERROR
     }
     const secretKey: string = process.env.JWT_SIGNATURE_KEY
-    const data: any = jwt.verify(token, secretKey)
+    const data: any = jwt.verify(req.cookies[tokenKey], secretKey)
     return data
   }
 
@@ -108,9 +117,9 @@ export default class Token {
 
   /** 쿠키를 생성합니다.
    *  @params {string} name
-   *  - 생성할 쿠키의 이름입니다.
+   *  - 쿠키에 담길 key 입니다.
    *  @params {string} token
-   *  - 쿠키에 포함할 token 입니다.
+   *  - 쿠키에 담길 value 입니다.
    *  @params {string} response
    *  - response로 전달하기 위한 객체입니다. 기본값으로 res를 사용합니다.
    */
