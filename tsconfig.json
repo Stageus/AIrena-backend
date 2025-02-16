@@ -10,18 +10,13 @@
     "baseUrl": ".",
     "paths": {
       "#mock/*": ["src/mock/*/index.ts"],
-      "#router/*": ["src/socialLogin/router/*.ts"],
+      "#member/*": ["src/member/*/index.ts"],
       "#controller/*": ["src/core/controller/index.ts"],
-      "#service/*": ["src/socialLogin/service/*.ts"],
       "#adapter/*": ["src/core/adapter/*.ts"],
       "#repository/*": ["src/repository/*.ts"],
-      "#dto/*": ["src/socialLogin/dto/*.ts"],
-      "#entity/*": ["src/entity/*.ts"],
       "#config/*": ["src/core/config/*.ts"],
       "#util/*": ["src/core/util/*.ts"],
-      "#error/*": ["src/core/error/*.ts"],
-      "#member/*": ["src/member/*/index.ts"],
-      "#socialLogin/*": ["src/socialLogin/*/index.ts"]
+      "#error/*": ["src/core/error/*.ts"]
     }
   },
   "include": [
