@@ -1,8 +1,11 @@
 import LoginAdapter from '#adapter/OAuthAdapter'
+import ErrorRegistry from '#error/ErrorRegistry'
 import Token from '#util/token/index'
 import dotenv from 'dotenv'
-import { Response } from 'express'
-import MemberRepository from 'src/member/repository/MemberRepository.js'
+import { Request, Response } from 'express'
+import jwt from 'jsonwebtoken'
+import NormalLoginRequest from '../dao/frontend/request/NormalLoginRequest.js'
+import MemberLoginRepository from '../repository/MemberLoginRepository.js'
 dotenv.config()
 
 const kakaoOauthUserInfoUrl = process.env.KAKAO_OAUTH_USER_INFO_URL || ''
@@ -11,6 +14,28 @@ const signupRedirectUrl = `${process.env.FRONTEND_SERVER_URL}/redirect/signup`
 const loginRedirectUrl = `${process.env.FRONTEND_SERVER_URL}/redirect/login`
 
 export default class LoginService {
+  /** 일반 로그인 서비스 로직*/
+  static async attemptNormalLogin(
+    normalLoginRequest: NormalLoginRequest,
+    res: Response,
+  ) {
+    const { id, password } = normalLoginRequest
+    const memberData: any = await MemberLoginRepository.getNormalLoginData(
+      id,
+      password,
+    )
+    if (!memberData) {
+      throw ErrorRegistry.CAN_NOT_FIND_USER
+    }
+    const loginToken: string = Token.generateLoginToken(
+      memberData.userId,
+      memberData.email,
+      memberData.role,
+    )
+    Token.generateCookie('loginToken', loginToken, res)
+    return loginRedirectUrl
+  }
+  /** 카카오 로그인 시도 , 정보 없으면 회원가입 진행 */
   static async checkKakaoUserDataAndSignin(
     code: string,
     res: Response,
@@ -20,7 +45,7 @@ export default class LoginService {
       kakaoToken,
       kakaoOauthUserInfoUrl,
     )
-    const checkResult: any = await MemberRepository.checkMemberDataFromDb(
+    const checkResult: any = await MemberLoginRepository.checkMemberDataFromDb(
       userData.id,
     )
     const loginToken = Token.generateLoginToken(
@@ -31,7 +56,7 @@ export default class LoginService {
     Token.generateCookie('loginToken', loginToken, res)
 
     if (!checkResult.rows[0] || checkResult.rows[0] == undefined) {
-      await MemberRepository.insertKakaoLoginMemberData(
+      await MemberLoginRepository.insertKakaoLoginMemberData(
         userData.id as string,
         userData.properties.nickname,
       )
@@ -39,7 +64,7 @@ export default class LoginService {
     }
     return loginRedirectUrl
   }
-
+  /** 구글 로그인 시도 , 정보 없으면 회원가입 진행 */
   static async checkGoogleUserDataAndSignin(
     code: string,
     res: Response,
@@ -49,7 +74,7 @@ export default class LoginService {
       googleLoginToken,
       googleOauthUserInfoUrl,
     )
-    const checkResult: any = await MemberRepository.checkMemberDataFromDb(
+    const checkResult: any = await MemberLoginRepository.checkMemberDataFromDb(
       userData.id,
     )
     const loginToken = Token.generateLoginToken(
@@ -60,7 +85,7 @@ export default class LoginService {
     Token.generateCookie('loginToken', loginToken, res)
 
     if (!checkResult.rows[0] || checkResult.rows[0] == undefined) {
-      await MemberRepository.insertGoogleLoginMemberData(
+      await MemberLoginRepository.insertGoogleLoginMemberData(
         userData.id as string,
         userData.name,
         userData.email,
@@ -68,5 +93,24 @@ export default class LoginService {
       return signupRedirectUrl
     }
     return signupRedirectUrl
+  }
+
+  /** 로그인 상태 체크 */
+  static async checkLogin(req: Request) {
+    if (!req.cookies) {
+      throw ErrorRegistry.LOGIN_REQUIRED
+    }
+    if (!req.cookies.loginToken) {
+      throw ErrorRegistry.LOGIN_REQUIRED
+    }
+    if (!process.env.JWT_SIGNATURE_KEY) {
+      throw ErrorRegistry.INTERNAL_SERVER_ERROR
+    }
+    try {
+      jwt.verify(req.cookies.loginToken, process.env.JWT_SIGNATURE_KEY)
+      return
+    } catch (e) {
+      throw ErrorRegistry.LOGIN_REQUIRED
+    }
   }
 }

@@ -24,6 +24,8 @@
   },
   "imports": {
     "#mock/*": "./dist/src/mock/*/index.js",
+    "#member/*": "./dist/src/member/*/index.js",
+    "#socialLogin/*": "./dist/src/socialLogin/*/index.js",
     "#router/*": "./dist/src/router/*.js",
     "#controller": "./dist/src/core/controller/index.js",
     "#service/*": "./dist/src/service/*.js",
