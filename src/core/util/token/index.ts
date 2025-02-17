@@ -119,11 +119,18 @@ export default class Token {
   static generateCookie(name: string, token: string, res: Response) {
     res.cookie(name, token, {
       path: '/',
-      domain: process.env.DEV_COOKIE_DOMAIN,
+      domain: process.env.COOKIE_DOMAIN,
       httpOnly: true,
-      secure: true,
-      sameSite: 'none',
       maxAge: 60 * 60 * 1000,
+    })
+  }
+
+  static destroyCookie(name: string, res: Response) {
+    res.clearCookie(name, {
+      path: '/',
+      domain: process.env.COOKIE_DOMAIN,
+      httpOnly: true,
+      maxAge: 0,
     })
   }
 }

@@ -33,7 +33,6 @@ export default class LoginService {
       memberData.role,
     )
     Token.generateCookie('loginToken', token, res)
-    return loginRedirectUrl
   }
   /** 카카오 로그인 시도 , 정보 없으면 회원가입 진행 */
   static async checkKakaoUserDataAndSignin(
