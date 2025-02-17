@@ -15,7 +15,7 @@ export default class FindService {
   static async findId(findIdRequest: FindIdRequest) {
     const { email } = findIdRequest
     const result = await MemberFindRepository.getIdByEmail(email)
-    if (!result.id) {
+    if (!result) {
       throw ErrorRegistry.CAN_NOT_FIND_USER
     }
 
