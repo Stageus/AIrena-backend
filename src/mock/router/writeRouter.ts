@@ -17,6 +17,6 @@ writeRouter.post(
     WriteRequest,
     WriteResponse,
   )(async (req, res) => {
-    return res.send(await WriteService.writeMock(req.userId, req.body))
+    return res.send(await WriteService.writeMock(req.memberIdx, req.body))
   }),
 )

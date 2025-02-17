@@ -39,7 +39,7 @@ const controller = <
       next: NextFunction,
     ) => {
       try {
-        req.userId = checkAuthReturningUserId(auth, req)
+        req.memberIdx = checkAuthReturningUserId(auth, req)
 
         if (QueryClass) {
           req.query = new QueryClass(req.query)

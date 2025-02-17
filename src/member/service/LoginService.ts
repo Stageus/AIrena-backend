@@ -46,20 +46,30 @@ export default class LoginService {
     const checkResult: any = await MemberLoginRepository.checkMemberDataFromDb(
       userData.id,
     )
+
+    if (!checkResult) {
+      await MemberLoginRepository.insertKakaoLoginMemberData(
+        userData.id as string,
+        userData.properties.nickname,
+      )
+      const checkResult: any =
+        await MemberLoginRepository.checkMemberDataFromDb(userData.id)
+      const token = Token.generateLoginToken(
+        checkResult.idx,
+        checkResult.email,
+        checkResult.role,
+      )
+      Token.generateCookie('loginToken', token, res)
+      return signupRedirectUrl
+    }
+
     const token = Token.generateLoginToken(
-      checkResult.id,
+      checkResult.idx,
       checkResult.email,
       checkResult.role,
     )
     Token.generateCookie('loginToken', token, res)
 
-    if (!checkResult.rows[0]) {
-      await MemberLoginRepository.insertKakaoLoginMemberData(
-        userData.id as string,
-        userData.properties.nickname,
-      )
-      return signupRedirectUrl
-    }
     return loginRedirectUrl
   }
   /** 구글 로그인 시도 , 정보 없으면 회원가입 진행 */
@@ -75,21 +85,31 @@ export default class LoginService {
     const checkResult: any = await MemberLoginRepository.checkMemberDataFromDb(
       userData.id,
     )
-    const token = Token.generateLoginToken(
-      checkResult.id,
-      checkResult.email,
-      checkResult.role,
-    )
-    Token.generateCookie('loginToken', token, res)
 
-    if (!checkResult.rows[0]) {
+    if (!checkResult) {
       await MemberLoginRepository.insertGoogleLoginMemberData(
         userData.id as string,
         userData.name,
         userData.email,
       )
+      const checkResult: any =
+        await MemberLoginRepository.checkMemberDataFromDb(userData.id)
+      const token = Token.generateLoginToken(
+        checkResult.idx,
+        checkResult.email,
+        checkResult.role,
+      )
+      Token.generateCookie('loginToken', token, res)
       return signupRedirectUrl
     }
+
+    const token = Token.generateLoginToken(
+      checkResult.idx,
+      checkResult.email,
+      checkResult.role,
+    )
+    Token.generateCookie('loginToken', token, res)
+
     return signupRedirectUrl
   }
 }

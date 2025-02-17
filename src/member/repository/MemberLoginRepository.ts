@@ -16,9 +16,9 @@ export default class MemberLoginRepository {
    * 계정 존재 여부 확인
    */
   static async checkMemberDataFromDb(socialId: string) {
-    return await postgres.query('SELECT * FROM member WHERE id = $1', [
-      socialId,
-    ])
+    return (
+      await postgres.query('SELECT * FROM member WHERE id = $1', [socialId])
+    ).rows[0]
   }
 
   /** 카카오 소셜로그인 회원가입 */
