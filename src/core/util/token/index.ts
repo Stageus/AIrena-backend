@@ -8,17 +8,17 @@ export default class Token {
    *  기본적으로 string 입니다.
    */
   static getTokenFromCookie(req: Request) {
-    const tokenKey = Object.keys(req.cookies).find((key) => /token/i.test(key))
+    // const tokenKey = Object.keys(req.cookies).find((key) => /token/i.test(key))
 
-    if (!tokenKey || !req.cookies[tokenKey]) {
-      throw ErrorRegistry.TOKEN_REQUIRED
-    }
-    return req.cookies[tokenKey] // 찾은 토큰 값을 반환
-    // const token = req.cookies.token
-    // if (!token) {
+    // if (!tokenKey || !req.cookies[tokenKey]) {
     //   throw ErrorRegistry.TOKEN_REQUIRED
     // }
-    // return token
+    // return req.cookies[tokenKey] // 찾은 토큰 값을 반환
+    const token = req.cookies.loginToken
+    if (!token) {
+      throw ErrorRegistry.TOKEN_REQUIRED
+    }
+    return token
   }
   /** 토큰에서 data를 추출합니다.
    *  기본적으로 object를 반환합니다.
