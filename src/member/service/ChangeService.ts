@@ -1,6 +1,6 @@
 import ErrorRegistry from '#error/ErrorRegistry'
-import EmailSender from '#util/EmailSender/index'
-import Token from '#util/Token/index'
+import EmailSender from '#util/EmailSender'
+import Token from '#util/Token'
 import dotenv from 'dotenv'
 import { Request } from 'express'
 import jwt from 'jsonwebtoken'

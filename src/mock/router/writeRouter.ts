@@ -1,5 +1,5 @@
 import controller from '#controller'
-import multipartParser from '#util/multipartParser/index'
+import multipartParser from '#util/multipartParser'
 import express from 'express'
 import WriteRequest from '../entity/dao/frontend/request/body/WriteRequest.js'
 import WriteResponse from '../entity/dao/frontend/response/WriteResponse.js'

@@ -1,4 +1,4 @@
-import CustomError from '#error/CustomError'
+import CustomError from './types/CustomError.js'
 
 export default class ErrorRegistry {
   // Global(GL)

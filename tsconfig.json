@@ -14,7 +14,7 @@
       "#controller/*": ["src/core/controller/index.ts"],
       "#adapter/*": ["src/core/adapter/*.ts"],
       "#config/*": ["src/core/config/*.ts"],
-      "#util/*": ["src/core/util/*.ts"],
+      "#util/*": ["src/core/util/*/index.ts"],
       "#error/*": ["src/core/error/*.ts"]
     },
     "typeRoots": ["src/types", "./node_modules/@types"]

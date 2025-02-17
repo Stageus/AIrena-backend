@@ -1,8 +1,7 @@
-import CustomError from '#error/CustomError'
-import ErrorInfo from '#error/ErrorInfo'
 import ErrorRegistry from '#error/ErrorRegistry'
-
 import { NextFunction, Request, Response } from 'express'
+import CustomError from './types/CustomError.js'
+import ErrorInfo from './types/ErrorInfo.js'
 
 export default function globalExceptionHandler(
   err: CustomError,

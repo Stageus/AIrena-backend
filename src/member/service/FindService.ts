@@ -1,6 +1,6 @@
 import ErrorRegistry from '#error/ErrorRegistry'
-import EmailSender from '#util/EmailSender/index'
-import Token from '#util/Token/index'
+import EmailSender from '#util/EmailSender'
+import Token from '#util/Token'
 import { Response } from 'express'
 import jwt from 'jsonwebtoken'
 import FindIdRequest from '../entity/dao/frontend/request/FindIdRequest.js'

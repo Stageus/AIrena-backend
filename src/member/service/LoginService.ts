@@ -1,6 +1,6 @@
 import LoginAdapter from '#adapter/OAuthAdapter'
 import ErrorRegistry from '#error/ErrorRegistry'
-import Token from '#util/Token/index'
+import Token from '#util/Token'
 import dotenv from 'dotenv'
 import { Response } from 'express'
 import NormalLoginRequest from '../entity/dao/frontend/request/NormalLoginRequest.js'
