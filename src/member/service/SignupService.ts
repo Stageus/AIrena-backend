@@ -11,8 +11,6 @@ import SignupResponse from '../entity/dao/frontend/response/SignupResponse.js'
 import MemberSignupRepository from '../repository/MemberSignupRepository.js'
 import RedisEmailSignupRepository from '../repository/RedisEmailSignupRepository.js'
 
-const signupRedirectUrl = `${process.env.FRONTEND_SERVER_URL}/redirect/signup`
-
 export default class SignupService {
   /** 인증 이메일 전송 서비스 로직 */
   static async emailSend(signupRequest: SignupRequest) {
@@ -56,7 +54,6 @@ export default class SignupService {
     )
     const token = Token.generateToken(memberHashData.id, data.email)
     Token.generateCookie('signupToken', token, res)
-    return signupRedirectUrl
   }
   /** 회원가입 인증 이메일 재전송 서비스 로직 */
   static async sendVerifyEmail(sendVerifyEmailRequest: SendVerifyEmailRequest) {
