@@ -7,6 +7,7 @@ export default class RedisSignupRepository {
     id: string,
     password: string,
     email: string,
+    token: string,
   ): Promise<void> {
     const now = new Date() // 현재 시간
     await redis.hset(email, {
@@ -15,6 +16,7 @@ export default class RedisSignupRepository {
       send_count: 1,
       is_approved: false,
       created_at: now,
+      token: token,
     })
     now.setHours(24, 0, 0, 0) // 현재 시간에서 다음날 00시로 설정
     const expireTime = Math.floor(now.getTime() / 1000) // Unix 타임스탬프 (초 단위)

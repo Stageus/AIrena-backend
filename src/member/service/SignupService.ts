@@ -19,12 +19,13 @@ export default class SignupService {
       throw ErrorRegistry.PASSWORD_NOT_EQUAL
     }
     await MemberSignupRepository.checkIdAndEmailDuplicate(id, email)
+    const token = Token.generateToken(id, email)
     await RedisEmailSignupRepository.insertMemberDataAtRedis(
       id,
       password,
       email,
+      token,
     )
-    const token = Token.generateToken(id, email)
     EmailSender.sendSignupVerifyEmail(email, token)
     return new SignupResponse(token)
   }
@@ -57,9 +58,10 @@ export default class SignupService {
   }
   /** 회원가입 인증 이메일 재전송 서비스 로직 */
   static async sendVerifyEmail(sendVerifyEmailRequest: SendVerifyEmailRequest) {
-    const { id, email } = sendVerifyEmailRequest
+    const { email } = sendVerifyEmailRequest
+    const hashData: any = RedisEmailSignupRepository.getHashDataFromRedis(email)
     await RedisEmailSignupRepository.increaseVerifyEmailDataFromRedis(email)
-    const token = Token.generateVerifyToken(id, email)
+    const token = Token.generateVerifyToken(hashData.id, email)
     EmailSender.sendSignupVerifyEmail(email, token)
   }
 }
