@@ -1,9 +1,9 @@
 import controller from '#controller'
 import dotenv from 'dotenv'
 import express from 'express'
+import LoginRequest from '../entity/dao/frontend/request/LoginRequest.js'
 import NormalLoginRequest from '../entity/dao/frontend/request/NormalLoginRequest.js'
-import LoginRequest from '../entity/dto/frontend/request/LoginRequest.js'
-import LoginUserDataResponse from '../entity/dto/frontend/response/loginUserDataResponse.js'
+import LoginUserDataResponse from '../entity/dao/frontend/response/loginUserDataResponse.js'
 import LoginService from '../service/LoginService.js'
 export const loginRouter = express.Router()
 dotenv.config()
