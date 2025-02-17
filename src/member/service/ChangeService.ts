@@ -1,12 +1,15 @@
 import ErrorRegistry from '#error/ErrorRegistry'
 import EmailSender from '#util/email/mailSender/index'
 import Token from '#util/token/index'
+import dotenv from 'dotenv'
 import { Request } from 'express'
+import jwt from 'jsonwebtoken'
 import NicknameChangeRequest from '../entity/dao/frontend/request/NicknameChangeRequest.js'
 import PasswordChangeRequest from '../entity/dao/frontend/request/PasswordChangeRequest.js'
 import SendFindPasswordEmailRequest from '../entity/dao/frontend/request/SendFindPasswordEmailRequest.js'
 import MemberChangeRepository from '../repository/MemberChangeRepository.js'
 import RedisEmailChangeRepository from '../repository/RedisEmailChangeRepository.js'
+dotenv.config()
 export default class ChangeService {
   /** 닉네임 변경 서비스 로직 */
   static async changeNickname(
@@ -23,10 +26,13 @@ export default class ChangeService {
     req: Request,
     passwordChangeRequest: PasswordChangeRequest,
   ) {
-    const { password } = passwordChangeRequest
+    const { password, token } = passwordChangeRequest
     try {
-      const data = Token.getDataFromToken(req)
-      console.log(data)
+      if (!process.env.JWT_SIGNATURE_KEY) {
+        throw ErrorRegistry.TOKEN_REQUIRED
+      }
+      const secretKey = process.env.JWT_SIGNATURE_KEY
+      const data: any = jwt.verify(token, secretKey)
       await MemberChangeRepository.updateMemberPassword(password, data.userId)
       return
     } catch (e) {
