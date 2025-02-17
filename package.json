@@ -12,7 +12,7 @@
   "type": "module",
   "dependencies": {
     "@upstash/redis": "1.34.4",
-    "cookie-parser": "1.4.7",
+    "cookie-parser": "^1.4.7",
     "cors": "2.8.5",
     "dotenv": "16.4.7",
     "express": "4.21.2",
@@ -24,13 +24,10 @@
   },
   "imports": {
     "#mock/*": "./dist/src/mock/*/index.js",
-    "#router/*": "./dist/src/router/*.js",
+    "#member/*": "./dist/src/member/*/index.js",
     "#controller": "./dist/src/core/controller/index.js",
-    "#service/*": "./dist/src/service/*.js",
     "#adapter/*": "./dist/src/core/adapter/*.js",
     "#repository/*": "./dist/src/repository/*.js",
-    "#dto/*": "./dist/src/dto/*.js",
-    "#entity/*": "./dist/src/entity/*.js",
     "#config/*": "./dist/src/core/config/*.js",
     "#util/*": "./dist/src/core/util/*.js",
     "#error/*": "./dist/src/core/error/*.js"

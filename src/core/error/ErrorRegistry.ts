@@ -12,6 +12,11 @@ export default class ErrorRegistry {
     'GL002',
     '입력 형식이 올바르지 않습니다',
   )
+  static readonly TOKEN_REQUIRED = new CustomError(
+    401,
+    'GL003',
+    '토큰이 필요합니다.',
+  )
 
   // User(US)
   static readonly CAN_NOT_FIND_USER = new CustomError(
@@ -48,6 +53,11 @@ export default class ErrorRegistry {
     429,
     'US007',
     '인증 요청 한도를 초과하였습니다. 내일 다시 시도하십시오',
+  )
+  static readonly PASSWORD_CHANGE_FAILED = new CustomError(
+    400,
+    'US008',
+    '비밀번호 변경에 실패했습니다. 비밀번호 찾기를 다시 시도해주세요',
   )
 
   // Mock(MO)
