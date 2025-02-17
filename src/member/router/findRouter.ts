@@ -17,17 +17,17 @@ findRouter.post(
     await FindService.findPassword(req.body)
     return res.sendStatus(200)
   }),
+)
 
-  findRouter.post(
-    '/password/verify',
-    controller(
-      FindPasswordVerifyRequest,
-      null,
-      null,
-      null,
-    )(async (req, res) => {
-      const url = await FindService.verifyFindPassword(req.query, res)
-      return res.redirect(url)
-    }),
-  ),
+findRouter.post(
+  '/password/verify',
+  controller(
+    FindPasswordVerifyRequest,
+    null,
+    null,
+    null,
+  )(async (req, res) => {
+    const url = await FindService.verifyFindPassword(req.query, res)
+    return res.redirect(url)
+  }),
 )
