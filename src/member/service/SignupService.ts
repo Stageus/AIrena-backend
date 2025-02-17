@@ -59,6 +59,11 @@ export default class SignupService {
   /** 회원가입 인증 이메일 재전송 서비스 로직 */
   static async sendVerifyEmail(sendVerifyEmailRequest: SendVerifyEmailRequest) {
     const { email } = sendVerifyEmailRequest
+    const checkRedis =
+      await RedisEmailSignupRepository.checkVerifyEmailDataFromRedis()
+    if (!checkRedis) {
+      throw ErrorRegistry.INTERNAL_SERVER_ERROR
+    }
     const hashData: any = RedisEmailSignupRepository.getHashDataFromRedis(email)
     await RedisEmailSignupRepository.increaseVerifyEmailDataFromRedis(email)
     const token = Token.generateVerifyToken(hashData.id, email)
