@@ -8,32 +8,37 @@ export default class Token {
    *  기본적으로 string 입니다.
    */
   static getTokenFromCookie(req: Request) {
-    // const tokenKey = Object.keys(req.cookies).find((key) => /token/i.test(key))
-
-    // if (!tokenKey || !req.cookies[tokenKey]) {
-    //   throw ErrorRegistry.TOKEN_REQUIRED
-    // }
-    // return req.cookies[tokenKey] // 찾은 토큰 값을 반환
-    const token = req.cookies.loginToken
-    if (!token) {
-      throw ErrorRegistry.TOKEN_REQUIRED
-    }
-    return token
-  }
-  /** 토큰에서 data를 추출합니다.
-   *  기본적으로 object를 반환합니다.
-   */
-  static getDataFromToken(req: Request) {
     const tokenKey = Object.keys(req.cookies).find((key) => /token/i.test(key))
 
     if (!tokenKey || !req.cookies[tokenKey]) {
       throw ErrorRegistry.TOKEN_REQUIRED
     }
+    return req.cookies[tokenKey] // 찾은 토큰 값을 반환
+    // const token = req.cookies.token
+    // if (!token) {
+    //   throw ErrorRegistry.TOKEN_REQUIRED
+    // }
+    // return token
+  }
+  /** 토큰에서 data를 추출합니다.
+   *  기본적으로 object를 반환합니다.
+   */
+  static getDataFromToken(req: Request) {
+    // const tokenKey = Object.keys(req.cookies).find((key) => /token/i.test(key))
+
+    // if (!tokenKey || !req.cookies[tokenKey]) {
+    //   throw ErrorRegistry.TOKEN_REQUIRED
+    // }
+    const token = req.cookies.loginToken
+    if (!token) {
+      throw ErrorRegistry.TOKEN_REQUIRED
+    }
+
     if (!process.env.JWT_SIGNATURE_KEY) {
       throw ErrorRegistry.INTERNAL_SERVER_ERROR
     }
     const secretKey: string = process.env.JWT_SIGNATURE_KEY
-    const data: any = jwt.verify(req.cookies[tokenKey], secretKey)
+    const data: any = jwt.verify(token, secretKey)
     return data
   }
 
