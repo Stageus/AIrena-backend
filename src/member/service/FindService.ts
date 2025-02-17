@@ -19,7 +19,7 @@ export default class FindService {
       throw ErrorRegistry.CAN_NOT_FIND_USER
     }
 
-    return new FindIdResponse(email, result.id)
+    return new FindIdResponse(result.id)
   }
 
   /** 비밀번호 검색 서비스 로직 */
