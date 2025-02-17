@@ -34,6 +34,9 @@ export default class ChangeService {
       const secretKey = process.env.JWT_SIGNATURE_KEY
       const data: any = jwt.verify(token, secretKey)
       await MemberChangeRepository.updateMemberPassword(password, data.userId)
+      await RedisEmailChangeRepository.resetFindPasswordEmailDataFromRedis(
+        data.email,
+      )
       return
     } catch (e) {
       console.error(e)

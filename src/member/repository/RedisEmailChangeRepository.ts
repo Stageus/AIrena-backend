@@ -28,4 +28,8 @@ export default class RedisEmailChangeRepository {
       await redis.hincrby(email, 'send_count', 1)
     }
   }
+
+  static async resetFindPasswordEmailDataFromRedis(email: string) {
+    await redis.del(email)
+  }
 }
