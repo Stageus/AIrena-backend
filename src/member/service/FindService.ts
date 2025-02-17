@@ -25,8 +25,6 @@ export default class FindService {
   /** 비밀번호 검색 서비스 로직 */
   static async findPassword(findPasswordRequest: FindPasswordRequest) {
     const { id, email } = findPasswordRequest
-    console.log(id)
-    console.log(email)
     const checkResult = await MemberFindRepository.checkMemberPasswordFromDb(
       id,
       email,
