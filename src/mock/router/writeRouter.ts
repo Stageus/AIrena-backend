@@ -11,11 +11,12 @@ writeRouter.post(
   '/',
   multipartParser('image', 1),
   controller(
+    'login',
     null,
     null,
     WriteRequest,
     WriteResponse,
   )(async (req, res) => {
-    return res.send(await WriteService.writeMock(2, req.body))
+    return res.send(await WriteService.writeMock(req.userId, req.body))
   }),
 )

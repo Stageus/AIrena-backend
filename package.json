@@ -10,9 +10,18 @@
   "license": "ISC",
   "description": "",
   "type": "module",
+  "imports": {
+    "#mock/*": "./dist/src/mock/*/index.js",
+    "#member/*": "./dist/src/member/*/index.js",
+    "#controller": "./dist/src/core/controller/index.js",
+    "#adapter/*": "./dist/src/core/adapter/*.js",
+    "#config/*": "./dist/src/core/config/*.js",
+    "#util/*": "./dist/src/core/util/*/index.js",
+    "#error/*": "./dist/src/core/error/*.js"
+  },
   "dependencies": {
     "@upstash/redis": "1.34.4",
-    "cookie-parser": "^1.4.7",
+    "cookie-parser": "1.4.7",
     "cors": "2.8.5",
     "dotenv": "16.4.7",
     "express": "4.21.2",
@@ -22,19 +31,9 @@
     "nodemailer": "6.10.0",
     "pg": "8.13.1"
   },
-  "imports": {
-    "#mock/*": "./dist/src/mock/*/index.js",
-    "#member/*": "./dist/src/member/*/index.js",
-    "#controller": "./dist/src/core/controller/index.js",
-    "#adapter/*": "./dist/src/core/adapter/*.js",
-    "#repository/*": "./dist/src/repository/*.js",
-    "#config/*": "./dist/src/core/config/*.js",
-    "#util/*": "./dist/src/core/util/*.js",
-    "#error/*": "./dist/src/core/error/*.js"
-  },
   "devDependencies": {
     "@types/cookie-parser": "1.4.8",
-    "@types/cors": "^2.8.17",
+    "@types/cors": "2.8.17",
     "@types/express": "5.0.0",
     "@types/jsonwebtoken": "9.0.8",
     "@types/multer": "1.4.12",

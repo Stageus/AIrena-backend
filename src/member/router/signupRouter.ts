@@ -10,6 +10,7 @@ export const signupRouter = express.Router()
 signupRouter.post(
   '/',
   controller(
+    'every',
     null,
     null,
     SignupRequest,
@@ -25,6 +26,7 @@ signupRouter.post(
 signupRouter.post(
   '/verify',
   controller(
+    'every',
     null,
     null,
     SignupVerifyRequest,
@@ -39,6 +41,7 @@ signupRouter.post(
 signupRouter.get(
   '/email',
   controller(
+    'every',
     SendVerifyEmailRequest,
     null,
     null,

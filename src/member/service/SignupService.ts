@@ -1,7 +1,7 @@
 import ErrorRegistry from '#error/ErrorRegistry'
-import EmailSender from '#util/email/mailSender/index'
-import RandomNicknameGenerator from '#util/nickname/nicknameGenerator/index'
-import Token from '#util/token/index'
+import EmailSender from '#util/EmailSender'
+import RandomNicknameGenerator from '#util/RandomNicknameGenerator'
+import Token from '#util/Token'
 import { Response } from 'express'
 import jwt from 'jsonwebtoken'
 import SendVerifyEmailRequest from '../entity/dao/frontend/request/SendVerifyEmailRequest.js'
@@ -19,7 +19,7 @@ export default class SignupService {
       throw ErrorRegistry.PASSWORD_NOT_EQUAL
     }
     await MemberSignupRepository.checkIdAndEmailDuplicate(id, email)
-    const token = Token.generateToken(id, email)
+    const token = Token.generateValidateToken(id, email)
     await RedisEmailSignupRepository.insertMemberDataAtRedis(
       id,
       password,
@@ -53,7 +53,7 @@ export default class SignupService {
       data.email,
       nickname,
     )
-    const token = Token.generateToken(memberHashData.id, data.email)
+    const token = Token.generateValidateToken(memberHashData.id, data.email)
     Token.generateCookie('signupToken', token, res)
   }
   /** 회원가입 인증 이메일 재전송 서비스 로직 */

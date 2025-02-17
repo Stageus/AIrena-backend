@@ -11,6 +11,7 @@ export const mockItemRouter = express.Router()
 mockItemRouter.get(
   '/:idx',
   controller(
+    'login',
     null,
     MockIdxPath,
     null,
@@ -23,6 +24,7 @@ mockItemRouter.get(
 mockItemRouter.get(
   '/:idx/result',
   controller(
+    'login',
     null,
     MockIdxPath,
     null,
@@ -35,6 +37,7 @@ mockItemRouter.get(
 mockItemRouter.post(
   '/:idx/result',
   controller(
+    'login',
     null,
     MockIdxPath,
     null,

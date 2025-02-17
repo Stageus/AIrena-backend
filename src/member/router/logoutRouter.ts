@@ -6,6 +6,7 @@ export const logoutRouter = express.Router()
 logoutRouter.get(
   '/',
   controller(
+    'every',
     null,
     null,
     null,

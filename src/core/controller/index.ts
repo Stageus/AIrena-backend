@@ -1,8 +1,11 @@
 import { NextFunction, Request, Response } from 'express'
+import checkAuthReturningUserId from './module/checkAuthReturningUserId.js'
 
 type Constructor<T> = new (...data: any) => T
 
 /**
+ * @param {'every' | 'login' | 'admin'} auth
+ *   - 권한, 해당 라우터의 권한을 설정합니다.
  * @param {Constructor<QueryType> | null} QueryClass
  *   - 쿼리 파라미터, 사용하지 않을 경우 null로 전달합니다.
  * @param {Constructor<PathType> | null} PathClass
@@ -18,6 +21,7 @@ const controller = <
   BodyType = {},
   ResponseType = void,
 >(
+  auth: 'every' | 'login' | 'admin',
   QueryClass: Constructor<QueryType> | null,
   PathClass: Constructor<PathType> | null,
   BodyClass: Constructor<BodyType> | null,
@@ -35,6 +39,8 @@ const controller = <
       next: NextFunction,
     ) => {
       try {
+        req.userId = checkAuthReturningUserId(auth, req)
+
         if (QueryClass) {
           req.query = new QueryClass(req.query)
         }

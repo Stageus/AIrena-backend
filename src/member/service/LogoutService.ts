@@ -1,4 +1,4 @@
-import Token from '#util/token/index'
+import Token from '#util/Token'
 import { Response } from 'express'
 
 export default class LogoutService {

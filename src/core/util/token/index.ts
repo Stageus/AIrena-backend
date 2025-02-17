@@ -4,21 +4,10 @@ import { Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
 dotenv.config()
 export default class Token {
-  /** 쿠키로부터 토큰을 얻어옵니다.
-   *  기본적으로 string 입니다.
-   */
-  static getTokenFromCookie(req: Request) {
-    const tokenKey = Object.keys(req.cookies).find((key) => /token/i.test(key))
-
-    if (!tokenKey || !req.cookies[tokenKey]) {
-      throw ErrorRegistry.TOKEN_REQUIRED
-    }
-    return req.cookies[tokenKey]
-  }
   /** 토큰에서 data를 추출합니다.
    *  기본적으로 object를 반환합니다.
    */
-  static getDataFromToken(req: Request) {
+  static getDataFromLoginToken(req: Request) {
     const token = req.cookies.loginToken
     if (!token) {
       throw ErrorRegistry.TOKEN_REQUIRED
@@ -38,7 +27,7 @@ export default class Token {
    *  @params {string} email
    *  - 사용자 이메일 주소입니다.
    */
-  static generateToken(id: string, email: string) {
+  static generateValidateToken(id: string, email: string) {
     if (!process.env.JWT_SIGNATURE_KEY) {
       throw ErrorRegistry.INTERNAL_SERVER_ERROR
     }

@@ -1,5 +1,5 @@
-import { modifierList } from '../const/modifierList.js'
-import { nicknameList } from '../const/nicknameList.js'
+import { modifierList } from './const/modifierList.js'
+import { nicknameList } from './const/nicknameList.js'
 
 export default class RandomNicknameGenerator {
   static async generateNickname() {

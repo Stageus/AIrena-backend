@@ -11,6 +11,7 @@ export const listRouter = express.Router()
 listRouter.get(
   '/',
   controller(
+    'login',
     ListQuery,
     null,
     null,
@@ -23,6 +24,7 @@ listRouter.get(
 listRouter.get(
   '/search',
   controller(
+    'login',
     SearchQuery,
     null,
     null,

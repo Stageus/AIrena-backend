@@ -21,6 +21,7 @@ const googleRedirectUri = process.env.GOOGLE_REDIRECT_URI
 loginRouter.post(
   '/normal',
   controller(
+    'every',
     null,
     null,
     NormalLoginRequest,
@@ -35,6 +36,7 @@ loginRouter.post(
 loginRouter.get(
   '/kakao',
   controller(
+    'every',
     null,
     null,
     null,
@@ -48,6 +50,7 @@ loginRouter.get(
 loginRouter.get(
   '/kakao/redirect',
   controller(
+    'every',
     LoginRequest,
     null,
     null,
@@ -65,6 +68,7 @@ loginRouter.get(
 loginRouter.get(
   '/google',
   controller(
+    'every',
     null,
     null,
     null,
@@ -78,6 +82,7 @@ loginRouter.get(
 loginRouter.get(
   '/google/redirect',
   controller(
+    'every',
     LoginRequest,
     null,
     null,
@@ -95,12 +100,12 @@ loginRouter.get(
 loginRouter.get(
   '/check',
   controller(
+    'login',
     null,
     null,
     null,
     null,
   )(async (req, res) => {
-    await LoginService.checkLogin(req)
     return res.sendStatus(200)
   }),
 )

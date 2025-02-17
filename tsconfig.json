@@ -13,16 +13,12 @@
       "#member/*": ["src/member/*/index.ts"],
       "#controller/*": ["src/core/controller/index.ts"],
       "#adapter/*": ["src/core/adapter/*.ts"],
-      "#repository/*": ["src/repository/*.ts"],
       "#config/*": ["src/core/config/*.ts"],
-      "#util/*": ["src/core/util/*.ts"],
+      "#util/*": ["src/core/util/*/index.ts"],
       "#error/*": ["src/core/error/*.ts"]
-    }
+    },
+    "typeRoots": ["src/types", "./node_modules/@types"]
   },
-  "include": [
-    "src/**/*.ts",
-    "index.ts",
-    "src/socialLogin/dto/frontend/response/MockScore"
-  ],
+  "include": ["src/**/*.ts", "index.ts"],
   "exclude": ["node_modules"]
 }
