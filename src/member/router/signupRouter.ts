@@ -30,8 +30,8 @@ signupRouter.post(
     SignupVerifyRequest,
     null,
   )(async (req, res) => {
-    const url = await SignupService.verifySignup(req.body, res)
-    return res.redirect(url)
+    await SignupService.verifySignup(req.body, res)
+    return res.sendStatus(201)
   }),
 )
 
