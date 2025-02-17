@@ -3,12 +3,25 @@ import EmailSender from '#util/email/mailSender/index'
 import Token from '#util/token/index'
 import { Response } from 'express'
 import jwt from 'jsonwebtoken'
+import FindIdRequest from '../entity/dao/frontend/request/FindIdRequest.js'
 import FindPasswordRequest from '../entity/dao/frontend/request/FindPasswordRequest.js'
 import FindPasswordVerifyRequest from '../entity/dao/frontend/request/FindPasswordVerifyRequest.js'
+import FindIdResponse from '../entity/dao/frontend/response/FindIdResponse.js'
 import MemberFindRepository from '../repository/MemberFindRepository.js'
 import RedisEmailFindRepository from '../repository/RedisEmailFindRepository.js'
 const changePasswordRedirectUrl = `${process.env.FRONTEND_SERVER_URL}/redirect/change/password`
 export default class FindService {
+  /** 아이디 검색 서비스 로직 */
+  static async findId(findIdRequest: FindIdRequest) {
+    const { email } = findIdRequest
+    const result = await MemberFindRepository.getIdByEmail(email)
+    if (!result.id) {
+      throw ErrorRegistry.CAN_NOT_FIND_USER
+    }
+
+    return new FindIdResponse(email, result.id)
+  }
+
   /** 비밀번호 검색 서비스 로직 */
   static async findPassword(findPasswordRequest: FindPasswordRequest) {
     const { id, email } = findPasswordRequest
