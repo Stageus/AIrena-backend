@@ -9,7 +9,7 @@ import MemberChangeRepository from '../repository/MemberChangeRepository.js'
 import RedisEmailChangeRepository from '../repository/RedisEmailChangeRepository.js'
 export default class ChangeService {
   /** 닉네임 변경 서비스 로직 */
-  static async nicknameChange(
+  static async changeNickname(
     req: Request,
     nicknameChangeRequest: NicknameChangeRequest,
   ) {
@@ -30,6 +30,7 @@ export default class ChangeService {
       await MemberChangeRepository.updateMemberPassword(password, data.userId)
       return
     } catch (e) {
+      console.error(e)
       throw ErrorRegistry.PASSWORD_CHANGE_FAILED
     }
   }

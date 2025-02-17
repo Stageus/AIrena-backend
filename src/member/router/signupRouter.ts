@@ -25,12 +25,12 @@ signupRouter.post(
 signupRouter.post(
   '/verify',
   controller(
+    null,
+    null,
     SignupVerifyRequest,
     null,
-    null,
-    null,
   )(async (req, res) => {
-    const url = await SignupService.verifySignup(req.query, res)
+    const url = await SignupService.verifySignup(req.body, res)
     return res.redirect(url)
   }),
 )
