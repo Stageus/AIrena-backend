@@ -1,5 +1,5 @@
 import controller from '#controller'
-import multipartParser from '#util/multipartParser'
+import multipartParser from '#util/multipartParser/index'
 import express from 'express'
 import WriteRequest from '../entity/dao/frontend/request/body/WriteRequest.js'
 import WriteResponse from '../entity/dao/frontend/response/WriteResponse.js'
@@ -11,11 +11,12 @@ writeRouter.post(
   '/',
   multipartParser('image', 1),
   controller(
+    'login',
     null,
     null,
     WriteRequest,
     WriteResponse,
   )(async (req, res) => {
-    return res.send(await WriteService.writeMock(2, req.body))
+    return res.send(await WriteService.writeMock(req.userId, req.body))
   }),
 )

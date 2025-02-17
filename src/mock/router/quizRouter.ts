@@ -11,6 +11,7 @@ export const quizRouter = express.Router()
 quizRouter.get(
   '/:idx',
   controller(
+    'login',
     null,
     QuizIdxPath,
     null,
@@ -23,6 +24,7 @@ quizRouter.get(
 quizRouter.post(
   '/:idx',
   controller(
+    'login',
     null,
     QuizIdxPath,
     SolveRequest,
@@ -36,6 +38,7 @@ quizRouter.post(
 quizRouter.get(
   '/:idx/result',
   controller(
+    'login',
     null,
     QuizIdxPath,
     null,

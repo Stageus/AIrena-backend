@@ -1,9 +1,8 @@
 import LoginAdapter from '#adapter/OAuthAdapter'
 import ErrorRegistry from '#error/ErrorRegistry'
-import Token from '#util/token/index'
+import Token from '#util/Token/index'
 import dotenv from 'dotenv'
-import { Request, Response } from 'express'
-import jwt from 'jsonwebtoken'
+import { Response } from 'express'
 import NormalLoginRequest from '../entity/dao/frontend/request/NormalLoginRequest.js'
 import MemberLoginRepository from '../repository/MemberLoginRepository.js'
 dotenv.config()
@@ -48,13 +47,13 @@ export default class LoginService {
       userData.id,
     )
     const token = Token.generateLoginToken(
-      userData.id,
-      userData.email,
-      userData.role,
+      checkResult.id,
+      checkResult.email,
+      checkResult.role,
     )
     Token.generateCookie('loginToken', token, res)
 
-    if (!checkResult.rows[0] || checkResult.rows[0] == undefined) {
+    if (!checkResult.rows[0]) {
       await MemberLoginRepository.insertKakaoLoginMemberData(
         userData.id as string,
         userData.properties.nickname,
@@ -77,13 +76,13 @@ export default class LoginService {
       userData.id,
     )
     const token = Token.generateLoginToken(
-      userData.id,
-      userData.email,
-      userData.role,
+      checkResult.id,
+      checkResult.email,
+      checkResult.role,
     )
     Token.generateCookie('loginToken', token, res)
 
-    if (!checkResult.rows[0] || checkResult.rows[0] == undefined) {
+    if (!checkResult.rows[0]) {
       await MemberLoginRepository.insertGoogleLoginMemberData(
         userData.id as string,
         userData.name,
@@ -92,24 +91,5 @@ export default class LoginService {
       return signupRedirectUrl
     }
     return signupRedirectUrl
-  }
-
-  /** 로그인 상태 체크 */
-  static async checkLogin(req: Request) {
-    if (!req.cookies) {
-      throw ErrorRegistry.LOGIN_REQUIRED
-    }
-    if (!req.cookies.loginToken) {
-      throw ErrorRegistry.LOGIN_REQUIRED
-    }
-    if (!process.env.JWT_SIGNATURE_KEY) {
-      throw ErrorRegistry.INTERNAL_SERVER_ERROR
-    }
-    try {
-      jwt.verify(req.cookies.loginToken, process.env.JWT_SIGNATURE_KEY)
-      return
-    } catch (e) {
-      throw ErrorRegistry.LOGIN_REQUIRED
-    }
   }
 }

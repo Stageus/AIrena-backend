@@ -10,6 +10,7 @@ export const changeRouter = express.Router()
 changeRouter.patch(
   '/nickname',
   controller(
+    'login',
     null,
     null,
     NicknameChangeRequest,
@@ -24,6 +25,7 @@ changeRouter.patch(
 changeRouter.patch(
   '/password',
   controller(
+    'every',
     null,
     null,
     PasswordChangeRequest,
@@ -38,6 +40,7 @@ changeRouter.patch(
 changeRouter.get(
   '/password/email',
   controller(
+    'every',
     SendFindPasswordEmailRequest,
     null,
     null,

@@ -1,6 +1,6 @@
 import ErrorRegistry from '#error/ErrorRegistry'
-import EmailSender from '#util/email/mailSender/index'
-import Token from '#util/token/index'
+import EmailSender from '#util/EmailSender/index'
+import Token from '#util/Token/index'
 import { Response } from 'express'
 import jwt from 'jsonwebtoken'
 import FindIdRequest from '../entity/dao/frontend/request/FindIdRequest.js'
@@ -52,7 +52,7 @@ export default class FindService {
     }
     const memberHashData: any =
       await RedisEmailFindRepository.getHashDataFromRedis(data.email)
-    const token = Token.generateToken(memberHashData.id, data.email)
+    const token = Token.generateValidateToken(memberHashData.id, data.email)
     Token.generateCookie('passwordChangeToken', token, res)
     return changePasswordRedirectUrl
   }

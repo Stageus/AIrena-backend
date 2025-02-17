@@ -10,6 +10,7 @@ export const findRouter = express.Router()
 findRouter.post(
   '/id',
   controller(
+    'every',
     null,
     null,
     FindIdRequest,
@@ -23,6 +24,7 @@ findRouter.post(
 findRouter.post(
   '/password',
   controller(
+    'every',
     null,
     null,
     FindPasswordRequest,
