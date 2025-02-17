@@ -8,6 +8,7 @@ import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import { configDotenv } from 'dotenv'
 import express from 'express'
+import { noticeRouter } from 'src/notice/router/index.js'
 configDotenv()
 
 const app = express()
@@ -22,6 +23,7 @@ app.use(cookieParser())
 app.use(express.json())
 app.use('/member', memberRouter)
 app.use('/mock', mockRouter)
+app.use('/notice', noticeRouter)
 app.use('/like', likeRouter)
 app.use(globalExceptionHandler)
 
