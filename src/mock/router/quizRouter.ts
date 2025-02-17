@@ -30,7 +30,7 @@ quizRouter.post(
     SolveRequest,
     null,
   )(async (req, res) => {
-    await QuizService.submitAnswer(2, req.params, req.body)
+    await QuizService.submitAnswer(req.memberIdx, req.params, req.body)
     res.sendStatus(201)
   }),
 )
@@ -44,6 +44,8 @@ quizRouter.get(
     null,
     QuizSolveResponse,
   )(async (req, res) => {
-    return res.send(await QuizService.getGradingResult(2, req.params))
+    return res.send(
+      await QuizService.getGradingResult(req.memberIdx, req.params),
+    )
   }),
 )

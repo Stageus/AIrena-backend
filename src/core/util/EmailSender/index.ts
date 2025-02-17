@@ -2,6 +2,7 @@ import dotenv from 'dotenv'
 import { readFileSync } from 'fs'
 import nodemailer from 'nodemailer'
 import path from 'path'
+
 dotenv.config()
 
 export default class EmailSender {
@@ -21,14 +22,11 @@ export default class EmailSender {
     let htmlTemplatePath = readFileSync(
       path.resolve(
         process.cwd(),
-        'src/core/util/email/templates/confirmSignupMail.html',
+        `src/core/util/EmailSender/templates/confirmSignupMail.html`,
       ),
       'utf-8',
     )
-    // const imagePath = path.join(
-    //   process.cwd(),
-    //   'src/core/util/email/images/ai-rena-icon.png',
-    // )
+
     const verifyUrl = `${process.env.FRONTEND_SERVER_URL as string}/redirect/signup/verify?token=${token}`
     htmlTemplatePath = htmlTemplatePath.replace('{{verifyUrl}}', verifyUrl)
 
@@ -37,13 +35,6 @@ export default class EmailSender {
       to: receiver,
       subject: 'AIrena 회원가입 안내',
       html: htmlTemplatePath,
-      // attachments: [
-      //   {
-      //     filename: 'ai-rena-icon.png',
-      //     path: imagePath,
-      //     cid: 'logoImage',
-      //   },
-      // ],
     }
 
     transporter.sendMail(mailOption, (err, info) => {
@@ -73,7 +64,7 @@ export default class EmailSender {
     let htmlTemplatePath = readFileSync(
       path.resolve(
         process.cwd(),
-        'src/core/util/email/templates/confirmPasswordChangeMail.html',
+        `src/core/util/EmailSender/templates/confirmPasswordChangeMail.html`,
       ),
       'utf-8',
     )

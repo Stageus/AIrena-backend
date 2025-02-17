@@ -1,5 +1,6 @@
 import { postgres } from '#config/postgres'
 import ErrorRegistry from '#error/ErrorRegistry'
+import SignupResultFromDB from '../entity/dao/db/SingupResultFromDB.js'
 
 export default class MemberSignupRepository {
   /** 아이디 & 이메일 중복 체크 */
@@ -21,10 +22,15 @@ export default class MemberSignupRepository {
     email: string,
     nickname: string,
   ) {
-    let datetime = new Date()
-    await postgres.query(
-      'INSERT INTO member (id, provider, password, email, nickname,created_at) VALUES ($1, $2, $3, $4, $5, $6)',
-      [id, 'NORMAL', password, email, nickname, datetime],
-    )
+    return (
+      await postgres.query(
+        `
+      INSERT INTO member 
+        (id, provider, password, email, nickname,created_at) 
+        VALUES ($1, $2, $3, $4, $5, NOW())
+      RETURNING idx, role`,
+        [id, 'NORMAL', password, email, nickname],
+      )
+    ).rows[0] as SignupResultFromDB
   }
 }

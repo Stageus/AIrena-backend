@@ -16,7 +16,7 @@ changeRouter.patch(
     NicknameChangeRequest,
     null,
   )(async (req, res): Promise<any> => {
-    await ChangeService.changeNickname(req, req.body)
+    await ChangeService.changeNickname(req.memberIdx, req.body)
     return res.sendStatus(200)
   }),
 )

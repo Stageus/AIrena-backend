@@ -33,7 +33,9 @@ export default class AnswerSubmitRepository {
           (
             SELECT nextQuiz.idx
             FROM quiz nextQuiz
-            WHERE nextQuiz.created_at > current_quiz.created_at
+            WHERE
+              nextQuiz.created_at > current_quiz.created_at
+              AND nextQuiz.mock_idx = current_quiz.mock_idx
             ORDER BY nextQuiz.created_at ASC
             LIMIT 1
           ) AS "nextQuizIdx",

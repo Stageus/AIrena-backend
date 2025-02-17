@@ -53,7 +53,7 @@ export default class Token {
    *  @params {string} role
    *  - 사용자 권한입니다.
    */
-  static generateLoginToken(idx: string, email: string, role: string) {
+  static generateLoginToken(idx: number, email: string, role: string) {
     if (!process.env.JWT_SIGNATURE_KEY) {
       throw ErrorRegistry.INTERNAL_SERVER_ERROR
     }

@@ -13,12 +13,11 @@ dotenv.config()
 export default class ChangeService {
   /** 닉네임 변경 서비스 로직 */
   static async changeNickname(
-    req: Request,
+    memberIdx: number,
     nicknameChangeRequest: NicknameChangeRequest,
   ) {
-    const data = Token.getDataFromLoginToken(req)
     const { nickname } = nicknameChangeRequest
-    await MemberChangeRepository.changeNickname(nickname, data.userId)
+    await MemberChangeRepository.changeNickname(nickname, memberIdx)
   }
 
   /** 비밀번호 변경 서비스 로직 */

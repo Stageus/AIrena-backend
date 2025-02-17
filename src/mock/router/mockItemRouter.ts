@@ -30,7 +30,9 @@ mockItemRouter.get(
     null,
     ResultResponse,
   )(async (req, res) => {
-    return res.send(await MockItemService.getMockResult(2, req.params))
+    return res.send(
+      await MockItemService.getMockResult(req.memberIdx, req.params),
+    )
   }),
 )
 
@@ -43,7 +45,7 @@ mockItemRouter.post(
     null,
     null,
   )(async (req, res) => {
-    await MockItemService.saveMockResult(2, req.params)
+    await MockItemService.saveMockResult(req.memberIdx, req.params)
     res.sendStatus(201)
   }),
 )

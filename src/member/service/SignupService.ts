@@ -39,22 +39,24 @@ export default class SignupService {
     if (!process.env.JWT_SIGNATURE_KEY)
       throw ErrorRegistry.INTERNAL_SERVER_ERROR
     const data: any = jwt.verify(getToken, process.env.JWT_SIGNATURE_KEY)
-    const nickname = await RandomNicknameGenerator.generateNickname()
-    const checkRedis =
-      await RedisEmailSignupRepository.checkVerifyEmailDataFromRedis()
-    if (!checkRedis) {
+
+    if (!(await RedisEmailSignupRepository.checkVerifyEmailDataFromRedis())) {
       throw ErrorRegistry.INTERNAL_SERVER_ERROR
     }
     const memberHashData: any =
       await RedisEmailSignupRepository.getHashDataFromRedis(data.email)
-    await MemberSignupRepository.insertNormalMemberData(
+    const result = await MemberSignupRepository.insertNormalMemberData(
       memberHashData.id,
       memberHashData.password,
       data.email,
-      nickname,
+      RandomNicknameGenerator.generateNickname(),
     )
-    const token = Token.generateValidateToken(memberHashData.id, data.email)
-    Token.generateCookie('signupToken', token, res)
+    const token = Token.generateLoginToken(
+      result.idx,
+      result.email,
+      result.role,
+    )
+    Token.generateCookie('loginToken', token, res)
   }
   /** 회원가입 인증 이메일 재전송 서비스 로직 */
   static async sendVerifyEmail(sendVerifyEmailRequest: SendVerifyEmailRequest) {
