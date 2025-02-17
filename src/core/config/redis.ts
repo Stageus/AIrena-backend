@@ -12,3 +12,13 @@ export default class RedisReset {
     let currentTime = Date.now()
   }
 }
+
+export const testRedisConnection = async () => {
+  try {
+    await redis.set('test_key', 'Hello, Upstash!')
+    const value = await redis.get('test_key')
+    console.log('|========== Upstash Redis 연결 성공 =========|', value)
+  } catch (error) {
+    console.error('Redis 연결 실패:', error)
+  }
+}

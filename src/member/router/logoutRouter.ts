@@ -4,7 +4,7 @@ import LogoutService from '../service/LogoutService.js'
 export const logoutRouter = express.Router()
 /** 로그아웃 API */
 logoutRouter.get(
-  '/logout',
+  '/',
   controller(
     null,
     null,

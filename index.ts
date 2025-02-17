@@ -1,4 +1,5 @@
 import { testPostgresConnection } from '#config/postgres'
+import { testRedisConnection } from '#config/redis'
 import globalExceptionHandler from '#error/globalExceptionHandler'
 import { memberRouter } from '#member/router'
 import { mockRouter } from '#mock/router'
@@ -25,5 +26,6 @@ app.use(globalExceptionHandler)
 
 app.listen(3000, async () => {
   await testPostgresConnection()
+  await testRedisConnection()
   console.log('Server is running on port 3000')
 })
