@@ -27,7 +27,7 @@ export default class LoginService {
       throw ErrorRegistry.CAN_NOT_FIND_USER
     }
     const token: string = Token.generateLoginToken(
-      memberData.id,
+      memberData.idx,
       memberData.email,
       memberData.role,
     )
@@ -49,7 +49,7 @@ export default class LoginService {
 
     if (!checkResult) {
       await MemberLoginRepository.insertKakaoLoginMemberData(
-        userData.id as string,
+        userData.id,
         userData.properties.nickname,
       )
       const checkResult: any =
@@ -88,7 +88,7 @@ export default class LoginService {
 
     if (!checkResult) {
       await MemberLoginRepository.insertGoogleLoginMemberData(
-        userData.id as string,
+        userData.id,
         userData.name,
         userData.email,
       )

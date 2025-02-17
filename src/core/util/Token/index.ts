@@ -46,21 +46,21 @@ export default class Token {
     return token
   }
   /** 로그인 토큰을 생성합니다.
-   *  @params {string} id
-   *  - 사용자 아이디 입니다.
+   *  @params {string} idx
+   *  - 사용자 인덱스 입니다.
    *  @params {string} email
    *  - 사용자 이메일 주소입니다.
    *  @params {string} role
    *  - 사용자 권한입니다.
    */
-  static generateLoginToken(id: string, email: string, role: string) {
+  static generateLoginToken(idx: string, email: string, role: string) {
     if (!process.env.JWT_SIGNATURE_KEY) {
       throw ErrorRegistry.INTERNAL_SERVER_ERROR
     }
     const secretKey: string = process.env.JWT_SIGNATURE_KEY
     const token = jwt.sign(
       {
-        userId: id,
+        idx: idx,
         email: email,
         role: role,
       },

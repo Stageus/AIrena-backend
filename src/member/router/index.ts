@@ -3,6 +3,7 @@ import { changeRouter } from './changeRouter.js'
 import { findRouter } from './findRouter.js'
 import { loginRouter } from './loginRouter.js'
 import { logoutRouter } from './logoutRouter.js'
+import { meRouter } from './meRouter.js'
 import { signupRouter } from './signupRouter.js'
 export const memberRouter = express.Router()
 
@@ -11,3 +12,4 @@ memberRouter.use('/signup', signupRouter)
 memberRouter.use('/find', findRouter)
 memberRouter.use('/change', changeRouter)
 memberRouter.use('/logout', logoutRouter)
+memberRouter.use('/me', meRouter)
