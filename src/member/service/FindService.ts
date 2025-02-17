@@ -34,8 +34,8 @@ export default class FindService {
     if (checkResult == 0) {
       throw ErrorRegistry.CAN_NOT_FIND_USER
     }
-    await RedisEmailFindRepository.insertMemberDataAtRedis(id, email)
     const token = Token.generateVerifyToken(id, email)
+    await RedisEmailFindRepository.insertMemberDataAtRedis(id, email, token)
     EmailSender.sendFindPasswordVerifyEmail(email, token)
   }
   /** 비밀번호 이메일 인증 서비스 로직 */
