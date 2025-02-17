@@ -15,10 +15,10 @@ const checkAuthReturningUserId = (
       throw ErrorRegistry.INTERNAL_SERVER_ERROR
     }
     const data: any = jwt.verify(token, process.env.JWT_SIGNATURE_KEY)
-    if (!data.userId) {
+    if (!data.idx) {
       throw ErrorRegistry.TOKEN_REQUIRED
     }
-    return data.userId
+    return data.idx
   } else if (auth === 'admin') {
     const token = req.cookies.loginToken
     if (!token) {
@@ -28,13 +28,13 @@ const checkAuthReturningUserId = (
       throw ErrorRegistry.INTERNAL_SERVER_ERROR
     }
     const data: any = jwt.verify(token, process.env.JWT_SIGNATURE_KEY)
-    if (!data.userId) {
+    if (!data.idx) {
       throw ErrorRegistry.TOKEN_REQUIRED
     }
     if (data.role !== 'admin') {
       throw ErrorRegistry.ACCESS_DENIED
     }
-    return data.userId
+    return data.idx
   }
 }
 

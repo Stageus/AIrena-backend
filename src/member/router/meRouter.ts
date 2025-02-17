@@ -2,10 +2,10 @@ import controller from '#controller'
 import express from 'express'
 import ProfileResponse from '../entity/dao/frontend/response/ProfileResponse.js'
 import MeService from '../service/MeService.js'
-export const logoutRouter = express.Router()
-/** 로그아웃 API */
-logoutRouter.get(
-  '/',
+export const meRouter = express.Router()
+/** 프로필 API */
+meRouter.get(
+  '/profile',
   controller(
     'login',
     null,
