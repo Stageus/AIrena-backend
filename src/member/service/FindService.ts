@@ -41,7 +41,7 @@ export default class FindService {
     findPasswordVerifyRequest: FindPasswordVerifyRequest,
     res: Response,
   ) {
-    const getToken = findPasswordVerifyRequest.token // 쿼리에 포함된 토큰
+    const getToken = findPasswordVerifyRequest.token
     if (!process.env.JWT_SIGNATURE_KEY)
       throw ErrorRegistry.INTERNAL_SERVER_ERROR
     const data: any = jwt.verify(getToken, process.env.JWT_SIGNATURE_KEY)

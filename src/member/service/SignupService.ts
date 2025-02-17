@@ -35,11 +35,11 @@ export default class SignupService {
     signupVerifyRequest: SignupVerifyRequest,
     res: Response,
   ) {
-    const getToken = signupVerifyRequest.token // 쿼리에 포함된 토큰
+    const getToken = signupVerifyRequest.token
     if (!process.env.JWT_SIGNATURE_KEY)
       throw ErrorRegistry.INTERNAL_SERVER_ERROR
     const data: any = jwt.verify(getToken, process.env.JWT_SIGNATURE_KEY)
-    const nickname = await RandomNicknameGenerator.generateNickname() // 랜덤 생성기 자리
+    const nickname = await RandomNicknameGenerator.generateNickname()
     const checkRedis =
       await RedisEmailSignupRepository.checkVerifyEmailDataFromRedis()
     if (!checkRedis) {
