@@ -14,11 +14,12 @@ export default class NoticeRepository {
     memberIdx: number,
     title: string,
     content: string,
+    image: string[],
   ) {
     return (
       await postgres.query(
-        'INSERT INTO notice (memberIdx, title,content) WHERE ($1,$2) RETURNING idx',
-        [title, content],
+        'INSERT INTO notice (memberIdx, title, content, image) WHERE ($1,$2) RETURNING idx',
+        [memberIdx, title, content, image],
       )
     ).rows[0].idx
   }
