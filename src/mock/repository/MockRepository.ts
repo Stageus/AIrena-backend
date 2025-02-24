@@ -223,13 +223,18 @@ export default class MockRepository {
         WHERE member_idx = $1 AND mock_idx = $2
       ),
       owner AS(
-        SELECT 
-          1
+        SELECT 1
         FROM mock
-        WHERE member_idx = $1 AND idx = $2
+        WHERE mock.idx = $2 AND mock.member_idx = $1
+      ),
+      admin AS(
+        SELECT 1
+        FROM member
+        WHERE member.idx = $1 AND member.role = 'ADMIN'
       )
       SELECT 
         EXISTS (SELECT 1 FROM owner) AS owner,
+        EXISTS (SELECT 1 FROM admin) AS admin,
         EXISTS (SELECT 1 FROM solved) AS solved,
         EXISTS (SELECT 1 FROM push_like) AS "pushLike"
       `,

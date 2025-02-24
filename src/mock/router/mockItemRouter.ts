@@ -3,7 +3,7 @@ import express from 'express'
 
 import MockIdxPath from '../entity/dao/frontend/request/path/MockIdxPath.js'
 import DetailResponse from '../entity/dao/frontend/response/DetailResponse.js'
-import IndividualMockInfoResponse from '../entity/dao/frontend/response/IndividuaIDetailResponse.js'
+import IndividualMockInfoResponse from '../entity/dao/frontend/response/IndividualDetailResponse.js'
 import ResultResponse from '../entity/dao/frontend/response/ResultResponse.js'
 import MockItemService from '../service/MockItemService.js'
 
