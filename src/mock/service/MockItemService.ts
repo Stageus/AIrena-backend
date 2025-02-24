@@ -1,3 +1,4 @@
+import MockEditRequest from '../entity/dao/frontend/request/body/MockEditRequest.js'
 import MockIdxPath from '../entity/dao/frontend/request/path/MockIdxPath.js'
 import DetailResponse from '../entity/dao/frontend/response/DetailResponse.js'
 import IndividualDetailResponse from '../entity/dao/frontend/response/IndividualDetailResponse.js'
@@ -57,5 +58,28 @@ export default class MockItemService {
       result.solved,
       result.pushLike,
     )
+  }
+
+  static async editMock(
+    userIdx: number,
+    path: MockIdxPath,
+    body: MockEditRequest,
+  ): Promise<void> {
+    const result = await MockRepository.updateMock(
+      userIdx,
+      path.idx,
+      body.title,
+      body.description,
+      body.urls,
+    )
+    console.log(result)
+  }
+
+  static async deleteMock(userIdx: number, path: MockIdxPath): Promise<void> {
+    await MockRepository.deleteMock(userIdx, path.idx)
+  }
+
+  static async getRank(userIdx: number, path: MockIdxPath): Promise<void> {
+    const result = await MockScoreRepository.getScore(userIdx, path.idx)
   }
 }

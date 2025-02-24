@@ -242,8 +242,38 @@ export default class MockRepository {
       )
     ).rows[0] as IndividualMockDetailResultFromDB
   }
-}
 
+  static async updateMock(
+    memberIdx: number,
+    idx: UUID,
+    title: string,
+    description: string,
+    urls: string[],
+  ) {
+    return await postgres.query(
+      `
+      WITH mock_update AS (
+        UPDATE mock
+        SET
+          title = $1,
+          description = $2,
+          updated_at = NOW()
+        WHERE idx = $2 AND member_idx = $1
+        RETURNING 1
+      )
+      UPDATE image SET urls = $5 WHERE article_idx = $2 AND EXISTS (SELECT 1 FROM mock_update)
+      `,
+      [memberIdx, idx, title, description, urls],
+    )
+  }
+
+  static async deleteMock(memberIdx: number, idx: UUID) {
+    await postgres.query(
+      `UPDATE mock SET is_deleted = true WHERE idx = $1 AND member_idx = $2`,
+      [idx, memberIdx],
+    )
+  }
+}
 const makeInsertManyQuery = (quizzesLength: number) => {
   let lastIndex = 5
   return `
