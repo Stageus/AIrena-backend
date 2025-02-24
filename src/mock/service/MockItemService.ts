@@ -1,6 +1,9 @@
 import MockIdxPath from '../entity/dao/frontend/request/path/MockIdxPath.js'
 import DetailResponse from '../entity/dao/frontend/response/DetailResponse.js'
-import IndividualMockInfoResponse from '../entity/dao/frontend/response/IndividualMockInfoResponse.js'
+import {
+  default as IndividualDetailResponse,
+  default as IndividualMockInfoResponse,
+} from '../entity/dao/frontend/response/IndividuaIDetailResponse.js'
 import ResultResponse from '../entity/dao/frontend/response/ResultResponse.js'
 import MockRepository from '../repository/MockRepository.js'
 import MockScoreRepository from '../repository/MockScoreRepository.js'
@@ -39,11 +42,14 @@ export default class MockItemService {
     await MockScoreRepository.saveScore(userIdx, path.idx)
   }
 
-  static async getIndividualMockInfo(
-    memberIdx: number,
-    path: MockIdxPath,
-  ): Promise<IndividualMockInfoResponse> {
-    const result = await MockRepository.getIndividualMockInfo(
+  static async getIndividualMockDetail({
+    memberIdx,
+    path,
+  }: {
+    memberIdx: number
+    path: MockIdxPath
+  }): Promise<IndividualDetailResponse> {
+    const result = await MockRepository.getIndividualMockDetail(
       memberIdx,
       path.idx,
     )

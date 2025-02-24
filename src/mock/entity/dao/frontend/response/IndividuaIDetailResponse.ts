@@ -1,4 +1,4 @@
-export default class IndividualMockInfoResponse {
+export default class IndividualDetailResponse {
   constructor(
     public readonly owner: boolean,
     public readonly solved: boolean,

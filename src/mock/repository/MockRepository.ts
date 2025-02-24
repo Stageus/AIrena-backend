@@ -1,6 +1,6 @@
 import { postgres } from '#config/postgres'
 import { UUID } from 'crypto'
-import IndividualMockResultFromDB from '../entity/dao/db/IndividualMockResultFromDB.js'
+import IndividualMockDetailResultFromDB from '../entity/dao/db/IndividualMockDetailResultFromDB.js'
 import MockResultFromDB from '../entity/dao/db/MockResultFromDB.js'
 import PaginatedMockListResultFromDB from '../entity/dao/db/PaginatedMockListResultFromDB.js'
 import Quiz from '../entity/dto/Quiz.js'
@@ -206,7 +206,7 @@ export default class MockRepository {
     ).rows[0].mock_idx as UUID
   }
 
-  static async getIndividualMockInfo(memberIdx: number, idx: UUID) {
+  static async getIndividualMockDetail(memberIdx: number, idx: UUID) {
     return (
       await postgres.query(
         `
@@ -235,7 +235,7 @@ export default class MockRepository {
       `,
         [memberIdx, idx],
       )
-    ).rows[0] as IndividualMockResultFromDB
+    ).rows[0] as IndividualMockDetailResultFromDB
   }
 }
 

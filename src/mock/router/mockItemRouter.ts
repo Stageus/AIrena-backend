@@ -3,7 +3,7 @@ import express from 'express'
 
 import MockIdxPath from '../entity/dao/frontend/request/path/MockIdxPath.js'
 import DetailResponse from '../entity/dao/frontend/response/DetailResponse.js'
-import IndividualMockInfoResponse from '../entity/dao/frontend/response/IndividualMockInfoResponse.js'
+import IndividualMockInfoResponse from '../entity/dao/frontend/response/IndividuaIDetailResponse.js'
 import ResultResponse from '../entity/dao/frontend/response/ResultResponse.js'
 import MockItemService from '../service/MockItemService.js'
 
@@ -61,7 +61,10 @@ mockItemRouter.get(
     IndividualMockInfoResponse,
   )(async (req, res) => {
     return res.send(
-      await MockItemService.getIndividualMockInfo(req.memberIdx, req.params),
+      await MockItemService.getIndividualMockDetail({
+        memberIdx: req.memberIdx,
+        path: req.params,
+      }),
     )
   }),
 )
