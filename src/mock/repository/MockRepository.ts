@@ -288,7 +288,9 @@ export default class MockRepository {
           description = $4,
           updated_at = NOW()
         FROM member
-        WHERE mock.idx = $2 AND (mock.member_idx = $1 OR member.role = 'ADMIN')
+        WHERE mock.idx = $2 
+            AND member.idx = $1
+            AND (mock.member_idx = $1 OR member.role = 'ADMIN')
         RETURNING 1
       )
       UPDATE image SET urls = $5 WHERE article_idx = $2 AND EXISTS (SELECT 1 FROM mock_update)
@@ -302,7 +304,9 @@ export default class MockRepository {
       `UPDATE mock 
       SET is_deleted = true
       FROM member
-      WHERE mock.idx = $2 AND (mock.member_idx = $1 OR member.role = 'ADMIN')`,
+      WHERE mock.idx = $2 
+        AND member.idx = $1
+        AND (mock.member_idx = $1 OR member.role = 'ADMIN')`,
       [memberIdx, idx],
     )
   }
