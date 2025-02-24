@@ -28,7 +28,6 @@ const multipartParser = (contentType: string, limit: number) => {
       }
 
       for (const file of req.files) {
-        console.log(file)
         const multerFile = file as Express.MulterS3.File
         if (!multerFile.mimetype.startsWith(contentType)) {
           return next(ErrorRegistry.INVALID_CONTENT_TYPE)

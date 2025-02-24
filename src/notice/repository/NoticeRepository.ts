@@ -22,7 +22,7 @@ export default class NoticeRepository {
         "SELECT * FROM notice WHERE title = $1 AND is_deleted = 'f' ORDER BY created_at",
         [title],
       )
-    ).rows[0]
+    ).rows
   }
   static async insertNoticeToDb(
     memberIdx: number,
@@ -52,7 +52,7 @@ export default class NoticeRepository {
   static async getNoticeInfoFromDb(idx: UUID) {
     return (
       await postgres.query(
-        'SELECT n.*, i.urls AS images FROM notice AS n LEFT JOIN image AS i on n.idx = i.article_idx WHERE n.idx = $1',
+        'SELECT n.*, i.urls AS image FROM notice AS n LEFT JOIN image AS i on n.idx = i.article_idx WHERE n.idx = $1',
         [idx],
       )
     ).rows[0]
@@ -68,8 +68,15 @@ export default class NoticeRepository {
     idx: UUID,
     title: string,
     content: string,
-    uploadUrls: string | string[] | null | undefined, // uploadUrls는 null 또는 undefined일 수 있음
+    uploadUrls: string[], // uploadUrls는 null 또는 undefined일 수 있음
   ) {
-    return await postgres.query()
+    await postgres.query(
+      'UPDATE notice SET title = $1, content = $2 WHERE idx = $3',
+      [title, content, idx],
+    )
+    await postgres.query('UPDATE image SET urls = $1 WHERE article_idx = $2', [
+      uploadUrls,
+      idx,
+    ])
   }
 }

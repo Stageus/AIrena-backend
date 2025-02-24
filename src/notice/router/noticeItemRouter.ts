@@ -36,7 +36,7 @@ noticeItemRouter.delete(
 
 noticeItemRouter.patch(
   '/:idx',
-  multipartParser('image', 1),
+  multipartParser('image', 5),
   controller(
     null,
     NoticeEditPathRequest,

@@ -1,22 +1,22 @@
 interface NoticePathResponseParams {
   title: string
   content: string
-  images: string[]
-  writerNickname: string
-  createdAt: string
+  image: string[]
+  member_idx: string
+  created_at: string
 }
 
 export default class NoticePathResponse {
   public title: string
   public content: string
-  public images: string[]
-  public writerNickname: string
-  public createdAt: string
+  public image: string[]
+  public member_idx: string
+  public created_at: string
   constructor(params: NoticePathResponseParams) {
     this.title = params.title
     this.content = params.content
-    this.images = params.images
-    this.writerNickname = params.writerNickname
-    this.createdAt = params.createdAt
+    this.image = params.image
+    this.member_idx = params.member_idx
+    this.created_at = params.created_at
   }
 }
