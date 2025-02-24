@@ -1,5 +1,6 @@
 import { postgres } from '#config/postgres'
 import { UUID } from 'crypto'
+import IndividualMockDetailResultFromDB from '../entity/dao/db/IndividualMockDetailResultFromDB.js'
 import MockResultFromDB from '../entity/dao/db/MockResultFromDB.js'
 import PaginatedMockListResultFromDB from '../entity/dao/db/PaginatedMockListResultFromDB.js'
 import Quiz from '../entity/dto/Quiz.js'
@@ -203,6 +204,43 @@ export default class MockRepository {
         ],
       )
     ).rows[0].mock_idx as UUID
+  }
+
+  static async getIndividualMockDetail(memberIdx: number, idx: UUID) {
+    return (
+      await postgres.query(
+        `
+      WITH push_like AS(
+        SELECT
+          1
+        FROM like_history
+        WHERE member_idx = $1 AND article_idx = $2
+      ),
+      solved AS(
+        SELECT
+          1
+        FROM mock_score
+        WHERE member_idx = $1 AND mock_idx = $2
+      ),
+      owner AS(
+        SELECT 1
+        FROM mock
+        WHERE mock.idx = $2 AND mock.member_idx = $1
+      ),
+      admin AS(
+        SELECT 1
+        FROM member
+        WHERE member.idx = $1 AND member.role = 'ADMIN'
+      )
+      SELECT 
+        EXISTS (SELECT 1 FROM owner) AS owner,
+        EXISTS (SELECT 1 FROM admin) AS admin,
+        EXISTS (SELECT 1 FROM solved) AS solved,
+        EXISTS (SELECT 1 FROM push_like) AS "pushLike"
+      `,
+        [memberIdx, idx],
+      )
+    ).rows[0] as IndividualMockDetailResultFromDB
   }
 }
 

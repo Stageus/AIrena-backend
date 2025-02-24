@@ -1,5 +1,6 @@
 import MockIdxPath from '../entity/dao/frontend/request/path/MockIdxPath.js'
 import DetailResponse from '../entity/dao/frontend/response/DetailResponse.js'
+import IndividualDetailResponse from '../entity/dao/frontend/response/IndividualDetailResponse.js'
 import ResultResponse from '../entity/dao/frontend/response/ResultResponse.js'
 import MockRepository from '../repository/MockRepository.js'
 import MockScoreRepository from '../repository/MockScoreRepository.js'
@@ -36,5 +37,25 @@ export default class MockItemService {
   ): Promise<void> {
     await MockScoreRepository.saveScoreForRank(userIdx, path.idx)
     await MockScoreRepository.saveScore(userIdx, path.idx)
+  }
+
+  static async getIndividualMockDetail({
+    memberIdx,
+    path,
+  }: {
+    memberIdx: number
+    path: MockIdxPath
+  }): Promise<IndividualDetailResponse> {
+    const result = await MockRepository.getIndividualMockDetail(
+      memberIdx,
+      path.idx,
+    )
+
+    return new IndividualDetailResponse(
+      result.owner,
+      result.admin,
+      result.solved,
+      result.pushLike,
+    )
   }
 }

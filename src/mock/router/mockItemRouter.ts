@@ -3,6 +3,7 @@ import express from 'express'
 
 import MockIdxPath from '../entity/dao/frontend/request/path/MockIdxPath.js'
 import DetailResponse from '../entity/dao/frontend/response/DetailResponse.js'
+import IndividualMockInfoResponse from '../entity/dao/frontend/response/IndividualDetailResponse.js'
 import ResultResponse from '../entity/dao/frontend/response/ResultResponse.js'
 import MockItemService from '../service/MockItemService.js'
 
@@ -47,5 +48,23 @@ mockItemRouter.post(
   )(async (req, res) => {
     await MockItemService.saveMockResult(req.memberIdx, req.params)
     res.sendStatus(201)
+  }),
+)
+
+mockItemRouter.get(
+  '/:idx/individual',
+  controller(
+    'login',
+    null,
+    MockIdxPath,
+    null,
+    IndividualMockInfoResponse,
+  )(async (req, res) => {
+    return res.send(
+      await MockItemService.getIndividualMockDetail({
+        memberIdx: req.memberIdx,
+        path: req.params,
+      }),
+    )
   }),
 )
