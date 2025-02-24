@@ -89,6 +89,13 @@ export default class ErrorRegistry {
     '지원하지 않는 파일 형식입니다',
   )
 
+  // Like(LI)
+  static readonly DUPLICATE_LIKE = new CustomError(
+    400,
+    'LI001',
+    '이미 좋아요를 누른 게시글입니다',
+  )
+
   // AI(AI)
   static readonly AI_SERVER_CONNECTION_FAILED = new CustomError(
     500,

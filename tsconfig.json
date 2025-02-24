@@ -11,6 +11,7 @@
     "paths": {
       "#mock/*": ["src/mock/*/index.ts"],
       "#member/*": ["src/member/*/index.ts"],
+      "#like/*": ["src/like/*/index.ts"],
       "#controller/*": ["src/core/controller/index.ts"],
       "#adapter/*": ["src/core/adapter/*.ts"],
       "#config/*": ["src/core/config/*.ts"],

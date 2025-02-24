@@ -116,6 +116,10 @@ ALTER TABLE "notice" ADD CONSTRAINT "PK_NOTICE" PRIMARY KEY ("idx");
 
 ALTER TABLE "email_send" ADD CONSTRAINT "PK_EMAIL_SEND" PRIMARY KEY ("idx");
 
+-- unique 제약조건 추가
+ALTER TABLE "like_history"
+ADD CONSTRAINT "unique_member_article" UNIQUE ("member_idx", "article_idx");
+
 -- 3. 외래키 생성
 ALTER TABLE "mock"
   ADD CONSTRAINT "FK_mock_member"
