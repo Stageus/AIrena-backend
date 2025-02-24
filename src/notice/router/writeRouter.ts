@@ -6,15 +6,15 @@ import WriteResponse from '../entity/dao/frontend/response/WriteResponse.js'
 import WriteService from '../service/WriteService.js'
 export const writeRouter = express.Router()
 
-writeRouter.get(
+writeRouter.post(
   '/',
-  multipartParser('images', 5),
+  multipartParser('image', 5),
   controller(
     null,
     null,
     WriteRequest,
     WriteResponse,
   )(async (req, res) => {
-    await WriteService.writeNotice(req.body)
+    return res.send(await WriteService.writeNotice(req.body))
   }),
 )
