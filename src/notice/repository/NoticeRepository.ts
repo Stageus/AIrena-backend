@@ -3,17 +3,6 @@ import { UUID } from 'crypto'
 
 export default class NoticeRepository {
   static async getListFromDb(current: number, display: number) {
-    console.log(current)
-    console.log(display)
-    // return await postgres
-    //   .query(
-    //     'SELECT title, member_idx, created_at FROM notice ORDER BY created_at DESC LIMIT $1 OFFSET $2',
-    //     [display, current],
-    //   )
-    //   .catch((err) => {
-    //     console.error(err)
-    //     console.log(err)
-    //   })
     return await postgres.query('SELECT * FROM notice')
   }
   static async getSearchListFromDb(title: string) {
