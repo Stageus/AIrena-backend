@@ -97,7 +97,7 @@ CREATE TABLE "email_send" (
     "is_approved" BOOLEAN DEFAULT FALSE NOT NULL
 );
 
--- 각 테이블의 Primary Key 설정
+-- 3. 각 테이블의 Primary Key 설정
 ALTER TABLE "mock_score" ADD CONSTRAINT "PK_MOCK_SCORE" PRIMARY KEY ("idx");
 
 ALTER TABLE "like_history" ADD CONSTRAINT "PK_LIKE_COUNT" PRIMARY KEY ("idx");
@@ -116,11 +116,11 @@ ALTER TABLE "notice" ADD CONSTRAINT "PK_NOTICE" PRIMARY KEY ("idx");
 
 ALTER TABLE "email_send" ADD CONSTRAINT "PK_EMAIL_SEND" PRIMARY KEY ("idx");
 
--- unique 제약조건 추가
+-- 4. unique 제약조건 추가
 ALTER TABLE "like_history"
 ADD CONSTRAINT "unique_member_article" UNIQUE ("member_idx", "article_idx");
 
--- 3. 외래키 생성
+-- 5. 외래키 생성
 ALTER TABLE "mock"
   ADD CONSTRAINT "FK_mock_member"
   FOREIGN KEY ("member_idx")
