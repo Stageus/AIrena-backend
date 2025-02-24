@@ -75,14 +75,14 @@ export default class MockItemService {
       body.uploadUrls,
     )
     if (result.rowCount === 0) {
-      throw ErrorRegistry.ACCESS_DENIED
+      throw ErrorRegistry.MOCK_EDIT_FAILED
     }
   }
 
   static async deleteMock(userIdx: number, path: MockIdxPath): Promise<void> {
     const result = await MockRepository.deleteMock(userIdx, path.idx)
     if (result.rowCount === 0) {
-      throw ErrorRegistry.ACCESS_DENIED
+      throw ErrorRegistry.MOCK_DELETE_FAILED
     }
   }
 }

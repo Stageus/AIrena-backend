@@ -66,6 +66,16 @@ export default class ErrorRegistry {
     'MO001',
     '모의고사가 존재하지 않습니다',
   )
+  static readonly MOCK_DELETE_FAILED = new CustomError(
+    400,
+    'MO002',
+    '모의고사 삭제에 실패했습니다',
+  )
+  static readonly MOCK_EDIT_FAILED = new CustomError(
+    400,
+    'MO002',
+    '모의고사 수정에 실패했습니다',
+  )
 
   // Notice(NO)
   static readonly CAN_NOT_FINE_NOTICE = new CustomError(

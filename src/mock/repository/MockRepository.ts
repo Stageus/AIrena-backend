@@ -287,7 +287,8 @@ export default class MockRepository {
           title = $3,
           description = $4,
           updated_at = NOW()
-        WHERE idx = $2 AND member_idx = $1
+        FROM member
+        WHERE mock.idx = $2 AND (mock.member_idx = $1 OR member.role = 'ADMIN')
         RETURNING 1
       )
       UPDATE image SET urls = $5 WHERE article_idx = $2 AND EXISTS (SELECT 1 FROM mock_update)
@@ -298,7 +299,10 @@ export default class MockRepository {
 
   static async deleteMock(memberIdx: number, idx: UUID) {
     return await postgres.query(
-      `UPDATE mock SET is_deleted = true WHERE idx = $2 AND member_idx = $1`,
+      `UPDATE mock 
+      SET is_deleted = true
+      FROM member
+      WHERE mock.idx = $2 AND (mock.member_idx = $1 OR member.role = 'ADMIN')`,
       [memberIdx, idx],
     )
   }
