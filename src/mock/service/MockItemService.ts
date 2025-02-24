@@ -1,3 +1,4 @@
+import ErrorRegistry from '#error/ErrorRegistry'
 import MockEditRequest from '../entity/dao/frontend/request/body/MockEditRequest.js'
 import MockIdxPath from '../entity/dao/frontend/request/path/MockIdxPath.js'
 import DetailResponse from '../entity/dao/frontend/response/DetailResponse.js'
@@ -18,6 +19,7 @@ export default class MockItemService {
       result.writerNickname,
       result.images,
       result.firstQuizIdx,
+      result.ranks,
     )
   }
 
@@ -70,16 +72,17 @@ export default class MockItemService {
       path.idx,
       body.title,
       body.description,
-      body.urls,
+      body.uploadUrls,
     )
-    console.log(result)
+    if (result.rowCount === 0) {
+      throw ErrorRegistry.ACCESS_DENIED
+    }
   }
 
   static async deleteMock(userIdx: number, path: MockIdxPath): Promise<void> {
-    await MockRepository.deleteMock(userIdx, path.idx)
-  }
-
-  static async getRank(userIdx: number, path: MockIdxPath): Promise<void> {
-    const result = await MockScoreRepository.getScore(userIdx, path.idx)
+    const result = await MockRepository.deleteMock(userIdx, path.idx)
+    if (result.rowCount === 0) {
+      throw ErrorRegistry.ACCESS_DENIED
+    }
   }
 }

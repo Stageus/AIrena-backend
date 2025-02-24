@@ -81,7 +81,7 @@ mockItemRouter.delete(
     null,
   )(async (req, res) => {
     await MockItemService.deleteMock(req.memberIdx, req.params)
-    res.sendStatus(204)
+    res.sendStatus(200)
   }),
 )
 
@@ -96,18 +96,6 @@ mockItemRouter.patch(
     null,
   )(async (req, res) => {
     await MockItemService.editMock(req.memberIdx, req.params, req.body)
-    res.sendStatus(204)
-  }),
-)
-mockItemRouter.get(
-  '/:idx/result/rank',
-  controller(
-    'login',
-    null,
-    MockIdxPath,
-    null,
-    null,
-  )(async (req, res) => {
-    return res.send(await MockItemService.getRank(req.memberIdx, req.params))
+    res.sendStatus(200)
   }),
 )

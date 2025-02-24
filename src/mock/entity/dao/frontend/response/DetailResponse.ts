@@ -8,6 +8,11 @@ export default class DetailResponse {
   writerNickname: string
   images: string[]
   firstQuizIdx: UUID
+  ranks: {
+    rank: number
+    nickName: string
+    score: number
+  }[]
 
   constructor(
     title: string,
@@ -17,6 +22,11 @@ export default class DetailResponse {
     writerNickname: string,
     images: string[],
     firstQuizIdx: UUID,
+    ranks: {
+      rank: number
+      nickName: string
+      score: number
+    }[],
   ) {
     this.title = title
     this.description = description
@@ -25,5 +35,6 @@ export default class DetailResponse {
     this.writerNickname = writerNickname
     this.images = images
     this.firstQuizIdx = firstQuizIdx
+    this.ranks = ranks
   }
 }

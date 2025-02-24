@@ -122,4 +122,18 @@ export default class MockScoreRepository {
       [mockIdx, memberIdx],
     )
   }
+
+  static async getRank(mockIdx: UUID) {
+    return await postgres.query(
+      `SELECT
+        RANK() OVER (ORDER BY score DESC) AS "rank",
+        member.nickName AS "nickName",
+        score,
+      FROM mock_score 
+      JOIN member ON mock_score.member_idx = member.idx
+      WHERE mock_idx = $1 
+      ORDER BY score DESC`,
+      [mockIdx],
+    )
+  }
 }

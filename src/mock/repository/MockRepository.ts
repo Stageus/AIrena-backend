@@ -10,6 +10,25 @@ export default class MockRepository {
     return (
       await postgres.query(
         `
+        WITH first_score AS (
+          SELECT DISTINCT ON (mc.member_idx)
+                mc.member_idx,
+                m.nickname,
+                mc.score
+          FROM mock_score mc
+          JOIN member m ON mc.member_idx = m.idx
+          WHERE mc.mock_idx = $1
+          ORDER BY mc.member_idx, mc.created_at ASC
+        ),
+        mock_rank AS (
+          SELECT
+            RANK() OVER (ORDER BY score DESC) AS "rank",
+            nickname,
+            score
+          FROM first_score
+          ORDER BY score DESC
+          LIMIT 15
+        )
         SELECT
             mock.idx,
             mock.title,
@@ -25,7 +44,17 @@ export default class MockRepository {
                 WHERE quiz.mock_idx = mock.idx
                 ORDER BY quiz.created_at ASC
                 LIMIT 1
-            ) AS "firstQuizIdx"
+            ) AS "firstQuizIdx",
+            (
+              SELECT json_agg(
+                json_build_object(
+                  'rank', mr.rank,
+                  'nickname', mr.nickname,
+                  'score', mr.score
+                )
+              )
+              FROM mock_rank mr
+            ) AS "ranks"
         FROM mock
         JOIN member ON member.idx = mock.member_idx
         JOIN image ON image.article_idx = mock.idx
@@ -255,8 +284,8 @@ export default class MockRepository {
       WITH mock_update AS (
         UPDATE mock
         SET
-          title = $1,
-          description = $2,
+          title = $3,
+          description = $4,
           updated_at = NOW()
         WHERE idx = $2 AND member_idx = $1
         RETURNING 1
@@ -268,9 +297,9 @@ export default class MockRepository {
   }
 
   static async deleteMock(memberIdx: number, idx: UUID) {
-    await postgres.query(
-      `UPDATE mock SET is_deleted = true WHERE idx = $1 AND member_idx = $2`,
-      [idx, memberIdx],
+    return await postgres.query(
+      `UPDATE mock SET is_deleted = true WHERE idx = $2 AND member_idx = $1`,
+      [memberIdx, idx],
     )
   }
 }

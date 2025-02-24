@@ -1,17 +1,17 @@
 interface MockEditRequestParams {
   title: string
   description: string
-  urls: string[]
+  uploadUrls: string[]
 }
 
 export default class MockEditRequest {
   title: string
   description: string
-  urls: string[]
+  uploadUrls: string[]
 
-  constructor(public params: MockEditRequestParams) {
+  constructor(params: MockEditRequestParams) {
     this.title = params.title
     this.description = params.description
-    this.urls = params.urls
+    this.uploadUrls = params.uploadUrls
   }
 }
