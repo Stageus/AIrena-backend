@@ -10,6 +10,25 @@ export default class MockRepository {
     return (
       await postgres.query(
         `
+        WITH first_score AS (
+          SELECT DISTINCT ON (mc.member_idx)
+                mc.member_idx,
+                m.nickname,
+                mc.score
+          FROM mock_score mc
+          JOIN member m ON mc.member_idx = m.idx
+          WHERE mc.mock_idx = $1
+          ORDER BY mc.member_idx, mc.created_at ASC
+        ),
+        mock_rank AS (
+          SELECT
+            RANK() OVER (ORDER BY score DESC) AS "rank",
+            nickname,
+            score
+          FROM first_score
+          ORDER BY score DESC
+          LIMIT 15
+        )
         SELECT
             mock.idx,
             mock.title,
@@ -25,7 +44,17 @@ export default class MockRepository {
                 WHERE quiz.mock_idx = mock.idx
                 ORDER BY quiz.created_at ASC
                 LIMIT 1
-            ) AS "firstQuizIdx"
+            ) AS "firstQuizIdx",
+            (
+              SELECT json_agg(
+                json_build_object(
+                  'rank', mr.rank,
+                  'nickname', mr.nickname,
+                  'score', mr.score
+                )
+              )
+              FROM mock_rank mr
+            ) AS "ranks"
         FROM mock
         JOIN member ON member.idx = mock.member_idx
         JOIN image ON image.article_idx = mock.idx
@@ -242,8 +271,46 @@ export default class MockRepository {
       )
     ).rows[0] as IndividualMockDetailResultFromDB
   }
-}
 
+  static async updateMock(
+    memberIdx: number,
+    idx: UUID,
+    title: string,
+    description: string,
+    urls: string[],
+  ) {
+    return await postgres.query(
+      `
+      WITH mock_update AS (
+        UPDATE mock
+        SET
+          title = $3,
+          description = $4,
+          updated_at = NOW()
+        FROM member
+        WHERE mock.idx = $2 
+            AND member.idx = $1
+            AND (mock.member_idx = $1 OR member.role = 'ADMIN')
+        RETURNING 1
+      )
+      UPDATE image SET urls = $5 WHERE article_idx = $2 AND EXISTS (SELECT 1 FROM mock_update)
+      `,
+      [memberIdx, idx, title, description, urls],
+    )
+  }
+
+  static async deleteMock(memberIdx: number, idx: UUID) {
+    return await postgres.query(
+      `UPDATE mock 
+      SET is_deleted = true
+      FROM member
+      WHERE mock.idx = $2 
+        AND member.idx = $1
+        AND (mock.member_idx = $1 OR member.role = 'ADMIN')`,
+      [memberIdx, idx],
+    )
+  }
+}
 const makeInsertManyQuery = (quizzesLength: number) => {
   let lastIndex = 5
   return `

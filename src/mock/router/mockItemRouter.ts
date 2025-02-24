@@ -1,6 +1,8 @@
 import controller from '#controller'
 import express from 'express'
 
+import multipartParser from '#util/multipartParser'
+import MockEditRequest from '../entity/dao/frontend/request/body/MockEditRequest.js'
 import MockIdxPath from '../entity/dao/frontend/request/path/MockIdxPath.js'
 import DetailResponse from '../entity/dao/frontend/response/DetailResponse.js'
 import IndividualMockInfoResponse from '../entity/dao/frontend/response/IndividualDetailResponse.js'
@@ -66,5 +68,34 @@ mockItemRouter.get(
         path: req.params,
       }),
     )
+  }),
+)
+
+mockItemRouter.delete(
+  '/:idx/delete',
+  controller(
+    'login',
+    null,
+    MockIdxPath,
+    null,
+    null,
+  )(async (req, res) => {
+    await MockItemService.deleteMock(req.memberIdx, req.params)
+    res.sendStatus(200)
+  }),
+)
+
+mockItemRouter.patch(
+  '/:idx/edit',
+  multipartParser('image', 1),
+  controller(
+    'login',
+    null,
+    MockIdxPath,
+    MockEditRequest,
+    null,
+  )(async (req, res) => {
+    await MockItemService.editMock(req.memberIdx, req.params, req.body)
+    res.sendStatus(200)
   }),
 )

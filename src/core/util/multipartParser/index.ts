@@ -10,8 +10,13 @@ const newBaseUrl = process.env.AWS_CLOUDFRONT_BASE_URL as string
 const replaceBaseUrl = (url: string): string => {
   return newBaseUrl + url.slice(oldBaseUrl.length)
 }
+
 const multipartParser = (contentType: string, limit: number) => {
-  return (req: Request, res: Response, next: NextFunction) => {
+  return (
+    req: Request<any, any, any, any>,
+    res: Response,
+    next: NextFunction,
+  ) => {
     multer.array(contentType, limit)(req, res, (err) => {
       if (err) {
         console.error(err)

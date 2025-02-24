@@ -1,3 +1,5 @@
+import ErrorRegistry from '#error/ErrorRegistry'
+import MockEditRequest from '../entity/dao/frontend/request/body/MockEditRequest.js'
 import MockIdxPath from '../entity/dao/frontend/request/path/MockIdxPath.js'
 import DetailResponse from '../entity/dao/frontend/response/DetailResponse.js'
 import IndividualDetailResponse from '../entity/dao/frontend/response/IndividualDetailResponse.js'
@@ -8,6 +10,9 @@ import MockScoreRepository from '../repository/MockScoreRepository.js'
 export default class MockItemService {
   static async getMockDetail(path: MockIdxPath): Promise<DetailResponse> {
     const result = await MockRepository.getMock(path.idx)
+    if (!result) {
+      throw ErrorRegistry.CAN_NOT_FIND_MOCK
+    }
 
     return new DetailResponse(
       result.title,
@@ -17,6 +22,7 @@ export default class MockItemService {
       result.writerNickname,
       result.images,
       result.firstQuizIdx,
+      result.ranks,
     )
   }
 
@@ -57,5 +63,29 @@ export default class MockItemService {
       result.solved,
       result.pushLike,
     )
+  }
+
+  static async editMock(
+    userIdx: number,
+    path: MockIdxPath,
+    body: MockEditRequest,
+  ): Promise<void> {
+    const result = await MockRepository.updateMock(
+      userIdx,
+      path.idx,
+      body.title,
+      body.description,
+      body.uploadUrls,
+    )
+    if (result.rowCount === 0) {
+      throw ErrorRegistry.MOCK_EDIT_FAILED
+    }
+  }
+
+  static async deleteMock(userIdx: number, path: MockIdxPath): Promise<void> {
+    const result = await MockRepository.deleteMock(userIdx, path.idx)
+    if (result.rowCount === 0) {
+      throw ErrorRegistry.MOCK_DELETE_FAILED
+    }
   }
 }

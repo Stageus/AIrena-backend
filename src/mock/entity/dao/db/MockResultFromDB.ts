@@ -10,4 +10,9 @@ export default interface MockResultFromDB {
   writerNickname: string
   images: string[]
   firstQuizIdx: UUID
+  ranks: {
+    rank: number
+    nickName: string
+    score: number
+  }[]
 }
