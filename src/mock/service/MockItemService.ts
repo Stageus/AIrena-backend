@@ -10,6 +10,9 @@ import MockScoreRepository from '../repository/MockScoreRepository.js'
 export default class MockItemService {
   static async getMockDetail(path: MockIdxPath): Promise<DetailResponse> {
     const result = await MockRepository.getMock(path.idx)
+    if (!result) {
+      throw ErrorRegistry.CAN_NOT_FIND_MOCK
+    }
 
     return new DetailResponse(
       result.title,

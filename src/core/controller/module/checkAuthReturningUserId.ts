@@ -9,27 +9,27 @@ const checkAuthReturningUserId = (
   if (auth === 'login') {
     const token = req.cookies.loginToken
     if (!token) {
-      throw ErrorRegistry.TOKEN_REQUIRED
+      throw ErrorRegistry.LOGIN_REQUIRED
     }
     if (!process.env.JWT_SIGNATURE_KEY) {
       throw ErrorRegistry.INTERNAL_SERVER_ERROR
     }
     const data: any = jwt.verify(token, process.env.JWT_SIGNATURE_KEY)
     if (!data.idx) {
-      throw ErrorRegistry.TOKEN_REQUIRED
+      throw ErrorRegistry.LOGIN_REQUIRED
     }
     return data.idx
   } else if (auth === 'admin') {
     const token = req.cookies.loginToken
     if (!token) {
-      throw ErrorRegistry.TOKEN_REQUIRED
+      throw ErrorRegistry.LOGIN_REQUIRED
     }
     if (!process.env.JWT_SIGNATURE_KEY) {
       throw ErrorRegistry.INTERNAL_SERVER_ERROR
     }
     const data: any = jwt.verify(token, process.env.JWT_SIGNATURE_KEY)
     if (!data.idx) {
-      throw ErrorRegistry.TOKEN_REQUIRED
+      throw ErrorRegistry.LOGIN_REQUIRED
     }
     if (data.role !== 'admin') {
       throw ErrorRegistry.ACCESS_DENIED
