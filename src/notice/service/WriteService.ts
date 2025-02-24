@@ -4,11 +4,11 @@ import NoticeRepository from '../repository/NoticeRepository.js'
 
 export default class WriteService {
   static async writeNotice(writeRequest: WriteRequest) {
-    const { title, content, image } = writeRequest
+    const { title, content, uploadUrls } = writeRequest
     // 멤버 인덱스
-    const memberIdx = 2
+
     return new WriteResponse(
-      await NoticeRepository.insertNoticeToDb(memberIdx, title, content, image),
+      await NoticeRepository.insertNoticeToDb(2, title, content, uploadUrls),
     )
   }
 }

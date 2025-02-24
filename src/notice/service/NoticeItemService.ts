@@ -21,7 +21,7 @@ export default class NoticeItemService {
     noticeEditBodyRequest: NoticeEditBodyRequest,
   ) {
     const { idx } = noticeEditPathRequest
-    const { title, content, image } = noticeEditBodyRequest
-    await NoticeRepository.editNoticeFromDb(idx, title, content, image)
+    const { title, content, uploadUrls } = noticeEditBodyRequest
+    await NoticeRepository.editNoticeFromDb(idx, title, content, uploadUrls)
   }
 }

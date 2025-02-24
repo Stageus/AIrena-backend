@@ -1,16 +1,16 @@
 interface NoticeEditBodyRequestParams {
   title: string
   content: string
-  image: string[]
+  uploadUrls: string[]
 }
 
 export default class NoticeEditBodyRequest {
   public title: string
   public content: string
-  public image: string[]
+  public uploadUrls: string[]
   constructor(params: NoticeEditBodyRequestParams) {
     this.title = params.title
     this.content = params.content
-    this.image = params.image
+    this.uploadUrls = params.uploadUrls
   }
 }

@@ -1,4 +1,5 @@
 import controller from '#controller'
+import multipartParser from '#util/multipartParser'
 import express from 'express'
 import NoticeDeletePathRequest from '../entity/dao/frontend/request/NoticeDeletePathRequest.js'
 import NoticeEditBodyRequest from '../entity/dao/frontend/request/NoticeEditBodyRequest.js'
@@ -35,6 +36,7 @@ noticeItemRouter.delete(
 
 noticeItemRouter.patch(
   '/:idx',
+  multipartParser('image', 1),
   controller(
     null,
     NoticeEditPathRequest,

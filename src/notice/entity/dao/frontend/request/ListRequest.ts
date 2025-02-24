@@ -1,13 +1,13 @@
 interface ListRequestParams {
-  currentPage: number
-  offset: number
+  current: number
+  display: number
 }
 
 export default class ListRequest {
-  public currentPage: number
-  public offset: number
+  public current: number
+  public display: number
   constructor(params: ListRequestParams) {
-    this.currentPage = params.currentPage
-    this.offset = params.offset
+    this.current = params.current
+    this.display = params.display
   }
 }

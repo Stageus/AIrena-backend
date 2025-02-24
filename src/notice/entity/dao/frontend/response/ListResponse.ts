@@ -10,10 +10,15 @@ export default class ListResponse {
   public currentPageNumber: number
   public lastPageNumber: number
   public data: any
-  constructor(params: ListResponseParams) {
-    this.firstPageNumber = params.firstPageNumber
-    this.currentPageNumber = params.currentPageNumber
-    this.lastPageNumber = params.lastPageNumber
+  constructor(
+    firstPageNumber: number,
+    currentPageNumber: number,
+    lastPageNumber: number,
+    params: ListResponseParams,
+  ) {
+    this.firstPageNumber = firstPageNumber
+    this.currentPageNumber = currentPageNumber
+    this.lastPageNumber = lastPageNumber
     this.data = params.data
   }
 }

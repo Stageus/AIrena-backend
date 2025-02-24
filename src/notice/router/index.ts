@@ -7,4 +7,4 @@ export const noticeRouter = express.Router()
 
 noticeRouter.use('/', noticeItemRouter)
 noticeRouter.use('/list', listRouter)
-noticeRouter.use('write', writeRouter)
+noticeRouter.use('/write', writeRouter)

@@ -8,18 +8,19 @@ import ListService from '../service/ListService.js'
 export const listRouter = express.Router()
 
 listRouter.get(
-  '/list',
+  '/',
   controller(
     ListRequest,
     null,
     null,
     ListResponse,
   )(async (req, res) => {
-    return res.send(await ListService.getList(req.query))
+    console.log('라우터터')
+    // return res.send(await ListService.getList(req.query))
   }),
 )
 listRouter.get(
-  '/list/search',
+  '/search',
   controller(
     ListSearchRequest,
     null,

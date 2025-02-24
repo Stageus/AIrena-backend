@@ -1,8 +1,10 @@
 import { UUID } from 'crypto'
-
+interface NoticeDeletePathRequestParams {
+  idx: UUID
+}
 export default class NoticeDeletePathRequest {
   public idx: UUID
-  constructor(idx: UUID) {
-    this.idx = idx
+  constructor(params: NoticeDeletePathRequestParams) {
+    this.idx = params.idx
   }
 }
