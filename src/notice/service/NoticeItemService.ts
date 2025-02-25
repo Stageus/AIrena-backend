@@ -1,3 +1,4 @@
+import ErrorRegistry from '#error/ErrorRegistry'
 import NoticeDeletePathRequest from '../entity/dao/frontend/request/NoticeDeletePathRequest.js'
 import NoticeEditBodyRequest from '../entity/dao/frontend/request/NoticeEditBodyRequest.js'
 import NoticeEditPathRequest from '../entity/dao/frontend/request/NoticeEditPathRequest.js'
@@ -8,9 +9,11 @@ import NoticeRepository from '../repository/NoticeRepository.js'
 export default class NoticeItemService {
   static async getNotice(noticePathRequest: NoticePathRequest) {
     const { idx } = noticePathRequest
-    return new NoticePathResponse(
-      await NoticeRepository.getNoticeInfoFromDb(idx),
-    )
+    const result = await NoticeRepository.getNoticeInfoFromDb(idx)
+    if (!result) {
+      throw ErrorRegistry.CAN_NOT_FINE_NOTICE
+    }
+    return new NoticePathResponse(result)
   }
   static async deleteNotice(noticeDeletePathRequest: NoticeDeletePathRequest) {
     const { idx } = noticeDeletePathRequest

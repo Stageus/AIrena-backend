@@ -101,7 +101,7 @@ export default class NoticeRepository {
   static async getNoticeInfoFromDb(idx: UUID) {
     return (
       await postgres.query(
-        'SELECT n.*, i.urls AS image FROM notice AS n LEFT JOIN image AS i on n.idx = i.article_idx WHERE n.idx = $1',
+        "SELECT n.*, i.urls AS image FROM notice AS n LEFT JOIN image AS i on n.idx = i.article_idx WHERE n.idx = $1 AND n.is_deleted = 'f'",
         [idx],
       )
     ).rows[0]
@@ -120,7 +120,7 @@ export default class NoticeRepository {
     uploadUrls: string[], // uploadUrls는 null 또는 undefined일 수 있음
   ) {
     await postgres.query(
-      'UPDATE notice SET title = $1, content = $2 WHERE idx = $3',
+      "UPDATE notice SET title = $1, content = $2 WHERE is_deleted = 'f' AND idx = $3",
       [title, content, idx],
     )
     await postgres.query('UPDATE image SET urls = $1 WHERE article_idx = $2', [

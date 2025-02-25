@@ -12,6 +12,7 @@ export const noticeItemRouter = express.Router()
 noticeItemRouter.get(
   '/:idx',
   controller(
+    'login',
     null,
     NoticePathRequest,
     null,
@@ -24,6 +25,7 @@ noticeItemRouter.get(
 noticeItemRouter.delete(
   '/:idx',
   controller(
+    'admin',
     null,
     NoticeDeletePathRequest,
     null,
@@ -38,6 +40,7 @@ noticeItemRouter.patch(
   '/:idx',
   multipartParser('image', 5),
   controller(
+    'admin',
     null,
     NoticeEditPathRequest,
     NoticeEditBodyRequest,

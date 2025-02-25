@@ -10,6 +10,7 @@ writeRouter.post(
   '/',
   multipartParser('image', 5),
   controller(
+    'admin',
     null,
     null,
     WriteRequest,

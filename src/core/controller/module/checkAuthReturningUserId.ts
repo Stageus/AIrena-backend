@@ -31,7 +31,7 @@ const checkAuthReturningUserId = (
     if (!data.idx) {
       throw ErrorRegistry.LOGIN_REQUIRED
     }
-    if (data.role !== 'admin') {
+    if (data.role !== 'ADMIN') {
       throw ErrorRegistry.ACCESS_DENIED
     }
     return data.idx
