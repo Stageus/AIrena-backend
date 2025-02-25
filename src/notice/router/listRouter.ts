@@ -10,12 +10,12 @@ export const listRouter = express.Router()
 listRouter.get(
   '/',
   controller(
+    'login',
     ListRequest,
     null,
     null,
     ListResponse,
   )(async (req, res) => {
-    console.log('라우터실행')
     return res.send(await ListService.getList(req.query))
   }),
 )
@@ -23,6 +23,7 @@ listRouter.get(
 listRouter.get(
   '/search',
   controller(
+    'login',
     ListSearchRequest,
     null,
     null,
