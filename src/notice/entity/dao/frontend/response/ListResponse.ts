@@ -1,24 +1,45 @@
-interface ListResponseParams {
+import NoticeList from 'src/notice/entity/dto/NoticeList.js'
+
+export default class NoticeListResponse {
   firstPageNumber: number
   currentPageNumber: number
   lastPageNumber: number
-  data: any
-}
+  notices: {
+    idx: number
+    title: string
+    writerNickname: string
+    createdAt: string
+    totalCount: number
+  }[]
 
-export default class ListResponse {
-  public firstPageNumber: number
-  public currentPageNumber: number
-  public lastPageNumber: number
-  public data: any
+  public static of(noticeList: NoticeList): NoticeListResponse {
+    return new NoticeListResponse(
+      noticeList.firstPageNumber,
+      noticeList.currentPageNumber,
+      noticeList.lastPageNumber,
+      noticeList.notices,
+    )
+  }
+
+  public static createEmpty(): NoticeListResponse {
+    return new NoticeListResponse(1, 1, 1, [])
+  }
+
   constructor(
     firstPageNumber: number,
     currentPageNumber: number,
     lastPageNumber: number,
-    params: ListResponseParams,
+    notices: {
+      idx: number
+      title: string
+      writerNickname: string
+      createdAt: string
+      totalCount: number
+    }[],
   ) {
     this.firstPageNumber = firstPageNumber
     this.currentPageNumber = currentPageNumber
     this.lastPageNumber = lastPageNumber
-    this.data = params.data
+    this.notices = notices
   }
 }

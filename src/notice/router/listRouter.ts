@@ -15,10 +15,11 @@ listRouter.get(
     null,
     ListResponse,
   )(async (req, res) => {
-    console.log('라우터터')
-    // return res.send(await ListService.getList(req.query))
+    console.log('라우터실행')
+    return res.send(await ListService.getList(req.query))
   }),
 )
+
 listRouter.get(
   '/search',
   controller(
