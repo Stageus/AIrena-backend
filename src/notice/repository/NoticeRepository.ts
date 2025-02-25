@@ -15,6 +15,7 @@ export default class NoticeRepository {
         notice.created_at AS createdAt
         FROM notice AS notice
         LEFT JOIN member AS mem ON notice.member_idx = mem.idx
+        WHERE notice.is_deleted = 'f'
         ORDER BY 4 DESC
         LIMIT $1 OFFSET $2
         `,
@@ -35,13 +36,42 @@ export default class NoticeRepository {
       throw ErrorRegistry.INTERNAL_SERVER_ERROR
     }
   }
-  static async getSearchListFromDb(title: string) {
-    return (
-      await postgres.query(
-        "SELECT * FROM notice WHERE title = $1 AND is_deleted = 'f' ORDER BY created_at",
-        [title],
-      )
-    ).rows
+  static async getSearchListFromDb(
+    title: string,
+    display: number,
+    offset: number,
+  ) {
+    try {
+      await postgres.query('BEGIN')
+      const listResult = (
+        await postgres.query(
+          `
+        SELECT notice.idx AS idx, 
+        notice.title AS title, 
+        mem.nickname AS writerNickname,
+        notice.created_at AS createdAt
+        FROM notice AS notice
+        LEFT JOIN member AS mem ON notice.member_idx = mem.idx
+        WHERE notice.is_deleted = 'f' AND title = $1
+        ORDER BY 4 DESC
+        LIMIT $2 OFFSET $3
+        `,
+          [title, display, offset],
+        )
+      ).rows
+      const totalCountResult = (
+        await postgres.query(`SELECT COUNT(*) AS totalCount FROM notice`)
+      ).rows[0]
+      await postgres.query('COMMIT')
+      return {
+        listResult,
+        totalCountResult,
+      }
+    } catch (err) {
+      await postgres.query('ROLLBACK')
+      console.log(err)
+      throw ErrorRegistry.INTERNAL_SERVER_ERROR
+    }
   }
   static async insertNoticeToDb(
     memberIdx: number,

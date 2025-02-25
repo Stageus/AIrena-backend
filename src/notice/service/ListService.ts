@@ -28,8 +28,25 @@ export default class ListService {
   }
 
   static async searchList(listSearchRequest: ListSearchRequest) {
-    const { title } = listSearchRequest
-    const searchData: any = await NoticeRepository.getSearchListFromDb(title)
-    return new ListSearchResponse(searchData)
+    const { title, display, current } = listSearchRequest
+    const offset = (current - 1) * display
+    const searchData: any = await NoticeRepository.getSearchListFromDb(
+      title,
+      display,
+      offset,
+    )
+    let firstPageNumber = Math.floor(current / 10) * 10 + 1
+    const totalCount = parseInt(searchData.totalCountResult.totalcount, 10)
+    const pageOffset = Math.min(
+      9,
+      Math.floor((totalCount - (firstPageNumber - 1) * display) / display),
+    )
+    const lastPageNumber = firstPageNumber + pageOffset
+    return new ListSearchResponse(
+      firstPageNumber,
+      current,
+      lastPageNumber,
+      searchData.listResult,
+    )
   }
 }
