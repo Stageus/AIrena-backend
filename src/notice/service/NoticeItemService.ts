@@ -9,7 +9,7 @@ export default class NoticeItemService {
     const { idx } = noticePathRequest
     const result = await NoticeRepository.getNoticeInfoFromDb(idx)
     if (!result) {
-      throw ErrorRegistry.CAN_NOT_FINE_NOTICE
+      throw ErrorRegistry.CAN_NOT_FIND_NOTICE
     }
     return new NoticeResponse(result)
   }

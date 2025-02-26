@@ -4,11 +4,9 @@ import { UUID } from 'crypto'
 
 export default class NoticeRepository {
   static async getPagedListFromDb(display: number, offset: number) {
-    try {
-      await postgres.query('BEGIN')
-      const listResult = (
-        await postgres.query(
-          `
+    const listResult = (
+      await postgres.query(
+        `
         SELECT notice.idx AS idx, 
         notice.title AS title, 
         mem.nickname AS writerNickname,
@@ -19,21 +17,16 @@ export default class NoticeRepository {
         ORDER BY 4 DESC
         LIMIT $1 OFFSET $2
         `,
-          [display, offset],
-        )
-      ).rows
-      const totalCountResult = (
-        await postgres.query(`SELECT COUNT(*) AS totalCount FROM notice`)
-      ).rows[0]
-      await postgres.query('COMMIT')
-      return {
-        listResult,
-        totalCountResult,
-      }
-    } catch (err) {
-      await postgres.query('ROLLBACK')
-      console.log(err)
-      throw ErrorRegistry.INTERNAL_SERVER_ERROR
+        [display, offset],
+      )
+    ).rows
+    const totalCountResult = (
+      await postgres.query(`SELECT COUNT(*) AS totalCount FROM notice`)
+    ).rows[0]
+    await postgres.query('COMMIT')
+    return {
+      listResult,
+      totalCountResult,
     }
   }
   static async getSearchListFromDb(
@@ -41,11 +34,9 @@ export default class NoticeRepository {
     display: number,
     offset: number,
   ) {
-    try {
-      await postgres.query('BEGIN')
-      const listResult = (
-        await postgres.query(
-          `
+    const listResult = (
+      await postgres.query(
+        `
         SELECT notice.idx AS idx, 
         notice.title AS title, 
         mem.nickname AS writerNickname,
@@ -56,21 +47,15 @@ export default class NoticeRepository {
         ORDER BY 4 DESC
         LIMIT $2 OFFSET $3
         `,
-          [title, display, offset],
-        )
-      ).rows
-      const totalCountResult = (
-        await postgres.query(`SELECT COUNT(*) AS totalCount FROM notice`)
-      ).rows[0]
-      await postgres.query('COMMIT')
-      return {
-        listResult,
-        totalCountResult,
-      }
-    } catch (err) {
-      await postgres.query('ROLLBACK')
-      console.log(err)
-      throw ErrorRegistry.INTERNAL_SERVER_ERROR
+        [title, display, offset],
+      )
+    ).rows
+    const totalCountResult = (
+      await postgres.query(`SELECT COUNT(*) AS totalCount FROM notice`)
+    ).rows[0]
+    return {
+      listResult,
+      totalCountResult,
     }
   }
   static async insertNoticeToDb(
@@ -98,7 +83,10 @@ export default class NoticeRepository {
   static async getNoticeInfoFromDb(idx: UUID) {
     return (
       await postgres.query(
-        "SELECT n.*, i.urls AS image FROM notice AS n LEFT JOIN image AS i on n.idx = i.article_idx WHERE n.idx = $1 AND n.is_deleted = 'f'",
+        `SELECT n.title,n.member_idx AS memberIdx,n.content,n.created_at AS createdAt, i.urls AS image 
+        FROM notice AS n 
+        LEFT JOIN image AS i on n.idx = i.article_idx 
+        WHERE n.idx = $1 AND n.is_deleted = 'f'`,
         [idx],
       )
     ).rows[0]
@@ -116,13 +104,20 @@ export default class NoticeRepository {
     content: string,
     uploadUrls: string[], // uploadUrls는 null 또는 undefined일 수 있음
   ) {
-    await postgres.query(
-      "UPDATE notice SET title = $1, content = $2 WHERE is_deleted = 'f' AND idx = $3",
-      [title, content, idx],
-    )
-    await postgres.query('UPDATE image SET urls = $1 WHERE article_idx = $2', [
-      uploadUrls,
-      idx,
-    ])
+    try {
+      await postgres.query('BEGIN')
+      await postgres.query(
+        "UPDATE notice SET title = $1, content = $2 WHERE is_deleted = 'f' AND idx = $3",
+        [title, content, idx],
+      )
+      await postgres.query(
+        'UPDATE image SET urls = $1 WHERE article_idx = $2',
+        [uploadUrls, idx],
+      )
+      await postgres.query('COMMIT')
+    } catch (err) {
+      await postgres.query('ROLLBACK')
+      throw ErrorRegistry.INTERNAL_SERVER_ERROR
+    }
   }
 }
