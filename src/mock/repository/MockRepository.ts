@@ -37,7 +37,7 @@ export default class MockRepository {
             mock.quiz_count as "quizCount",
             mock.like_count as "likeCount",
             member.nickname as "writerNickname",
-            image.urls as ,
+            image.urls as images,
             (
                 SELECT quiz.idx
                 FROM quiz

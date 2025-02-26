@@ -1,11 +1,9 @@
 import controller from '#controller'
 import multipartParser from '#util/multipartParser'
 import express from 'express'
-import NoticeDeletePathRequest from '../entity/dao/frontend/request/NoticeDeletePathRequest.js'
 import NoticeEditBodyRequest from '../entity/dao/frontend/request/NoticeEditBodyRequest.js'
-import NoticeEditPathRequest from '../entity/dao/frontend/request/NoticeEditPathRequest.js'
 import NoticePathRequest from '../entity/dao/frontend/request/NoticePathRequest.js'
-import NoticePathResponse from '../entity/dao/frontend/response/NoticePathResponse.js'
+import NoticePathResponse from '../entity/dao/frontend/response/NoticeResponse.js'
 import NoticeItemService from '../service/NoticeItemService.js'
 export const noticeItemRouter = express.Router()
 
@@ -27,7 +25,7 @@ noticeItemRouter.delete(
   controller(
     'admin',
     null,
-    NoticeDeletePathRequest,
+    NoticePathRequest,
     null,
     null,
   )(async (req, res) => {
@@ -42,7 +40,7 @@ noticeItemRouter.patch(
   controller(
     'admin',
     null,
-    NoticeEditPathRequest,
+    NoticePathRequest,
     NoticeEditBodyRequest,
     null,
   )(async (req, res) => {

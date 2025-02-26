@@ -1,4 +1,4 @@
-interface NoticePathResponseParams {
+interface NoticeResponseParams {
   title: string
   content: string
   image: string[]
@@ -6,13 +6,13 @@ interface NoticePathResponseParams {
   created_at: string
 }
 
-export default class NoticePathResponse {
+export default class NoticeResponse {
   public title: string
   public content: string
   public image: string[]
   public member_idx: string
   public created_at: string
-  constructor(params: NoticePathResponseParams) {
+  constructor(params: NoticeResponseParams) {
     this.title = params.title
     this.content = params.content
     this.image = params.image

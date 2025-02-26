@@ -1,9 +1,7 @@
 import ErrorRegistry from '#error/ErrorRegistry'
-import NoticeDeletePathRequest from '../entity/dao/frontend/request/NoticeDeletePathRequest.js'
 import NoticeEditBodyRequest from '../entity/dao/frontend/request/NoticeEditBodyRequest.js'
-import NoticeEditPathRequest from '../entity/dao/frontend/request/NoticeEditPathRequest.js'
 import NoticePathRequest from '../entity/dao/frontend/request/NoticePathRequest.js'
-import NoticePathResponse from '../entity/dao/frontend/response/NoticePathResponse.js'
+import NoticeResponse from '../entity/dao/frontend/response/NoticeResponse.js'
 import NoticeRepository from '../repository/NoticeRepository.js'
 
 export default class NoticeItemService {
@@ -13,17 +11,17 @@ export default class NoticeItemService {
     if (!result) {
       throw ErrorRegistry.CAN_NOT_FINE_NOTICE
     }
-    return new NoticePathResponse(result)
+    return new NoticeResponse(result)
   }
-  static async deleteNotice(noticeDeletePathRequest: NoticeDeletePathRequest) {
-    const { idx } = noticeDeletePathRequest
+  static async deleteNotice(noticePathRequest: NoticePathRequest) {
+    const { idx } = noticePathRequest
     await NoticeRepository.deleteNoticeFromDb(idx)
   }
   static async editNotice(
-    noticeEditPathRequest: NoticeEditPathRequest,
+    noticePathRequest: NoticePathRequest,
     noticeEditBodyRequest: NoticeEditBodyRequest,
   ) {
-    const { idx } = noticeEditPathRequest
+    const { idx } = noticePathRequest
     const { title, content, uploadUrls } = noticeEditBodyRequest
     await NoticeRepository.editNoticeFromDb(idx, title, content, uploadUrls)
   }

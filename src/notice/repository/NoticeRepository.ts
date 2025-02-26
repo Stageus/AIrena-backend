@@ -92,9 +92,6 @@ export default class NoticeRepository {
           VALUES($1, $2, NOW())`,
       [noticeIdx, uploadUrls],
     )
-
-    await postgres.query('COMMIT') // 트랜잭션 커밋
-
     return noticeIdx
   }
 
