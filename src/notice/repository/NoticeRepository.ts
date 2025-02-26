@@ -83,9 +83,14 @@ export default class NoticeRepository {
   static async getNoticeInfoFromDb(idx: UUID) {
     return (
       await postgres.query(
-        `SELECT n.title,n.member_idx AS memberIdx,n.content,n.created_at AS createdAt, i.urls AS image 
+        `SELECT n.title,
+          mem.nickname AS "writerNickname",
+          n.content,
+          n.created_at AS "createdAt",
+          i.urls AS image  
         FROM notice AS n 
-        LEFT JOIN image AS i on n.idx = i.article_idx 
+        LEFT JOIN image AS i ON n.idx = i.article_idx 
+        JOIN member AS mem ON mem.idx = n.member_idx
         WHERE n.idx = $1 AND n.is_deleted = 'f'`,
         [idx],
       )
