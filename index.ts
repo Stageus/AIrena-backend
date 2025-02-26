@@ -5,6 +5,7 @@ import { likeRouter } from '#like/router'
 import { memberRouter } from '#member/router'
 import { mockRouter } from '#mock/router'
 import { noticeRouter } from '#notice/router'
+import { rankRouter } from '#rank/router'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import { configDotenv } from 'dotenv'
@@ -25,6 +26,7 @@ app.use('/member', memberRouter)
 app.use('/mock', mockRouter)
 app.use('/notice', noticeRouter)
 app.use('/like', likeRouter)
+app.use('/rank', rankRouter)
 app.use(globalExceptionHandler)
 
 app.listen(3000, async () => {

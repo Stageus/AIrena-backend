@@ -3,4 +3,4 @@ import { rankListRouter } from './rankListRouter.js'
 
 export const rankRouter = express.Router()
 
-rankRouter.use('/', rankListRouter)
+rankRouter.use('/list', rankListRouter)

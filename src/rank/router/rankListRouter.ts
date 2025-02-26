@@ -17,7 +17,7 @@ rankListRouter.get(
     null,
     RankListResponse,
   )(async (req, res) => {
-    return await RankListService.getRankList(req.query)
+    return res.send(await RankListService.getRankList(req.query))
   }),
 )
 
@@ -30,6 +30,6 @@ rankListRouter.get(
     null,
     FilteredRankListResponse,
   )(async (req, res) => {
-    return await RankListService.getFilteredRankList(req.query)
+    return res.send(await RankListService.getFilteredRankList(req.query))
   }),
 )

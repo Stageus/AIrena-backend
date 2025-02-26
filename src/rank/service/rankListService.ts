@@ -6,15 +6,18 @@ import RankListRepository from '../repository/rankListRepository.js'
 
 export default class RankListService {
   static async getRankList(rankListRequest: RankListRequest) {
-    const result: any = await RankListRepository.getRankListFromDb()
+    const { display } = rankListRequest
+    const result: any = await RankListRepository.getRankListFromDb(display)
     return new RankListResponse(result)
   }
   static async getFilteredRankList(
     filteredRankListRequest: FilteredRankListRequest,
   ) {
-    const { sortType } = filteredRankListRequest
-    const result: any =
-      await RankListRepository.getFilteredRankListFromDb(sortType)
+    const { sortType, current } = filteredRankListRequest
+    const result: any = await RankListRepository.getFilteredRankListFromDb(
+      sortType,
+      current,
+    )
     return new FilteredRankListResponse(result)
   }
 }
