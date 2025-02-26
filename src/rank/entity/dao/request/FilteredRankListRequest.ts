@@ -1,10 +1,10 @@
 interface FilteredRankListRequestParams {
-  nicknameToSearch: string
+  sortType: string
 }
 
 export default class FilteredRankListRequest {
-  public nicknameToSearch: string
+  public sortType: string
   constructor(params: FilteredRankListRequestParams) {
-    this.nicknameToSearch = params.nicknameToSearch
+    this.sortType = params.sortType
   }
 }
