@@ -64,20 +64,27 @@ export default class NoticeRepository {
     content: string,
     uploadUrls: string[],
   ) {
-    const noticeResult = await postgres.query(
-      `INSERT INTO notice (member_idx, title, content, created_at)
+    try {
+      await postgres.query('BEGIN')
+      const noticeResult = await postgres.query(
+        `INSERT INTO notice (member_idx, title, content, created_at)
          VALUES($1, $2, $3, NOW())
          RETURNING idx`,
-      [memberIdx, title, content],
-    )
-    const noticeIdx = noticeResult.rows[0].idx
+        [memberIdx, title, content],
+      )
+      const noticeIdx = noticeResult.rows[0].idx
 
-    await postgres.query(
-      `INSERT INTO image (article_idx, urls, created_at)
+      await postgres.query(
+        `INSERT INTO image (article_idx, urls, created_at)
           VALUES($1, $2, NOW())`,
-      [noticeIdx, uploadUrls],
-    )
-    return noticeIdx
+        [noticeIdx, uploadUrls],
+      )
+      await postgres.query('COLLECT')
+      return noticeIdx
+    } catch (err) {
+      await postgres.query('ROLLBACK')
+      throw ErrorRegistry.INTERNAL_SERVER_ERROR
+    }
   }
 
   static async getNoticeInfoFromDb(idx: UUID) {
