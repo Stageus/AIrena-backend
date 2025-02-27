@@ -47,10 +47,8 @@ export default class SignupService {
     }
     const memberHashData: any =
       await RedisEmailSignupRepository.getHashDataFromRedis(data.email)
-    // 여기서 비밀번호 암호화화]
     const salt = process.env.ENCRYPT_SALT_STRING
     const password = CryptoJS.SHA256(memberHashData.password + salt).toString()
-    console.log(password)
     const result = await MemberSignupRepository.insertNormalMemberData(
       memberHashData.id,
       password,

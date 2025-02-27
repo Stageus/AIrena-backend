@@ -23,7 +23,6 @@ export default class LoginService {
     const passwordCheck = CryptoJS.SHA256(
       password + process.env.ENCRYPT_SALT_STRING,
     ).toString()
-    console.log(passwordCheck)
     const memberData: any = await MemberLoginRepository.getNormalLoginData(
       id,
       passwordCheck,
