@@ -78,7 +78,7 @@ export default class ErrorRegistry {
   )
 
   // Notice(NO)
-  static readonly CAN_NOT_FINE_NOTICE = new CustomError(
+  static readonly CAN_NOT_FIND_NOTICE = new CustomError(
     404,
     'NO001',
     '공지글이 존재하지 않습니다.',

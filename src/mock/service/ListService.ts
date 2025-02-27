@@ -14,7 +14,7 @@ export default class ListService {
       offset,
     )
 
-    const firstPageNumber = Math.floor(currentPageNumber / 10) * 10 + 1
+    const firstPageNumber = Math.floor(currentPageNumber - 1 / 10) * 10 + 1
     const pageOffset = Math.min(
       9,
       Math.floor(
@@ -45,7 +45,7 @@ export default class ListService {
         offset,
       )
 
-      const firstPageNumber = Math.floor(currentPageNumber / 10) * 10 + 1
+      const firstPageNumber = Math.floor((currentPageNumber - 1) / 10) * 10 + 1
       const pageOffset = Math.min(
         9,
         Math.floor(

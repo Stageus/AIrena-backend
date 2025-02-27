@@ -4,6 +4,7 @@ import globalExceptionHandler from '#error/globalExceptionHandler'
 import { likeRouter } from '#like/router'
 import { memberRouter } from '#member/router'
 import { mockRouter } from '#mock/router'
+import { noticeRouter } from '#notice/router'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import { configDotenv } from 'dotenv'
@@ -22,6 +23,7 @@ app.use(cookieParser())
 app.use(express.json())
 app.use('/member', memberRouter)
 app.use('/mock', mockRouter)
+app.use('/notice', noticeRouter)
 app.use('/like', likeRouter)
 app.use(globalExceptionHandler)
 

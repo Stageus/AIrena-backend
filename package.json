@@ -13,6 +13,7 @@
   "imports": {
     "#mock/*": "./dist/src/mock/*/index.js",
     "#member/*": "./dist/src/member/*/index.js",
+    "#notice/*": "./dist/src/notice/*/index.js",
     "#like/*": "./dist/src/like/*/index.js",
     "#controller": "./dist/src/core/controller/index.js",
     "#adapter/*": "./dist/src/core/adapter/*.js",

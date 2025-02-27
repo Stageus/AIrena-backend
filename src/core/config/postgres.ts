@@ -9,6 +9,7 @@ export const postgres = new pg.Pool({
   user: process.env.POSTGRES_USER as string,
   password: process.env.POSTGRES_PASSWORD as string,
   database: process.env.POSTGRES_DB as string,
+  max: 10,
 })
 
 export const testPostgresConnection = async () => {
