@@ -50,8 +50,11 @@ export default class NoticeRepository {
       )
     ).rows
     const totalCountResult = (
-      await postgres.query(`SELECT COUNT(*) AS totalCount FROM notice`)
-    ).rows[0]
+      await postgres.query(
+        `SELECT COUNT(*) AS "totalCount" FROM notice WHERE is_deleted = 'f' AND title LIKE $1`,
+        [titleToSearch],
+      )
+    ).rows[0].totalCount
     return {
       listResult,
       totalCountResult,

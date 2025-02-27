@@ -36,7 +36,7 @@ export default class ListService {
     const noticeList = new NoticeList(
       current,
       display,
-      searchData.totalCountResult.totalCount,
+      searchData.totalCountResult,
       searchData.listResult,
     )
     return ListSearchResponse.of(noticeList)
