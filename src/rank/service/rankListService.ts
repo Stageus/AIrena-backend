@@ -6,8 +6,8 @@ import RankListRepository from '../repository/rankListRepository.js'
 
 export default class RankListService {
   static async getRankList(rankListRequest: RankListRequest) {
-    const { display } = rankListRequest
-    const result: any = await RankListRepository.getRankListFromDb(display)
+    const { current } = rankListRequest
+    const result: any = await RankListRepository.getRankListFromDb(current)
     return new RankListResponse(result)
   }
   static async getFilteredRankList(

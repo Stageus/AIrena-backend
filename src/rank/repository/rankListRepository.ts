@@ -1,7 +1,7 @@
 import { postgres } from '#config/postgres'
 
 export default class RankListRepository {
-  static async getRankListFromDb(display: number) {
+  static async getRankListFromDb(current: number) {
     return (
       await postgres.query(
         `
@@ -39,7 +39,7 @@ export default class RankListRepository {
       ORDER BY rank 
       LIMIT 10;
       `,
-        [display],
+        [current],
       )
     ).rows
   }
