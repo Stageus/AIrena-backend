@@ -1,6 +1,7 @@
 import LoginAdapter from '#adapter/OAuthAdapter'
 import ErrorRegistry from '#error/ErrorRegistry'
 import Token from '#util/Token'
+import CryptoJS from 'crypto-js'
 import dotenv from 'dotenv'
 import { Response } from 'express'
 import NormalLoginRequest from '../entity/dao/frontend/request/NormalLoginRequest.js'
@@ -19,9 +20,13 @@ export default class LoginService {
     res: Response,
   ) {
     const { id, password } = normalLoginRequest
+    const passwordCheck = CryptoJS.SHA256(
+      password + process.env.ENCRYPT_SALT_STRING,
+    ).toString()
+    console.log(passwordCheck)
     const memberData: any = await MemberLoginRepository.getNormalLoginData(
       id,
-      password,
+      passwordCheck,
     )
     if (!memberData) {
       throw ErrorRegistry.CAN_NOT_FIND_USER
