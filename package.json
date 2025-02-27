@@ -15,6 +15,7 @@
     "#member/*": "./dist/src/member/*/index.js",
     "#notice/*": "./dist/src/notice/*/index.js",
     "#like/*": "./dist/src/like/*/index.js",
+    "#rank/*": "./dist/src/rank/*/index.js",
     "#controller": "./dist/src/core/controller/index.js",
     "#adapter/*": "./dist/src/core/adapter/*.js",
     "#config/*": "./dist/src/core/config/*.js",
