@@ -1,13 +1,16 @@
 interface FilteredRankListRequestParams {
-  sortType: string
+  tier: string
   current: number
+  nickname: string
 }
 
 export default class FilteredRankListRequest {
-  public sortType: string
+  public tier: string
   public current: number
+  public nickname: string
   constructor(params: FilteredRankListRequestParams) {
-    this.sortType = params.sortType
+    this.tier = params.tier
     this.current = Number(params.current)
+    this.nickname = params.nickname
   }
 }

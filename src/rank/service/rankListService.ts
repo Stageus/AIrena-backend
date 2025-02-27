@@ -13,10 +13,28 @@ export default class RankListService {
   static async getFilteredRankList(
     filteredRankListRequest: FilteredRankListRequest,
   ) {
-    const { sortType, current } = filteredRankListRequest
+    const { tier, current, nickname } = filteredRankListRequest
+    if (!nickname) {
+      const result: any = await RankListRepository.getFilteredRankListFromDb(
+        tier,
+        current,
+        '%',
+      )
+      return new FilteredRankListResponse(result)
+    }
+
+    if (!tier) {
+      const result: any = await RankListRepository.getFilteredRankListFromDb(
+        '%',
+        current,
+        nickname,
+      )
+      return new FilteredRankListResponse(result)
+    }
     const result: any = await RankListRepository.getFilteredRankListFromDb(
-      sortType,
+      tier,
       current,
+      nickname,
     )
     return new FilteredRankListResponse(result)
   }

@@ -44,7 +44,11 @@ export default class RankListRepository {
     ).rows
   }
 
-  static async getFilteredRankListFromDb(sortType: string, current: number) {
+  static async getFilteredRankListFromDb(
+    tier: string,
+    current: number,
+    nickname: string,
+  ) {
     return (
       await postgres.query(
         `      
@@ -87,15 +91,15 @@ export default class RankListRepository {
           nickname, 
           score 
         FROM ranked_with_tiers 
-        WHERE tier = $1 
+        WHERE tier LIKE $1 
       )
       SELECT *
       FROM ranked_tiers 
-      WHERE new_rank > $2 
+      WHERE new_rank > $2 AND nickname LIKE $3
       ORDER BY new_rank 
       LIMIT 10;
       `,
-        [sortType, current],
+        [tier, current, nickname],
       )
     ).rows
   }
