@@ -67,21 +67,22 @@ export default class NoticeRepository {
     try {
       await postgres.query('BEGIN')
       const noticeResult = await postgres.query(
-        `INSERT INTO notice (member_idx, title, content, created_at)
-         VALUES($1, $2, $3, NOW())
-         RETURNING idx`,
-        [memberIdx, title, content],
+        `
+        WITH notice_insert AS (
+          INSERT INTO notice (member_idx, title, content, created_at)
+          VALUES($1, $2, $3, NOW())
+          RETURNING idx
+        )
+        INSERT INTO image (article_idx, urls, created_at)
+        SELECT idx, $4, NOW() FROM notice_insert
+        RETURNING article_idx`,
+        [memberIdx, title, content, uploadUrls],
       )
-      const noticeIdx = noticeResult.rows[0].idx
-
-      await postgres.query(
-        `INSERT INTO image (article_idx, urls, created_at)
-          VALUES($1, $2, NOW())`,
-        [noticeIdx, uploadUrls],
-      )
-      await postgres.query('COLLECT')
+      await postgres.query('COMMIT')
+      const noticeIdx = noticeResult.rows[0].article_idx
       return noticeIdx
     } catch (err) {
+      console.log(err)
       await postgres.query('ROLLBACK')
       throw ErrorRegistry.INTERNAL_SERVER_ERROR
     }
