@@ -77,13 +77,6 @@ export default class EmailSender {
       to: receiver,
       subject: 'AIrena 비밀번호 변경 안내',
       html: htmlTemplatePath,
-      attachments: [
-        {
-          filename: 'ai-rena-icon.png',
-          path: imagePath,
-          cid: 'logoImage',
-        },
-      ],
     }
 
     transporter.sendMail(mailOption, (err, info) => {
