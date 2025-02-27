@@ -2,7 +2,6 @@ import controller from '#controller'
 import express from 'express'
 import FilteredRankListRequest from '../entity/dao/request/FilteredRankListRequest.js'
 import RankListRequest from '../entity/dao/request/RankListRequest.js'
-import FilteredRankListResponse from '../entity/dao/response/FilteredRankListResponse.js'
 import RankListResponse from '../entity/dao/response/RankListResponse.js'
 import RankListService from '../service/rankListService.js'
 
@@ -28,7 +27,7 @@ rankListRouter.get(
     FilteredRankListRequest,
     null,
     null,
-    FilteredRankListResponse,
+    RankListResponse,
   )(async (req, res) => {
     return res.send(await RankListService.getFilteredRankList(req.query))
   }),
