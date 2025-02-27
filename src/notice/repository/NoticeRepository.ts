@@ -22,7 +22,7 @@ export default class NoticeRepository {
     ).rows
     const totalCountResult = (
       await postgres.query(`SELECT COUNT(*) AS "totalCount" FROM notice`)
-    ).rows[0]
+    ).rows[0].totalCount
     return {
       listResult,
       totalCountResult,

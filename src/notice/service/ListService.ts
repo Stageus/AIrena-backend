@@ -17,7 +17,7 @@ export default class ListService {
     const noticeList = new NoticeList(
       current,
       display,
-      listData.totalCountResult.totalCount,
+      listData.totalCountResult,
       listData.listResult,
     )
 
