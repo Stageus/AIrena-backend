@@ -27,8 +27,9 @@ export default class ListService {
   static async searchList(listSearchRequest: ListSearchRequest) {
     const { title, display, current } = listSearchRequest
     const offset = (current - 1) * display
+    const titleToSearch = '%' + title + '%'
     const searchData: any = await NoticeRepository.getSearchListFromDb(
-      title,
+      titleToSearch,
       display,
       offset,
     )

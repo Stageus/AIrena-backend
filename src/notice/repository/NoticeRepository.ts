@@ -29,7 +29,7 @@ export default class NoticeRepository {
     }
   }
   static async getSearchListFromDb(
-    title: string,
+    titleToSearch: string,
     display: number,
     offset: number,
   ) {
@@ -42,11 +42,11 @@ export default class NoticeRepository {
         notice.created_at AS createdAt
         FROM notice AS notice
         LEFT JOIN member AS mem ON notice.member_idx = mem.idx
-        WHERE notice.is_deleted = 'f' AND title = $1
+        WHERE notice.is_deleted = 'f' AND title LIKE $1
         ORDER BY 4 DESC
         LIMIT $2 OFFSET $3
         `,
-        [title, display, offset],
+        [titleToSearch, display, offset],
       )
     ).rows
     const totalCountResult = (
