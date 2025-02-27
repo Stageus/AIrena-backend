@@ -129,7 +129,7 @@ export default class MockRepository {
         like_count_paginated AS (
             SELECT *
             FROM filtered
-            ORDER BY like_count DESC
+            ORDER BY like_count DESC, created_at DESC
             LIMIT $2 OFFSET $3
         ),
         nickname_added AS (
@@ -185,7 +185,7 @@ export default class MockRepository {
                 new_paginated.title,
                 new_paginated.created_at as "createdAt",
                 new_paginated.like_count as "likeCount",
-                member.nickname as writerNickname
+                member.nickname as "writerNickname"
             FROM new_paginated
             JOIN member ON member.idx = new_paginated.member_idx
         )

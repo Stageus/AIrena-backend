@@ -3,7 +3,7 @@ import ErrorRegistry from '#error/ErrorRegistry'
 interface SearchQueryParams {
   current: number
   display: number
-  sort: 'new' | 'like'
+  sort: 'like'
   title: string
 }
 
