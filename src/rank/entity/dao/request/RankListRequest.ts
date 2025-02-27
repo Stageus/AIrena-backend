@@ -11,6 +11,6 @@ export default class RankListRequest {
   constructor(params: RankListRequestParams) {
     this.sortType = params.sortType
     this.nicknameToSearch = params.nicknameToSearch
-    this.display = params.display
+    this.display = Number(params.display)
   }
 }

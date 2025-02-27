@@ -8,6 +8,6 @@ export default class FilteredRankListRequest {
   public current: number
   constructor(params: FilteredRankListRequestParams) {
     this.sortType = params.sortType
-    this.current = params.current
+    this.current = Number(params.current)
   }
 }
