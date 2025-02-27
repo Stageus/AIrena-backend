@@ -40,8 +40,8 @@ export default class NoticeRepository {
         `
         SELECT notice.idx AS idx, 
         notice.title AS title, 
-        mem.nickname AS writerNickname,
-        notice.created_at AS createdAt
+        mem.nickname AS "writerNickname",
+        notice.created_at AS "createdAt"
         FROM notice AS notice
         LEFT JOIN member AS mem ON notice.member_idx = mem.idx
         WHERE notice.is_deleted = 'f' AND title LIKE $1
