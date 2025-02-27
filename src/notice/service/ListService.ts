@@ -35,7 +35,8 @@ export default class ListService {
       display,
       offset,
     )
-    let firstPageNumber = Math.floor(current / 10) * 10 + 1
+
+    let firstPageNumber = Math.floor(current - 1 / 10) * 10 + 1
     const totalCount = parseInt(searchData.totalCountResult.totalcount, 10)
     const pageOffset = Math.min(
       9,
