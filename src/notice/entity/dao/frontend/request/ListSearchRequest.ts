@@ -10,7 +10,7 @@ export default class ListSearchRequest {
   public display: number
   constructor(params: ListSearchRequestParams) {
     this.title = params.title
-    this.display = params.display
-    this.current = params.current
+    this.display = Number(params.display)
+    this.current = Number(params.current)
   }
 }

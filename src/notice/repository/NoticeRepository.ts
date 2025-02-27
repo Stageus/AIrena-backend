@@ -117,20 +117,19 @@ export default class NoticeRepository {
     content: string,
     uploadUrls: string[], // uploadUrls는 null 또는 undefined일 수 있음
   ) {
-    try {
-      await postgres.query('BEGIN')
-      await postgres.query(
-        "UPDATE notice SET title = $1, content = $2 WHERE is_deleted = 'f' AND idx = $3",
-        [title, content, idx],
-      )
-      await postgres.query(
-        'UPDATE image SET urls = $1 WHERE article_idx = $2',
-        [uploadUrls, idx],
-      )
-      await postgres.query('COMMIT')
-    } catch (err) {
-      await postgres.query('ROLLBACK')
-      throw ErrorRegistry.INTERNAL_SERVER_ERROR
-    }
+    await postgres.query(
+      `
+        WITH updated_notice AS(
+          UPDATE notice 
+          SET title = $1, content = $2
+          WHERE is_deleted = 'f' AND idx = $3
+          RETURNING idx
+        )
+        UPDATE image
+        SET urls = $4
+        WHERE article_idx IN(SELECT idx FROM updated_notice)
+        `,
+      [title, content, idx, uploadUrls],
+    )
   }
 }
