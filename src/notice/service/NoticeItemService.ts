@@ -11,7 +11,6 @@ export default class NoticeItemService {
     if (!result) {
       throw ErrorRegistry.CAN_NOT_FIND_NOTICE
     }
-    console.log(result)
     return new NoticeResponse(result)
   }
   static async deleteNotice(noticePathRequest: NoticePathRequest) {

@@ -1,7 +1,7 @@
 interface NoticeResponseParams {
   title: string
   content: string
-  image: string[]
+  images: string[]
   writerNickname: string
   createdAt: string
 }
@@ -9,13 +9,13 @@ interface NoticeResponseParams {
 export default class NoticeResponse {
   public title: string
   public content: string
-  public image: string[]
+  public images: string[]
   public writerNickname: string
   public createdAt: string
   constructor(params: NoticeResponseParams) {
     this.title = params.title
     this.content = params.content
-    this.image = params.image
+    this.images = params.images
     this.writerNickname = params.writerNickname
     this.createdAt = params.createdAt
   }

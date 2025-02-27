@@ -7,7 +7,7 @@ export default class ListRequest {
   public current: number
   public display: number
   constructor(params: ListRequestParams) {
-    this.current = params.current
-    this.display = params.display
+    this.current = Number(params.current)
+    this.display = Number(params.display)
   }
 }

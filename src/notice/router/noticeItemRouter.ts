@@ -3,7 +3,7 @@ import multipartParser from '#util/multipartParser'
 import express from 'express'
 import NoticeEditBodyRequest from '../entity/dao/frontend/request/NoticeEditBodyRequest.js'
 import NoticePathRequest from '../entity/dao/frontend/request/NoticePathRequest.js'
-import NoticePathResponse from '../entity/dao/frontend/response/NoticeResponse.js'
+import NoticeResponse from '../entity/dao/frontend/response/NoticeResponse.js'
 import NoticeItemService from '../service/NoticeItemService.js'
 export const noticeItemRouter = express.Router()
 
@@ -14,7 +14,7 @@ noticeItemRouter.get(
     null,
     NoticePathRequest,
     null,
-    NoticePathResponse,
+    NoticeResponse,
   )(async (req, res) => {
     return res.send(await NoticeItemService.getNotice(req.params))
   }),

@@ -95,7 +95,7 @@ export default class NoticeRepository {
           mem.nickname AS "writerNickname",
           n.content,
           n.created_at AS "createdAt",
-          i.urls AS image  
+          i.urls AS "images"  
         FROM notice AS n 
         LEFT JOIN image AS i ON n.idx = i.article_idx 
         JOIN member AS mem ON mem.idx = n.member_idx
