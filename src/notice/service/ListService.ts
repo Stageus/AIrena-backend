@@ -2,6 +2,7 @@ import ListRequest from '../entity/dao/frontend/request/ListRequest.js'
 import ListSearchRequest from '../entity/dao/frontend/request/ListSearchRequest.js'
 import ListResponse from '../entity/dao/frontend/response/ListResponse.js'
 import ListSearchResponse from '../entity/dao/frontend/response/ListSearchResponse.js'
+import NoticeList from '../entity/dto/NoticeList.js'
 import NoticeRepository from '../repository/NoticeRepository.js'
 
 export default class ListService {
@@ -13,19 +14,14 @@ export default class ListService {
       offset,
     )
 
-    let firstPageNumber = Math.floor((current - 1) / 10) * 10 + 1
-    const totalCount = parseInt(listData.totalCountResult.totalcount, 10)
-    const pageOffset = Math.min(
-      9,
-      Math.floor((totalCount - (firstPageNumber - 1) * display) / display),
-    )
-    const lastPageNumber = firstPageNumber + pageOffset
-    return new ListResponse(
-      firstPageNumber,
+    const noticeList = new NoticeList(
       current,
-      lastPageNumber,
+      display,
+      listData.totalCountResult.totalCount,
       listData.listResult,
     )
+
+    return ListResponse.of(noticeList)
   }
 
   static async searchList(listSearchRequest: ListSearchRequest) {
@@ -36,18 +32,12 @@ export default class ListService {
       display,
       offset,
     )
-    const firstPageNumber = Math.floor(current - 1 / 10) * 10 + 1
-    const totalCount = parseInt(searchData.totalCountResult.totalcount, 10)
-    const pageOffset = Math.min(
-      9,
-      Math.floor((totalCount - (firstPageNumber - 1) * display) / display),
-    )
-    const lastPageNumber = firstPageNumber + pageOffset
-    return new ListSearchResponse(
-      firstPageNumber,
+    const noticeList = new NoticeList(
       current,
-      lastPageNumber,
+      display,
+      searchData.totalCountResult.totalCount,
       searchData.listResult,
     )
+    return ListSearchResponse.of(noticeList)
   }
 }
