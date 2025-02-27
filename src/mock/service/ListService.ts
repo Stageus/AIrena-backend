@@ -1,6 +1,8 @@
+import ErrorRegistry from '#error/ErrorRegistry'
 import ListQuery from '../entity/dao/frontend/request/query/ListRequest.js'
 import SearchQuery from '../entity/dao/frontend/request/query/SearchRequest.js'
 import ListResponse from '../entity/dao/frontend/response/ListResponse.js'
+import MockList from '../entity/dto/MockList.js'
 import MockRepository from '../repository/MockRepository.js'
 
 export default class ListService {
@@ -14,22 +16,14 @@ export default class ListService {
       offset,
     )
 
-    const firstPageNumber = Math.floor(currentPageNumber - 1 / 10) * 10 + 1
-    const pageOffset = Math.min(
-      9,
-      Math.floor(
-        (dbResult.totalCount - (firstPageNumber - 1) * displayCount) /
-          displayCount,
-      ),
-    )
-    const lastPageNumber = firstPageNumber + pageOffset
-
-    return new ListResponse(
-      firstPageNumber,
+    const mockList = new MockList(
       currentPageNumber,
-      lastPageNumber,
+      displayCount,
+      dbResult.totalCount,
       dbResult.mocks,
     )
+
+    return ListResponse.of(mockList)
   }
 
   static async searchMock(query: SearchQuery): Promise<ListResponse> {
@@ -38,56 +32,38 @@ export default class ListService {
     const offset = (currentPageNumber - 1) * displayCount
     const title = '%' + query.title + '%'
 
-    if (query.sort === 'new') {
-      const dbResult = await MockRepository.getFilteredNewMockList(
+    const dbResult = await this.getDBResultBySortType(
+      query.sort,
+      title,
+      displayCount,
+      offset,
+    )
+
+    const mockList = new MockList(
+      currentPageNumber,
+      displayCount,
+      dbResult.totalCount,
+      dbResult.mocks,
+    )
+    return ListResponse.of(mockList)
+  }
+
+  private static getDBResultBySortType = (
+    sortType: 'new' | 'like',
+    title: string,
+    displayCount: number,
+    offset: number,
+  ) => {
+    if (sortType === 'new') {
+      return MockRepository.getFilteredNewMockList(title, displayCount, offset)
+    }
+    if (sortType === 'like') {
+      return MockRepository.getFilteredLikeDescMockList(
         title,
         displayCount,
         offset,
       )
-
-      const firstPageNumber = Math.floor((currentPageNumber - 1) / 10) * 10 + 1
-      const pageOffset = Math.min(
-        9,
-        Math.floor(
-          (dbResult.totalCount - (firstPageNumber - 1) * displayCount) /
-            displayCount,
-        ),
-      )
-      const lastPageNumber = firstPageNumber + pageOffset
-
-      return new ListResponse(
-        firstPageNumber,
-        currentPageNumber,
-        lastPageNumber,
-        dbResult.mocks,
-      )
     }
-
-    if (query.sort === 'like') {
-      const dbResult = await MockRepository.getFilteredLikeDescMockList(
-        title,
-        displayCount,
-        offset,
-      )
-
-      const firstPageNumber = Math.floor(currentPageNumber / 10) * 10 + 1
-      const pageOffset = Math.min(
-        9,
-        Math.floor(
-          (dbResult.totalCount - (firstPageNumber - 1) * displayCount) /
-            displayCount,
-        ),
-      )
-      const lastPageNumber = firstPageNumber + pageOffset
-
-      return new ListResponse(
-        firstPageNumber,
-        currentPageNumber,
-        lastPageNumber,
-        dbResult.mocks,
-      )
-    }
-
-    return ListResponse.createEmpty()
+    throw ErrorRegistry.INTERNAL_SERVER_ERROR
   }
 }

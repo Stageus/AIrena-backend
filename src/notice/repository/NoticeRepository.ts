@@ -21,9 +21,8 @@ export default class NoticeRepository {
       )
     ).rows
     const totalCountResult = (
-      await postgres.query(`SELECT COUNT(*) AS totalCount FROM notice`)
+      await postgres.query(`SELECT COUNT(*) AS "totalCount" FROM notice`)
     ).rows[0]
-    await postgres.query('COMMIT')
     return {
       listResult,
       totalCountResult,
