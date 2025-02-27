@@ -40,7 +40,7 @@ export default class Token {
       secretKey,
       {
         issuer: 'ai-rena',
-        expiresIn: '60m',
+        expiresIn: '30d',
       },
     )
     return token
@@ -91,7 +91,7 @@ export default class Token {
       secretKey,
       {
         issuer: 'ai-rena',
-        expiresIn: '60m',
+        expiresIn: '1d',
       },
     )
     return token
