@@ -4,6 +4,7 @@ export default class NoticeList {
   lastPageNumber: number
   prevPageExist: boolean
   nextPageExist: boolean
+  totalCount: number
   notices: {
     idx: number
     title: string
@@ -23,6 +24,7 @@ export default class NoticeList {
       totalCount: number
     }[],
   ) {
+    this.totalCount = totalCount
     this.currentPageNumber = currentPageNumber
     this.firstPageNumber = Math.floor((currentPageNumber - 1) / 10) * 10 + 1
     const pageOffset = Math.min(

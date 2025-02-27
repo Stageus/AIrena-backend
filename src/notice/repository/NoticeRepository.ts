@@ -22,14 +22,14 @@ export default class NoticeRepository {
     ).rows
     const totalCountResult = (
       await postgres.query(`SELECT COUNT(*) AS "totalCount" FROM notice`)
-    ).rows[0]
+    ).rows[0].totalCount
     return {
       listResult,
       totalCountResult,
     }
   }
   static async getSearchListFromDb(
-    title: string,
+    titleToSearch: string,
     display: number,
     offset: number,
   ) {
@@ -42,16 +42,19 @@ export default class NoticeRepository {
         notice.created_at AS createdAt
         FROM notice AS notice
         LEFT JOIN member AS mem ON notice.member_idx = mem.idx
-        WHERE notice.is_deleted = 'f' AND title = $1
+        WHERE notice.is_deleted = 'f' AND title LIKE $1
         ORDER BY 4 DESC
         LIMIT $2 OFFSET $3
         `,
-        [title, display, offset],
+        [titleToSearch, display, offset],
       )
     ).rows
     const totalCountResult = (
-      await postgres.query(`SELECT COUNT(*) AS totalCount FROM notice`)
-    ).rows[0]
+      await postgres.query(
+        `SELECT COUNT(*) AS "totalCount" FROM notice WHERE is_deleted = 'f' AND title LIKE $1`,
+        [titleToSearch],
+      )
+    ).rows[0].totalCount
     return {
       listResult,
       totalCountResult,

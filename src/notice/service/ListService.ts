@@ -17,7 +17,7 @@ export default class ListService {
     const noticeList = new NoticeList(
       current,
       display,
-      listData.totalCountResult.totalCount,
+      listData.totalCountResult,
       listData.listResult,
     )
 
@@ -27,15 +27,16 @@ export default class ListService {
   static async searchList(listSearchRequest: ListSearchRequest) {
     const { title, display, current } = listSearchRequest
     const offset = (current - 1) * display
+    const titleToSearch = '%' + title + '%'
     const searchData: any = await NoticeRepository.getSearchListFromDb(
-      title,
+      titleToSearch,
       display,
       offset,
     )
     const noticeList = new NoticeList(
       current,
       display,
-      searchData.totalCountResult.totalCount,
+      searchData.totalCountResult,
       searchData.listResult,
     )
     return ListSearchResponse.of(noticeList)
