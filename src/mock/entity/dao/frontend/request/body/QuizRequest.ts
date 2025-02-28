@@ -1,3 +1,5 @@
+import ErrorRegistry from '#error/ErrorRegistry'
+import Regex from '#util/Regex'
 import { UUID } from 'crypto'
 
 interface QuizRequestParams {
@@ -8,6 +10,9 @@ export default class QuizRequest {
   public idx: UUID
 
   constructor(params: QuizRequestParams) {
+    if (!new RegExp(Regex.uuid).test(params.idx)) {
+      throw ErrorRegistry.INVALID_INPUT_FORMAT
+    }
     this.idx = params.idx
   }
 }
