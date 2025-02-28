@@ -1,9 +1,6 @@
-import dotenv from 'dotenv'
 import { readFileSync } from 'fs'
 import nodemailer from 'nodemailer'
 import path from 'path'
-
-dotenv.config()
 
 export default class EmailSender {
   static sendSignupVerifyEmail = (receiver: string, token: string) => {

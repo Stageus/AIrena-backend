@@ -1,7 +1,7 @@
-import multer from '#config/multer'
 import ErrorRegistry from '#error/ErrorRegistry'
 import dotenv from 'dotenv'
 import { NextFunction, Request, Response } from 'express'
+import multer from './config/multer.js'
 dotenv.config()
 
 const oldBaseUrl = process.env.AWS_S3_BUCKET_BASE_URL as string

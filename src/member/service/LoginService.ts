@@ -2,11 +2,9 @@ import LoginAdapter from '#adapter/OAuthAdapter'
 import ErrorRegistry from '#error/ErrorRegistry'
 import Token from '#util/Token'
 import CryptoJS from 'crypto-js'
-import dotenv from 'dotenv'
 import { Response } from 'express'
 import NormalLoginRequest from '../entity/dao/frontend/request/NormalLoginRequest.js'
 import MemberLoginRepository from '../repository/MemberLoginRepository.js'
-dotenv.config()
 
 const kakaoOauthUserInfoUrl = process.env.KAKAO_OAUTH_USER_INFO_URL || ''
 const googleOauthUserInfoUrl = process.env.GOOGLE_OAUTH_USER_INFO_URL || ''

@@ -3,7 +3,6 @@ import EmailSender from '#util/EmailSender'
 import RandomNicknameGenerator from '#util/RandomNicknameGenerator'
 import Token from '#util/Token'
 import CryptoJS from 'crypto-js'
-import dotenv from 'dotenv'
 import { Response } from 'express'
 import jwt from 'jsonwebtoken'
 import SendVerifyEmailRequest from '../entity/dao/frontend/request/SendVerifyEmailRequest.js'
@@ -12,7 +11,6 @@ import SignupVerifyRequest from '../entity/dao/frontend/request/SignupVerifyRequ
 import SignupResponse from '../entity/dao/frontend/response/SignupResponse.js'
 import MemberSignupRepository from '../repository/MemberSignupRepository.js'
 import RedisEmailSignupRepository from '../repository/RedisEmailSignupRepository.js'
-dotenv.config
 export default class SignupService {
   /** 인증 이메일 전송 서비스 로직 */
   static async emailSend(signupRequest: SignupRequest) {

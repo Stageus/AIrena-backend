@@ -1,7 +1,6 @@
 import ErrorRegistry from '#error/ErrorRegistry'
 import EmailSender from '#util/EmailSender'
 import Token from '#util/Token'
-import dotenv from 'dotenv'
 import { Request } from 'express'
 import jwt from 'jsonwebtoken'
 import NicknameChangeRequest from '../entity/dao/frontend/request/NicknameChangeRequest.js'
@@ -9,7 +8,6 @@ import PasswordChangeRequest from '../entity/dao/frontend/request/PasswordChange
 import SendFindPasswordEmailRequest from '../entity/dao/frontend/request/SendFindPasswordEmailRequest.js'
 import MemberChangeRepository from '../repository/MemberChangeRepository.js'
 import RedisEmailChangeRepository from '../repository/RedisEmailChangeRepository.js'
-dotenv.config()
 export default class ChangeService {
   /** 닉네임 변경 서비스 로직 */
   static async changeNickname(

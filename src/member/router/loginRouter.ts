@@ -1,12 +1,10 @@
 import controller from '#controller'
-import dotenv from 'dotenv'
 import express from 'express'
 import LoginRequest from '../entity/dao/frontend/request/LoginRequest.js'
 import NormalLoginRequest from '../entity/dao/frontend/request/NormalLoginRequest.js'
 import LoginUserDataResponse from '../entity/dao/frontend/response/loginUserDataResponse.js'
 import LoginService from '../service/LoginService.js'
 export const loginRouter = express.Router()
-dotenv.config()
 
 const kakaoOauthUri = process.env.KAKAO_OAUTH_URI
 const kakaoClientId = process.env.KAKAO_CLIENT_ID
