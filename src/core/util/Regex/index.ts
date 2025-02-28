@@ -10,6 +10,7 @@ export default class Regex {
   public static textAnswer =
     /^[가-힣a-zA-Z0-9!@#$%^&*()_+={}\[\]:;"'<>,.?~`-]{1,100}$/
   public static search = /^[가-힣a-zA-Z0-9]{2,100}$/
+  public static tier = /^(DIAMOND|PLATINUM|GOLD|SILVER|BRONZE)$/
   public static file =
     /^(?:[^\s]+\.jpg|[^\s]+\.png)(,(?:[^\s]+\.jpg|[^\s]+\.png)){0,4}$/
   public static password =
