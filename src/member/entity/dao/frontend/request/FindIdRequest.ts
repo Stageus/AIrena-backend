@@ -11,7 +11,7 @@ export default class FindIdRequest {
   constructor(params: FindIdRequestParams) {
     this.email = params.email
     if (!RegExp(regex.email, this.email)) {
-      throw ErrorRegistry.
+      throw ErrorRegistry.INVALID_INPUT_FORMAT
     }
   }
 }
