@@ -10,7 +10,8 @@ export default class FindIdRequest {
 
   constructor(params: FindIdRequestParams) {
     this.email = params.email
-    if (!RegExp(regex.email, this.email)) {
+    console.log(this.email)
+    if (!new RegExp(regex.email).test(this.email as string)) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }
   }
