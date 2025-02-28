@@ -1,4 +1,5 @@
 import ErrorRegistry from '#error/ErrorRegistry'
+import Regex from '#util/Regex'
 
 interface PasswordChangeRequestParams {
   password: string
@@ -11,11 +12,14 @@ export default class PasswordChangeRequest {
   public token: string
 
   constructor(params: PasswordChangeRequestParams) {
+    if (!new RegExp(Regex.password).test(params.password)) {
+      throw ErrorRegistry.INVALID_INPUT_FORMAT
+    }
+    if (params.password != params.passwordCheck) {
+      throw ErrorRegistry.PASSWORD_NOT_EQUAL
+    }
     this.password = params.password
     this.passwordCheck = params.passwordCheck
     this.token = params.token
-    if (this.password != this.passwordCheck) {
-      throw ErrorRegistry.PASSWORD_NOT_EQUAL
-    }
   }
 }
