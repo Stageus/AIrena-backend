@@ -1,3 +1,6 @@
+import ErrorRegistry from '#error/ErrorRegistry'
+import Regex from '#util/Regex'
+
 interface SendVerifyEmailRequestParams {
   email: string
 }
@@ -5,7 +8,10 @@ interface SendVerifyEmailRequestParams {
 export default class SendVerifyEmailRequest {
   public email: string
 
-  constructor(parms: SendVerifyEmailRequestParams) {
-    this.email = parms.email
+  constructor(params: SendVerifyEmailRequestParams) {
+    if (!new RegExp(Regex.EMAIL).test(params.email)) {
+      throw ErrorRegistry.INVALID_INPUT_FORMAT
+    }
+    this.email = params.email
   }
 }
