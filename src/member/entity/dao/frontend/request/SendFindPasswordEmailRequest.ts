@@ -12,8 +12,8 @@ export default class SendFindPasswordEmailRequest {
 
   constructor(params: SendFindPasswordEmailRequestParams) {
     if (
-      !new RegExp(Regex.id).test(params.id) ||
-      !new RegExp(Regex.email).test(params.email)
+      !new RegExp(Regex.ID).test(params.id) ||
+      !new RegExp(Regex.EMAIL).test(params.email)
     ) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }

@@ -9,7 +9,7 @@ export default class SendVerifyEmailRequest {
   public email: string
 
   constructor(params: SendVerifyEmailRequestParams) {
-    if (!new RegExp(Regex.email).test(params.email)) {
+    if (!new RegExp(Regex.EMAIL).test(params.email)) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }
     this.email = params.email

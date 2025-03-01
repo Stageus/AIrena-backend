@@ -12,7 +12,7 @@ export default class ListSearchRequest {
   public current: number
   public display: number
   constructor(params: ListSearchRequestParams) {
-    if (!new RegExp(Regex.title).test(params.title)) {
+    if (!new RegExp(Regex.TITLE).test(params.title)) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }
     this.title = params.title

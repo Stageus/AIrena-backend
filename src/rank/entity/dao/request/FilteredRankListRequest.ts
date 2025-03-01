@@ -13,8 +13,8 @@ export default class FilteredRankListRequest {
   public nickname: string
   constructor(params: FilteredRankListRequestParams) {
     if (
-      !new RegExp(Regex.tier).test(params.tier) ||
-      !new RegExp(Regex.nickname).test(params.nickname)
+      !new RegExp(Regex.TIER).test(params.tier) ||
+      !new RegExp(Regex.NICKNAME).test(params.nickname)
     ) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }

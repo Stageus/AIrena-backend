@@ -14,8 +14,8 @@ export default class MockEditRequest {
 
   constructor(params: MockEditRequestParams) {
     if (
-      !new RegExp(Regex.title).test(params.title) ||
-      !new RegExp(Regex.description).test(params.description)
+      !new RegExp(Regex.TITLE).test(params.title) ||
+      !new RegExp(Regex.DESCRIPTION).test(params.description)
     ) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }

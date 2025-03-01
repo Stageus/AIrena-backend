@@ -9,7 +9,7 @@ export default class NicknameChangeRequest {
   public nickname: string
 
   constructor(params: NicknameChangeRequestParams) {
-    if (!new RegExp(Regex.nickname).test(params.nickname)) {
+    if (!new RegExp(Regex.NICKNAME).test(params.nickname)) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }
     this.nickname = params.nickname

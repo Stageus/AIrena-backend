@@ -8,7 +8,7 @@ export default class FindIdRequest {
   public email: string
 
   constructor(params: FindIdRequestParams) {
-    if (!new RegExp(Regex.email).test(params.email as string)) {
+    if (!new RegExp(Regex.EMAIL).test(params.email as string)) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }
     this.email = params.email

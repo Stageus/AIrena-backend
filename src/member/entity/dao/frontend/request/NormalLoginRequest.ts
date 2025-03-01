@@ -11,8 +11,8 @@ export default class NormalLoginRequest {
   public password: string
   constructor(params: NormalLoginRequestParams) {
     if (
-      !new RegExp(Regex.id).test(params.id) ||
-      !new RegExp(Regex.password).test(params.id)
+      !new RegExp(Regex.ID).test(params.id) ||
+      !new RegExp(Regex.PASSWORD).test(params.id)
     ) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }

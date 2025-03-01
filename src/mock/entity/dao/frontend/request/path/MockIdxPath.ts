@@ -10,7 +10,7 @@ export default class MockIdxPath {
   public idx: UUID
 
   constructor(params: MockIdxPathParams) {
-    if (!new RegExp(Regex.uuid).test(params.idx)) {
+    if (!new RegExp(Regex.UUID).test(params.idx)) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }
     this.idx = params.idx

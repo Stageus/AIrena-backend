@@ -18,9 +18,9 @@ export default class WriteRequest {
 
   constructor(params: WriteRequestParams) {
     if (
-      !new RegExp(Regex.subject).test(params.subject) ||
-      !new RegExp(Regex.title).test(params.title) ||
-      !new RegExp(Regex.description).test(params.description) ||
+      !new RegExp(Regex.SUBJECT).test(params.subject) ||
+      !new RegExp(Regex.TITLE).test(params.title) ||
+      !new RegExp(Regex.DESCRIPTION).test(params.description) ||
       params.quizCount > 10 ||
       params.quizCount < 0
     ) {

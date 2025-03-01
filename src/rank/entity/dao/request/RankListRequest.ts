@@ -8,3 +8,4 @@ export default class RankListRequest {
     this.current = Number(params.current)
   }
 }
+;``
