@@ -2,13 +2,13 @@ import ErrorRegistry from '#error/ErrorRegistry'
 import Regex from '#util/Regex'
 
 interface SolveRequestParams {
-  singleChoiceAnswer: number | null
-  textAnswer: string | null
+  singleChoiceAnswer?: number
+  textAnswer?: string
 }
 
 export default class SolveRequest {
-  singleChoiceAnswer: number | null
-  textAnswer: string | null
+  singleChoiceAnswer?: number
+  textAnswer?: string
 
   constructor(public params: SolveRequestParams) {
     if (
