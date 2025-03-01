@@ -6,10 +6,10 @@ export default class Regex {
     /^(?=.*[가-힣a-zA-Z])[가-힣a-zA-Z0-9]{2,12}$/
   public static readonly TITLE = /^[가-힣a-zA-Z0-9]{2,50}$/
   public static readonly DESCRIPTION = /^[가-힣a-zA-Z0-9]{2,500}$/
-  public static SUBJECT = /^(?=.*[가-힣a-zA-Z])[가-힣a-zA-Z0-9]{2,50}$/
-  public static QUIZ_COUNT = /^(10|[1-9])$/
-  public static CONTENT = /^[가-힣a-zA-Z0-9]{2,500}$/
-  public static TEXT_ANSWER =
+  public static readonly SUBJECT = /^(?=.*[가-힣a-zA-Z])[가-힣a-zA-Z0-9]{2,50}$/
+  public static readonly QUIZ_COUNT = /^(10|[1-9])$/
+  public static readonly CONTENT = /^[가-힣a-zA-Z0-9]{2,500}$/
+  public static readonly TEXT_ANSWER =
     /^[가-힣a-zA-Z0-9!@#$%^&*()_+={}\[\]:;"'<>,.?~`-]{1,100}$/
   public static readonly SEARCH = /^[가-힣a-zA-Z0-9]{2,100}$/
   public static readonly TIER = /^(DIAMOND|PLATINUM|GOLD|SILVER|BRONZE)$/
