@@ -34,6 +34,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Clean up unused Docker resources
+        run: |
+          sudo docker container prune -f
+          sudo docker image prune -f
+
       - name: Application Build and Run
         uses: appleboy/ssh-action@v0.1.6
         with:
@@ -46,3 +51,4 @@ jobs:
             sudo docker rmi ${{secrets.DOCKER_ID}}/${{secrets.PROJECT_NAME}}
             sudo docker pull ${{secrets.DOCKER_ID}}/${{secrets.PROJECT_NAME}}
             sudo docker run -p ${{secrets.EC2_PORT}}:${{secrets.EC2_PORT}} --name ${{secrets.PROJECT_NAME}} -d ${{secrets.DOCKER_ID}}/${{secrets.PROJECT_NAME}}
+            sudo docker image prune -af
