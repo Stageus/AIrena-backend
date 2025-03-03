@@ -20,8 +20,8 @@ jobs:
 
       - name: Build the Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_ID }}-${{ secrets.PROJECT_NAME }}:latest \
-                      -t ${{ secrets.DOCKER_ID }}-${{ secrets.PROJECT_NAME }}:${{ github.run_id }} .
+          docker build -t ${{ secrets.DOCKER_ID }}/${{ secrets.PROJECT_NAME }}:latest \
+                      -t ${{ secrets.DOCKER_ID }}/${{ secrets.PROJECT_NAME }}:${{ github.run_id }} .
 
       - name: DockerHub Push
         run: |
