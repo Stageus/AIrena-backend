@@ -46,9 +46,9 @@ jobs:
           username: ${{ secrets.EC2_USER}}
           key: ${{secrets.EC2_KEY}}
           script: |
-            sudo docker kill ${{secrets.PROJECT_NAME}}
-            sudo docker rm -f ${{secrets.PROJECT_NAME }}
-            sudo docker rmi ${{secrets.DOCKER_ID}}/${{secrets.PROJECT_NAME}}
-            sudo docker pull ${{secrets.DOCKER_ID}}/${{secrets.PROJECT_NAME}}
-            sudo docker run -p ${{secrets.EC2_PORT}}:${{secrets.EC2_PORT}} --name ${{secrets.PROJECT_NAME}} -d ${{secrets.DOCKER_ID}}/${{secrets.PROJECT_NAME}}
-            sudo docker image prune -af
+            docker stop ${{secrets.PROJECT_NAME}}
+            docker rm -f ${{secrets.PROJECT_NAME }}
+            docker rmi ${{secrets.DOCKER_ID}}/${{secrets.PROJECT_NAME}}
+            docker pull ${{secrets.DOCKER_ID}}/${{secrets.PROJECT_NAME}}
+            docker run -p ${{secrets.EC2_PORT}}:${{secrets.EC2_PORT}} --name ${{secrets.PROJECT_NAME}} -d ${{secrets.DOCKER_ID}}/${{secrets.PROJECT_NAME}}
+            docker image prune -af
