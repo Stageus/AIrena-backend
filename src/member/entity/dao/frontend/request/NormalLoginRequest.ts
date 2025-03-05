@@ -1,5 +1,4 @@
 import ErrorRegistry from '#error/ErrorRegistry'
-import Regex from '#util/Regex'
 
 interface NormalLoginRequestParams {
   id: string
@@ -11,11 +10,14 @@ export default class NormalLoginRequest {
   public password: string
   constructor(params: NormalLoginRequestParams) {
     if (
-      !new RegExp(Regex.ID).test(params.id) ||
-      !new RegExp(Regex.PASSWORD).test(params.id)
+      !params.id ||
+      !params.password ||
+      params.id.length > 100 ||
+      params.password.length > 100
     ) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }
+
     this.id = params.id
     this.password = params.password
   }

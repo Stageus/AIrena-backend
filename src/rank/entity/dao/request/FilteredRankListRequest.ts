@@ -14,7 +14,8 @@ export default class FilteredRankListRequest {
   constructor(params: FilteredRankListRequestParams) {
     if (
       !new RegExp(Regex.TIER).test(params.tier) ||
-      !new RegExp(Regex.NICKNAME).test(params.nickname)
+      !params.nickname ||
+      params.nickname.length > 100
     ) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }

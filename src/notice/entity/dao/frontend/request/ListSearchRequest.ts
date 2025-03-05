@@ -1,5 +1,4 @@
 import ErrorRegistry from '#error/ErrorRegistry'
-import Regex from '#util/Regex'
 
 interface ListSearchRequestParams {
   title: string
@@ -12,7 +11,7 @@ export default class ListSearchRequest {
   public current: number
   public display: number
   constructor(params: ListSearchRequestParams) {
-    if (!new RegExp(Regex.TITLE).test(params.title)) {
+    if (!params.title || params.title.length > 100) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }
     this.title = params.title

@@ -31,7 +31,9 @@ export default class SearchQuery {
     } else {
       this.sort = params.sort
     }
-
+    if (params.title.length > 100) {
+      throw ErrorRegistry.INVALID_INPUT_FORMAT
+    }
     if (!params.title) {
       this.title = '%'
     } else {
