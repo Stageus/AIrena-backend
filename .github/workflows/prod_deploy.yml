@@ -1,9 +1,8 @@
 name: Production-Deploy-From-Github-Go-AWS-EC2-With-DockerHub
 on:
-  pull_request:
-    branches: ['main']
-  schedule:
-    - cron: '0 0 1 * *'
+  push:
+    branches:
+      - main
 
 jobs:
   build:
@@ -27,19 +26,12 @@ jobs:
       - name: Push Docker image
         run: |
           docker push ${{secrets.DOCKER_ID}}/${{secrets.PROJECT_NAME}}:latest
-          docker push ${{secrets.DOCKER_ID}}/${{secrets.PROJECT_NAME}}:${{github.run_id}}
   deploy:
     name: Deploy to Server
     needs: build
     runs-on: ubuntu-latest
 
     steps:
-      - name: Clean up unused Docker resources
-        run: |
-          sudo docker container prune -f
-          temp=$(date -d "1 months ago" '+%Y-%m-%d')
-          docker image prune --filter until=$temp -a -f
-
       - name: Application Build and Run
         uses: appleboy/ssh-action@v0.1.6
         with:
