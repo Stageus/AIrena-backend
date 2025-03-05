@@ -1,16 +1,36 @@
-import express from 'express'
+import { testPostgresConnection } from '#config/postgres'
+import { testRedisConnection } from '#config/redis'
 import globalExceptionHandler from '#error/globalExceptionHandler'
-import { loginRouter } from '#router/loginRouter'
-import { testRouter } from '#router/testRouter'
-import { testPostgresConnection } from '#database/postgres'
+import { likeRouter } from '#like/router'
+import { memberRouter } from '#member/router'
+import { mockRouter } from '#mock/router'
+import { noticeRouter } from '#notice/router'
+import { rankRouter } from '#rank/router'
+import cookieParser from 'cookie-parser'
+import cors from 'cors'
+import { configDotenv } from 'dotenv'
+import express from 'express'
+configDotenv()
 
 const app = express()
+app.use(
+  cors({
+    origin: process.env.FRONTEND_SERVER_URL,
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+    credentials: true,
+  }),
+)
+app.use(cookieParser())
 app.use(express.json())
-app.use('/login', loginRouter)
-app.use('/test', testRouter)
+app.use('/member', memberRouter)
+app.use('/mock', mockRouter)
+app.use('/notice', noticeRouter)
+app.use('/like', likeRouter)
+app.use('/rank', rankRouter)
 app.use(globalExceptionHandler)
 
 app.listen(3000, async () => {
   await testPostgresConnection()
+  await testRedisConnection()
   console.log('Server is running on port 3000')
 })

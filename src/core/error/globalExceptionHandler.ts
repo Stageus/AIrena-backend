@@ -1,19 +1,18 @@
+import ErrorRegistry from '#error/ErrorRegistry'
 import { NextFunction, Request, Response } from 'express'
-import CustomError from '#error/customError'
-import ErrorInfo from '#error/errorInfo'
-import ErrorRegistry from '#error/errorRegistry'
+import CustomError from './types/CustomError.js'
+import ErrorInfo from './types/ErrorInfo.js'
 
 export default function globalExceptionHandler(
-  err: CustomError | Error,
+  err: CustomError,
   req: Request,
   res: Response,
   next: NextFunction,
 ): any {
   console.error(err)
-  if (!(err instanceof CustomError)) {
+  if (!err.status) {
     err = ErrorRegistry.INTERNAL_SERVER_ERROR
   }
 
-  const customError = err as CustomError
-  return res.status(customError.status).json(new ErrorInfo(customError))
+  return res.status(err.status).json(new ErrorInfo(err))
 }
