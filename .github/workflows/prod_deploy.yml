@@ -21,7 +21,7 @@ jobs:
 
       - name: Build the Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_ID }}/${{ secrets.PROJECT_NAME }}:latest
+          docker build -t ${{ secrets.DOCKER_ID }}/${{ secrets.PROJECT_NAME }}:latest .
 
       - name: Push Docker image
         run: |
