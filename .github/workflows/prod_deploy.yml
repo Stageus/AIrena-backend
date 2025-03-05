@@ -1,9 +1,7 @@
 name: Production-Deploy-From-Github-Go-AWS-EC2-With-DockerHub
 on:
-  push:
-    branches: ['SUS-71-cd-setup']
   pull_request:
-    branches: ['SUS-71-cd-setup']
+    branches: ['main']
   schedule:
     - cron: '0 0 1 * *'
 
@@ -24,8 +22,7 @@ jobs:
 
       - name: Build the Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_ID }}/${{ secrets.PROJECT_NAME }}:latest \
-                      -t ${{ secrets.DOCKER_ID }}/${{ secrets.PROJECT_NAME }}:${{ github.run_id }} .
+          docker build -t ${{ secrets.DOCKER_ID }}/${{ secrets.PROJECT_NAME }}:latest
 
       - name: Push Docker image
         run: |
