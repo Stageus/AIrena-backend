@@ -16,6 +16,6 @@ writeRouter.post(
     WriteRequest,
     WriteResponse,
   )(async (req, res) => {
-    return res.send(await WriteService.writeNotice(req.body))
+    return res.send(await WriteService.writeNotice(req.memberIdx, req.body))
   }),
 )
