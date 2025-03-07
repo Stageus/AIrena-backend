@@ -20,7 +20,7 @@ export default class WriteRequest {
     if (
       !new RegExp(Regex.SUBJECT).test(params.subject) ||
       !new RegExp(Regex.TITLE).test(params.title) ||
-      !new RegExp(Regex.DESCRIPTION).test(params.description) ||
+      (params.description && params.description.length > 1000) ||
       params.quizCount > 10 ||
       params.quizCount < 0
     ) {

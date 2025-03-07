@@ -14,7 +14,7 @@ export default class WriteRequest {
   constructor(params: WriteRequestParams) {
     if (
       !new RegExp(Regex.TITLE).test(params.title) ||
-      !new RegExp(Regex.CONTENT).test(params.content)
+      (params.content && params.content.length > 10000)
     ) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }

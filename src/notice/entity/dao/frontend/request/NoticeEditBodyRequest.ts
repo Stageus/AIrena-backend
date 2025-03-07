@@ -14,7 +14,7 @@ export default class NoticeEditBodyRequest {
   constructor(params: NoticeEditBodyRequestParams) {
     if (
       !new RegExp(Regex.TITLE).test(params.title) ||
-      !new RegExp(Regex.CONTENT).test(params.content)
+      (params.content && params.content.length > 1000)
     ) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }
