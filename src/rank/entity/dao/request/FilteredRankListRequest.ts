@@ -12,15 +12,27 @@ export default class FilteredRankListRequest {
   public current: number
   public nickname: string
   constructor(params: FilteredRankListRequestParams) {
-    if (
-      !new RegExp(Regex.TIER).test(params.tier) ||
-      !params.nickname ||
-      params.nickname.length > 100
-    ) {
+    if (params.tier && !new RegExp(Regex.TIER).test(params.tier)) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }
-    this.tier = params.tier
+    if (!params.tier) {
+      this.tier = '%'
+    } else {
+      this.tier = params.tier
+    }
+
+    if (!params.current) {
+      throw ErrorRegistry.INVALID_INPUT_FORMAT
+    }
     this.current = Number(params.current)
-    this.nickname = params.nickname
+
+    if (params.nickname && params.nickname.length > 100) {
+      throw ErrorRegistry.INVALID_INPUT_FORMAT
+    }
+    if (!params.nickname) {
+      this.nickname = '%'
+    } else {
+      this.nickname = params.nickname
+    }
   }
 }

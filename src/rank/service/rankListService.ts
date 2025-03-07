@@ -13,28 +13,13 @@ export default class RankListService {
     filteredRankListRequest: FilteredRankListRequest,
   ) {
     const { tier, current, nickname } = filteredRankListRequest
-    if (!nickname) {
-      const result: any = await RankListRepository.getFilteredRankListFromDb(
-        tier,
-        current,
-        '%',
-      )
-      return new RankListResponse(result)
-    }
 
-    if (!tier) {
-      const result: any = await RankListRepository.getFilteredRankListFromDb(
-        '%',
-        current,
-        nickname,
-      )
-      return new RankListResponse(result)
-    }
     const result: any = await RankListRepository.getFilteredRankListFromDb(
-      tier,
+      '%' + tier + '%',
       current,
-      nickname,
+      '%' + nickname + '%',
     )
+
     return new RankListResponse(result)
   }
 }

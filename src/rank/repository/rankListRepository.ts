@@ -86,7 +86,7 @@ export default class RankListRepository {
       ),
       ranked_tiers AS (
         SELECT 
-          ROW_NUMBER() OVER (ORDER BY score DESC) AS new_rank, 
+          ROW_NUMBER() OVER (ORDER BY score DESC) AS rank, 
           tier, 
           nickname, 
           score 
@@ -95,8 +95,8 @@ export default class RankListRepository {
       )
       SELECT *
       FROM ranked_tiers 
-      WHERE new_rank > $2 AND nickname LIKE $3
-      ORDER BY new_rank 
+      WHERE rank > $2 AND nickname LIKE $3
+      ORDER BY rank 
       LIMIT 10;
       `,
         [tier, current, nickname],
