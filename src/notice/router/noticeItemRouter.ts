@@ -3,9 +3,26 @@ import multipartParser from '#util/multipartParser'
 import express from 'express'
 import NoticeEditBodyRequest from '../entity/dao/frontend/request/NoticeEditBodyRequest.js'
 import NoticePathRequest from '../entity/dao/frontend/request/NoticePathRequest.js'
+import WriteRequest from '../entity/dao/frontend/request/WriteRequest.js'
 import NoticeResponse from '../entity/dao/frontend/response/NoticeResponse.js'
+import WriteResponse from '../entity/dao/frontend/response/WriteResponse.js'
 import NoticeItemService from '../service/NoticeItemService.js'
+import WriteService from '../service/WriteService.js'
 export const noticeItemRouter = express.Router()
+
+noticeItemRouter.post(
+  '/',
+  multipartParser('image', 5),
+  controller(
+    'admin',
+    null,
+    null,
+    WriteRequest,
+    WriteResponse,
+  )(async (req, res) => {
+    return res.send(await WriteService.writeNotice(req.memberIdx, req.body))
+  }),
+)
 
 noticeItemRouter.get(
   '/:idx',

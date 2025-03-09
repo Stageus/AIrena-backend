@@ -1,5 +1,3 @@
-import NoticeList from 'src/notice/entity/dto/NoticeList.js'
-
 export default class NoticeListResponse {
   firstPageNumber: number
   currentPageNumber: number
@@ -13,39 +11,30 @@ export default class NoticeListResponse {
     createdAt: string
   }[]
 
-  public static of(noticeList: NoticeList): NoticeListResponse {
-    return new NoticeListResponse(
-      noticeList.firstPageNumber,
-      noticeList.currentPageNumber,
-      noticeList.lastPageNumber,
-      noticeList.prevPageExist,
-      noticeList.nextPageExist,
-      noticeList.notices,
-    )
-  }
-
-  public static createEmpty(): NoticeListResponse {
-    return new NoticeListResponse(1, 1, 1, false, false, [])
-  }
-
   constructor(
-    firstPageNumber: number,
     currentPageNumber: number,
-    lastPageNumber: number,
-    prevPageExist: boolean,
-    nextPageExist: boolean,
+    displayCount: number,
+    totalCount: number,
     notices: {
       idx: number
       title: string
       writerNickname: string
       createdAt: string
+      totalCount: number
     }[],
   ) {
-    this.firstPageNumber = firstPageNumber
     this.currentPageNumber = currentPageNumber
-    this.lastPageNumber = lastPageNumber
-    this.prevPageExist = prevPageExist
-    this.nextPageExist = nextPageExist
+    this.firstPageNumber = Math.floor((currentPageNumber - 1) / 10) * 10 + 1
+    const pageOffset = Math.min(
+      9,
+      Math.floor(
+        (totalCount - (this.firstPageNumber - 1) * displayCount) / displayCount,
+      ),
+    )
+    this.lastPageNumber = this.firstPageNumber + pageOffset
+    this.prevPageExist = this.firstPageNumber > 1
+    this.nextPageExist =
+      this.lastPageNumber < Math.floor((totalCount - 1) / displayCount) + 1
     this.notices = notices
   }
 }

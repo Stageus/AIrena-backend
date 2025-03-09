@@ -3,10 +3,25 @@ import express from 'express'
 import ArticleIdxPath from '../entity/dao/frontend/request/path/ArticleIdxPath.js'
 import LikeService from '../service/LikeService.js'
 
-export const deleteRouter = express.Router()
+export const likeItemRouter = express.Router()
 
-deleteRouter.delete(
-  '/:idx',
+likeItemRouter.post(
+  '/',
+  controller(
+    'login',
+    null,
+    ArticleIdxPath,
+    null,
+    null,
+  )(async (req, res) => {
+    return res.send(
+      await LikeService.addLikeToArticle(req.memberIdx, req.params.idx),
+    )
+  }),
+)
+
+likeItemRouter.delete(
+  '/',
   controller(
     'login',
     null,
