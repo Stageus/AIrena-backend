@@ -12,14 +12,14 @@ export default class RankListService {
     } else {
       let tierQuery: string
       if (!tier) {
-        tierQuery = '%'
+        tierQuery = '%%%'
       } else {
         tierQuery = tier
       }
 
       let nicknameQuery: string
       if (!nickname) {
-        nicknameQuery = '%'
+        nicknameQuery = '%%%'
       } else {
         nicknameQuery = nickname
       }
