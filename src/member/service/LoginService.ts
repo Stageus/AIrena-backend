@@ -45,8 +45,10 @@ export default class LoginService {
       kakaoToken,
       kakaoOauthUserInfoUrl,
     )
+    const kakaoEmail = `${userData.id}@kakao.com`
     const checkResult: any = await MemberLoginRepository.checkMemberDataFromDb(
       userData.id,
+      kakaoEmail,
     )
 
     if (!checkResult) {
@@ -55,7 +57,10 @@ export default class LoginService {
         userData.properties.nickname,
       )
       const checkResult: any =
-        await MemberLoginRepository.checkMemberDataFromDb(userData.id)
+        await MemberLoginRepository.checkMemberDataFromDb(
+          userData.id,
+          kakaoEmail,
+        )
       const token = Token.generateLoginToken(
         checkResult.idx,
         checkResult.email,
@@ -80,22 +85,33 @@ export default class LoginService {
     res: Response,
   ): Promise<string> {
     const googleLoginToken = await LoginAdapter.getGoogleToken(code)
+    console.log(1)
     const userData = await LoginAdapter.getUserDataByToken(
       googleLoginToken,
       googleOauthUserInfoUrl,
     )
+    console.log(2)
+    console.log(userData)
     const checkResult: any = await MemberLoginRepository.checkMemberDataFromDb(
       userData.id,
+      userData.email,
     )
-
+    console.log(3)
+    console.log(checkResult)
+    if (checkResult == false) {
+      throw ErrorRegistry.DUPLICATED_EMAIL
+    }
     if (!checkResult) {
-      await MemberLoginRepository.insertGoogleLoginMemberData(
+      await await MemberLoginRepository.insertGoogleLoginMemberData(
         userData.id,
         userData.name,
         userData.email,
       )
       const checkResult: any =
-        await MemberLoginRepository.checkMemberDataFromDb(userData.id)
+        await MemberLoginRepository.checkMemberDataFromDb(
+          userData.id,
+          userData.email,
+        )
       const token = Token.generateLoginToken(
         checkResult.idx,
         checkResult.email,
