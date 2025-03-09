@@ -1,10 +1,8 @@
 import express from 'express'
 import { listRouter } from './listRouter.js'
 import { noticeItemRouter } from './noticeItemRouter.js'
-import { writeRouter } from './writeRouter.js'
 
 export const noticeRouter = express.Router()
 
 noticeRouter.use('/list', listRouter)
-noticeRouter.use('/write', writeRouter)
-noticeRouter.use('/', noticeItemRouter)
+noticeRouter.use('/:idx', noticeItemRouter)
