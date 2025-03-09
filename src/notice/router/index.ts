@@ -5,4 +5,4 @@ import { noticeItemRouter } from './noticeItemRouter.js'
 export const noticeRouter = express.Router()
 
 noticeRouter.use('/list', listRouter)
-noticeRouter.use('/:idx', noticeItemRouter)
+noticeRouter.use('/', noticeItemRouter)

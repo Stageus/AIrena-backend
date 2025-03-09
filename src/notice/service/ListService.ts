@@ -8,15 +8,15 @@ export default class ListService {
     const offset = (current - 1) * display
 
     let listData
-    if (title) {
-      const titleToSearch = '%' + title + '%'
+    if (!title) {
+      listData = await NoticeRepository.getPagedListFromDb(display, offset)
+    } else {
+      const titleQuery = '%' + title + '%'
       listData = await NoticeRepository.getSearchListFromDb(
-        titleToSearch,
+        titleQuery,
         display,
         offset,
       )
-    } else {
-      listData = await NoticeRepository.getPagedListFromDb(display, offset)
     }
 
     return new ListResponse(

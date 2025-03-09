@@ -21,20 +21,20 @@ export default class ListService {
       }
 
       if (!sort) {
-        dbResult = await MockRepository.getFilteredLikeDescMockList(
-          title,
+        dbResult = await MockRepository.getFilteredNewMockList(
+          titleQuery,
           display,
           offset,
         )
       } else if (sort === 'new') {
-        dbResult = await MockRepository.getFilteredLikeDescMockList(
-          title,
+        dbResult = await MockRepository.getFilteredNewMockList(
+          titleQuery,
           display,
           offset,
         )
       } else if (sort === 'like') {
         dbResult = await MockRepository.getFilteredLikeDescMockList(
-          title,
+          titleQuery,
           display,
           offset,
         )

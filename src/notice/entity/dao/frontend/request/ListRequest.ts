@@ -14,8 +14,8 @@ export default class ListRequest {
     if (params.title && params.title.length > 100) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }
-
     this.title = params.title
+
     if (!params.current) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }
