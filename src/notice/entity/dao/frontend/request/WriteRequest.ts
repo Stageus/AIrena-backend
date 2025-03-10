@@ -13,7 +13,7 @@ export default class WriteRequest {
   public uploadUrls: string[]
   constructor(params: WriteRequestParams) {
     if (
-      !new RegExp(Regex.TITLE).test(params.title) ||
+      !Regex.TITLE.test(params.title) ||
       (params.content && params.content.length > 10000)
     ) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT

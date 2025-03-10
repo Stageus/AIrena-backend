@@ -12,7 +12,7 @@ export default class PasswordChangeRequest {
   public token: string
 
   constructor(params: PasswordChangeRequestParams) {
-    if (!new RegExp(Regex.PASSWORD).test(params.password)) {
+    if (!Regex.PASSWORD.test(params.password)) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }
     if (params.password != params.passwordCheck) {
