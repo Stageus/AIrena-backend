@@ -45,10 +45,9 @@ export default class LoginService {
       kakaoToken,
       kakaoOauthUserInfoUrl,
     )
-    const kakaoEmail = `${userData.id}@kakao.com`
+    // const kakaoEmail = `${userData.id}@kakao.com`
     const checkResult: any = await MemberLoginRepository.checkMemberDataFromDb(
       userData.id,
-      kakaoEmail,
     )
 
     if (!checkResult) {
@@ -57,10 +56,7 @@ export default class LoginService {
         userData.properties.nickname,
       )
       const checkResult: any =
-        await MemberLoginRepository.checkMemberDataFromDb(
-          userData.id,
-          kakaoEmail,
-        )
+        await MemberLoginRepository.checkMemberDataFromDb(userData.id)
       const token = Token.generateLoginToken(
         checkResult.idx,
         checkResult.email,
@@ -85,33 +81,29 @@ export default class LoginService {
     res: Response,
   ): Promise<string> {
     const googleLoginToken = await LoginAdapter.getGoogleToken(code)
-    console.log(1)
     const userData = await LoginAdapter.getUserDataByToken(
       googleLoginToken,
       googleOauthUserInfoUrl,
     )
-    console.log(2)
-    console.log(userData)
     const checkResult: any = await MemberLoginRepository.checkMemberDataFromDb(
       userData.id,
-      userData.email,
     )
-    console.log(3)
-    console.log(checkResult)
-    if (checkResult == false) {
+    const checkEmail: any =
+      await MemberLoginRepository.checkGoogleMailAvailable(
+        userData.id,
+        userData.email,
+      )
+    if (checkEmail == false) {
       throw ErrorRegistry.DUPLICATED_EMAIL
     }
     if (!checkResult) {
-      await await MemberLoginRepository.insertGoogleLoginMemberData(
+      await MemberLoginRepository.insertGoogleLoginMemberData(
         userData.id,
         userData.name,
         userData.email,
       )
       const checkResult: any =
-        await MemberLoginRepository.checkMemberDataFromDb(
-          userData.id,
-          userData.email,
-        )
+        await MemberLoginRepository.checkMemberDataFromDb(userData.id)
       const token = Token.generateLoginToken(
         checkResult.idx,
         checkResult.email,
