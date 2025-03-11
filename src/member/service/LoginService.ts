@@ -45,6 +45,7 @@ export default class LoginService {
       kakaoToken,
       kakaoOauthUserInfoUrl,
     )
+    // const kakaoEmail = `${userData.id}@kakao.com`
     const checkResult: any = await MemberLoginRepository.checkMemberDataFromDb(
       userData.id,
     )
@@ -87,7 +88,14 @@ export default class LoginService {
     const checkResult: any = await MemberLoginRepository.checkMemberDataFromDb(
       userData.id,
     )
-
+    const checkEmail: any =
+      await MemberLoginRepository.checkGoogleMailAvailable(
+        userData.id,
+        userData.email,
+      )
+    if (checkEmail == false) {
+      throw ErrorRegistry.DUPLICATED_EMAIL
+    }
     if (!checkResult) {
       await MemberLoginRepository.insertGoogleLoginMemberData(
         userData.id,
