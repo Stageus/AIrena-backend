@@ -10,7 +10,7 @@ export default class QuizIdxPath {
   public idx: UUID
 
   constructor(params: QuizIdxPathParams) {
-    if (!new RegExp(Regex.UUID).test(params.idx)) {
+    if (Regex.UUID.test(params.idx)) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }
     this.idx = params.idx

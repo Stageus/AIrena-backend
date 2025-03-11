@@ -12,7 +12,7 @@ export default class FilteredRankListRequest {
   public current: number
   public nickname: string
   constructor(params: FilteredRankListRequestParams) {
-    if (params.tier && !new RegExp(Regex.TIER).test(params.tier)) {
+    if (params.tier && !Regex.TIER.test(params.tier)) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }
     if (!params.tier) {

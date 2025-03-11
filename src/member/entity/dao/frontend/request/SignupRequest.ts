@@ -16,10 +16,10 @@ export default class SignupRequest {
 
   constructor(params: SignupRequestParams) {
     if (
-      !new RegExp(Regex.ID).test(params.id) ||
-      !new RegExp(Regex.PASSWORD).test(params.password) ||
-      !new RegExp(Regex.PASSWORD).test(params.passwordCheck) ||
-      !new RegExp(Regex.EMAIL).test(params.email)
+      !Regex.ID.test(params.id) ||
+      !Regex.PASSWORD.test(params.password) ||
+      !Regex.PASSWORD.test(params.passwordCheck) ||
+      !Regex.EMAIL.test(params.email)
     ) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }

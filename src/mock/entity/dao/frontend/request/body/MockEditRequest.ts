@@ -14,7 +14,7 @@ export default class MockEditRequest {
 
   constructor(params: MockEditRequestParams) {
     if (
-      !new RegExp(Regex.TITLE).test(params.title) ||
+      !Regex.TITLE.test(params.title) ||
       (params.description && params.description.length > 1000)
     ) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT

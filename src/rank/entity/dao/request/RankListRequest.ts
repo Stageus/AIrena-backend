@@ -17,7 +17,7 @@ export default class RankListRequest {
     }
     this.current = Number(params.current)
 
-    if (params.tier && !new RegExp(Regex.TIER).test(params.tier)) {
+    if (params.tier && !Regex.TIER.test(params.tier)) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }
     this.tier = params.tier

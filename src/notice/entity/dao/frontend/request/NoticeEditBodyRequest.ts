@@ -13,7 +13,7 @@ export default class NoticeEditBodyRequest {
   public uploadUrls: string[]
   constructor(params: NoticeEditBodyRequestParams) {
     if (
-      !new RegExp(Regex.TITLE).test(params.title) ||
+      !Regex.TITLE.test(params.title) ||
       (params.content && params.content.length > 1000)
     ) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
