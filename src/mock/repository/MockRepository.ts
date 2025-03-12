@@ -49,15 +49,18 @@ export default class MockRepository {
                 ORDER BY quiz.created_at ASC
                 LIMIT 1
             ) AS "firstQuizIdx",
-            (
-              SELECT json_agg(
-                json_build_object(
+            COALESCE(
+              (
+                SELECT json_agg(
+                  json_build_object(
                   'rank', mr.rank,
                   'nickname', mr.nickname,
                   'score', mr.score
+                  )
                 )
-              )
-              FROM mock_rank mr
+                FROM mock_rank mr
+              ),
+            '[]'::json
             ) AS "ranks"
         FROM mock
         JOIN member ON member.idx = mock.member_idx
