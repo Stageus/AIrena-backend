@@ -25,6 +25,7 @@ export default class NoticeItemService {
   ) {
     const { idx } = noticePathRequest
     const { title, content, uploadUrls } = noticeEditBodyRequest
+    console.log(noticeEditBodyRequest)
     await NoticeRepository.editNoticeFromDb(idx, title, content, uploadUrls)
   }
 }

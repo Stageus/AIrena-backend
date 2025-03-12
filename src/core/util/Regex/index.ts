@@ -6,7 +6,6 @@ export default class Regex {
   public static readonly NICKNAME =
     /^(?=.*[가-힣a-zA-Z])[가-힣a-zA-Z0-9]{2,12}$/
 
-  public static readonly TITLE = /^[ㄱ-ㅎ가-힣a-zA-Z0-9\s]{2,50}$/
   public static readonly DESCRIPTION = /^[가-힣a-zA-Z0-9]{2,500}$/
   public static readonly SUBJECT = /^(?=.*[가-힣a-zA-Z])[가-힣a-zA-Z0-9]{2,50}$/
   public static readonly QUIZ_COUNT = /^(10|[1-9])$/

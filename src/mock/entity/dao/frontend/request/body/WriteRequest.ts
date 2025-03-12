@@ -17,9 +17,14 @@ export default class WriteRequest {
   public uploadUrls: string[]
 
   constructor(params: WriteRequestParams) {
+    if (!params.title) {
+      throw ErrorRegistry.INVALID_INPUT_FORMAT
+    }
+    if (params.title.length > 50 && params.title.length < 2) {
+      throw ErrorRegistry.INVALID_INPUT_FORMAT
+    }
     if (
       !Regex.SUBJECT.test(params.subject) ||
-      !Regex.TITLE.test(params.title) ||
       (params.description && params.description.length > 1000) ||
       params.quizCount > 10 ||
       params.quizCount < 0
