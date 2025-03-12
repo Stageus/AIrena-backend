@@ -21,7 +21,7 @@ export default class RankListService {
       if (!nickname) {
         nicknameQuery = '%%%'
       } else {
-        nicknameQuery = nickname
+        nicknameQuery = '%' + nickname + '%'
       }
 
       result = await RankListRepository.getFilteredRankListFromDb(

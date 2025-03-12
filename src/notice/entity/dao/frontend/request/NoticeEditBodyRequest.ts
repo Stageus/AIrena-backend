@@ -1,9 +1,9 @@
 import ErrorRegistry from '#error/ErrorRegistry'
-import Regex from '#util/Regex'
 
 interface NoticeEditBodyRequestParams {
   title: string
   content: string
+  existingUrls: string[]
   uploadUrls: string[]
 }
 
@@ -12,10 +12,13 @@ export default class NoticeEditBodyRequest {
   public content: string
   public uploadUrls: string[]
   constructor(params: NoticeEditBodyRequestParams) {
-    if (
-      !Regex.TITLE.test(params.title) ||
-      (params.content && params.content.length > 1000)
-    ) {
+    if (!params.title) {
+      throw ErrorRegistry.INVALID_INPUT_FORMAT
+    }
+    if (params.title.length > 50 && params.title.length < 2) {
+      throw ErrorRegistry.INVALID_INPUT_FORMAT
+    }
+    if (params.content && params.content.length > 1000) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }
     this.title = params.title

@@ -119,7 +119,7 @@ export default class NoticeRepository {
     idx: UUID,
     title: string,
     content: string,
-    uploadUrls: string[], // uploadUrls는 null 또는 undefined일 수 있음
+    uploadUrls: string[],
   ) {
     await postgres.query(
       `

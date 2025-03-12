@@ -33,12 +33,10 @@ export default class ChangeService {
       const data: any = jwt.verify(token, secretKey)
       const salt = process.env.ENCRYPT_SALT_STRING
       const changePassword = CryptoJS.SHA256(password + salt).toString()
-      console.log(changePassword)
       await MemberChangeRepository.updateMemberPassword(
         changePassword,
         data.userId,
       )
-      console.log(data)
       await RedisEmailChangeRepository.resetFindPasswordEmailDataFromRedis(
         data.email,
       )
@@ -54,7 +52,6 @@ export default class ChangeService {
     sendFindPasswordEmailRequest: SendFindPasswordEmailRequest,
   ) {
     const { id, email } = sendFindPasswordEmailRequest
-    console.log(id)
     const token = Token.generateVerifyToken(id, email)
     await RedisEmailChangeRepository.checkFindPasswordEmailDataFromRedis(
       email,

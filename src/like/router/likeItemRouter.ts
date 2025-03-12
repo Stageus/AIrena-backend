@@ -6,7 +6,7 @@ import LikeService from '../service/LikeService.js'
 export const likeItemRouter = express.Router()
 
 likeItemRouter.post(
-  '/',
+  '/:idx',
   controller(
     'login',
     null,
@@ -21,7 +21,7 @@ likeItemRouter.post(
 )
 
 likeItemRouter.delete(
-  '/',
+  '/:idx',
   controller(
     'login',
     null,
