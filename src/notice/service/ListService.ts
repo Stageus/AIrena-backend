@@ -22,8 +22,8 @@ export default class ListService {
     return new ListResponse(
       current,
       display,
-      listData.totalCountResult,
-      listData.listResult,
+      listData.totalCount,
+      listData.list,
     )
   }
 }
