@@ -41,8 +41,8 @@ const multipartParser = (contentType: string, limit: number) => {
       }
 
       const uploadUrls = []
-      const existingUrls = req.body.existingUrls
-      if (existingUrls) {
+      if (req.body.existingUrls) {
+        const existingUrls = req.body.existingUrls.split(',')
         existingUrls.forEach((url: string) => {
           if (!url.startsWith(newBaseUrl)) {
             return next(ErrorRegistry.INVALID_INPUT_FORMAT)
@@ -55,7 +55,7 @@ const multipartParser = (contentType: string, limit: number) => {
       }
 
       uploadUrls.push(
-        req.files.map((file) => {
+        ...req.files.map((file) => {
           const multerFile = file as Express.MulterS3.File
           return replaceBaseUrl(multerFile.location)
         }),
