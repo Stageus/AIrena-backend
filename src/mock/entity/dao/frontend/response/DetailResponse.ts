@@ -8,6 +8,7 @@ export default class DetailResponse {
   writerNickname: string
   images: string[]
   firstQuizIdx: UUID
+  likeCount: number
   ranks: {
     rank: number
     nickName: string
@@ -22,6 +23,7 @@ export default class DetailResponse {
     writerNickname: string,
     images: string[],
     firstQuizIdx: UUID,
+    likeCount: number,
     ranks: {
       rank: number
       nickName: string
@@ -35,6 +37,7 @@ export default class DetailResponse {
     this.writerNickname = writerNickname
     this.images = images
     this.firstQuizIdx = firstQuizIdx
+    this.likeCount = likeCount
     this.ranks = ranks
   }
 }

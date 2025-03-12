@@ -22,6 +22,7 @@ export default class MockItemService {
       result.writerNickname,
       result.images,
       result.firstQuizIdx,
+      result.likeCount,
       result.ranks,
     )
   }

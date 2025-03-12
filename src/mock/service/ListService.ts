@@ -1,7 +1,6 @@
 import ErrorRegistry from '#error/ErrorRegistry'
 import ListRequest from '../entity/dao/frontend/request/query/ListRequest.js'
 import ListResponse from '../entity/dao/frontend/response/ListResponse.js'
-import MockList from '../entity/dto/MockList.js'
 import MockRepository from '../repository/MockRepository.js'
 
 export default class ListService {
@@ -43,13 +42,11 @@ export default class ListService {
       }
     }
 
-    const mockList = new MockList(
+    return new ListResponse(
       current,
       display,
       dbResult.totalCount,
       dbResult.mocks,
     )
-
-    return ListResponse.of(mockList)
   }
 }

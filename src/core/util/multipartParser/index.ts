@@ -40,10 +40,26 @@ const multipartParser = (contentType: string, limit: number) => {
         }
       }
 
-      const uploadUrls = req.files.map((file) => {
-        const multerFile = file as Express.MulterS3.File
-        return replaceBaseUrl(multerFile.location)
-      })
+      const uploadUrls = []
+      const existingUrls = req.body.existingUrls
+      if (existingUrls) {
+        existingUrls.forEach((url: string) => {
+          if (!url.startsWith(newBaseUrl)) {
+            return next(ErrorRegistry.INVALID_INPUT_FORMAT)
+          }
+        })
+        if (existingUrls.length + req.files.length > limit) {
+          return next(ErrorRegistry.INVALID_INPUT_FORMAT)
+        }
+        uploadUrls.push(...existingUrls)
+      }
+
+      uploadUrls.push(
+        req.files.map((file) => {
+          const multerFile = file as Express.MulterS3.File
+          return replaceBaseUrl(multerFile.location)
+        }),
+      )
 
       req.body = { ...req.body, uploadUrls }
       next()

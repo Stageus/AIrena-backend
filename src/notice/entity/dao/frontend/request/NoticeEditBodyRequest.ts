@@ -4,6 +4,7 @@ import Regex from '#util/Regex'
 interface NoticeEditBodyRequestParams {
   title: string
   content: string
+  existingUrls: string[]
   uploadUrls: string[]
 }
 

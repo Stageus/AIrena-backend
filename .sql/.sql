@@ -26,7 +26,6 @@ CREATE TABLE "mock" (
     "title" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "quiz_count" INTEGER NOT NULL,
-    "like_count" INTEGER DEFAULT 0 NOT NULL,
     "created_at" TIMESTAMP NOT NULL,
     "updated_at" TIMESTAMP DEFAULT NOW() NOT NULL,
     "is_deleted" BOOLEAN DEFAULT FALSE NOT NULL

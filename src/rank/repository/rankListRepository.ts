@@ -72,7 +72,7 @@ export default class RankListRepository {
                 WHEN rank BETWEEN 3 AND 5 THEN 'GOLD' 
                 WHEN rank BETWEEN 6 AND 8 THEN 'SILVER' 
                 ELSE 'BRONZE' 
-              END 
+              END
             WHEN score = 0 THEN 'BRONZE' 
             WHEN rank BETWEEN 1 AND total_count * 0.06 THEN 'DIAMOND' 
             WHEN rank BETWEEN total_count * 0.06 + 1 AND total_count * 0.12 THEN 'PLATINUM' 
@@ -87,16 +87,16 @@ export default class RankListRepository {
       ranked_tiers AS (
         SELECT 
           ROW_NUMBER() OVER (ORDER BY score DESC) AS rank, 
-          tier, 
+          tier,
           nickname, 
           score 
         FROM ranked_with_tiers 
-        WHERE tier LIKE $1 
+        WHERE tier LIKE $1  AND nickname LIKE $3
       )
       SELECT *
       FROM ranked_tiers 
-      WHERE rank > $2 AND nickname LIKE $3
-      ORDER BY rank 
+      WHERE rank > $2
+      ORDER BY rank
       LIMIT 10;
       `,
         [tier, current, nickname],
