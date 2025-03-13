@@ -10,7 +10,7 @@ export default class NoticeRepository {
         SELECT notice.idx AS idx, 
         notice.title AS title, 
         mem.nickname AS "writerNickname",
-        notice.created_at AS "createdAt"
+        TO_CHAR(notice.created_at,'YYYY-MM-DD') AS "createdAt"
         FROM notice AS notice
         LEFT JOIN member AS mem ON notice.member_idx = mem.idx
         WHERE notice.is_deleted = 'f'
@@ -41,7 +41,7 @@ export default class NoticeRepository {
         SELECT notice.idx AS idx, 
         notice.title AS title, 
         mem.nickname AS "writerNickname",
-        notice.created_at AS "createdAt"
+        TO_CHAR(notice.created_at,'YYYY-MM-DD') AS "createdAt"
         FROM notice AS notice
         LEFT JOIN member AS mem ON notice.member_idx = mem.idx
         WHERE notice.is_deleted = 'f' AND title LIKE $1
@@ -98,7 +98,7 @@ export default class NoticeRepository {
         `SELECT n.title,
           mem.nickname AS "writerNickname",
           n.content,
-          n.created_at AS "createdAt",
+          TO_CHAR(n.created_at,'YYYY-MM-DD') AS "createdAt",
           i.urls AS "images"  
         FROM notice AS n 
         LEFT JOIN image AS i ON n.idx = i.article_idx 
