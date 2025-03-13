@@ -1,3 +1,5 @@
+import { UUID } from 'crypto'
+
 export default class NoticeListResponse {
   firstPageNumber: number
   currentPageNumber: number
@@ -5,7 +7,7 @@ export default class NoticeListResponse {
   prevPageExist: boolean
   nextPageExist: boolean
   notices: {
-    idx: number
+    idx: UUID
     title: string
     writerNickname: string
     createdAt: string
@@ -16,11 +18,11 @@ export default class NoticeListResponse {
     displayCount: number,
     totalCount: number,
     notices: {
-      idx: number
+      idx: UUID
       title: string
       writerNickname: string
+      content: string
       createdAt: string
-      totalCount: number
     }[],
   ) {
     this.currentPageNumber = currentPageNumber

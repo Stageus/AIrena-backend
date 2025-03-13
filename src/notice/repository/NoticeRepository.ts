@@ -1,6 +1,8 @@
 import { postgres } from '#config/postgres'
 import ErrorRegistry from '#error/ErrorRegistry'
 import { UUID } from 'crypto'
+import { NoticeInfoFromDB } from '../entity/dao/db/NoticeInfoFromDB.js'
+import { NoticeListFromDB } from '../entity/dao/db/NoticeListFromDB.js'
 
 export default class NoticeRepository {
   static async getPagedListFromDb(display: number, offset: number) {
@@ -26,10 +28,11 @@ export default class NoticeRepository {
       )
     ).rows[0].totalCount
     return {
-      listResult,
-      totalCountResult,
-    }
+      list: listResult,
+      totalCount: totalCountResult,
+    } as NoticeListFromDB
   }
+
   static async getSearchListFromDb(
     titleToSearch: string,
     display: number,
@@ -51,16 +54,18 @@ export default class NoticeRepository {
         [titleToSearch, display, offset],
       )
     ).rows
+
     const totalCountResult = (
       await postgres.query(
         `SELECT COUNT(*) AS "totalCount" FROM notice WHERE is_deleted = 'f' AND title LIKE $1`,
         [titleToSearch],
       )
     ).rows[0].totalCount
+
     return {
-      listResult,
-      totalCountResult,
-    }
+      totalCount: totalCountResult,
+      list: listResult,
+    } as NoticeListFromDB
   }
   static async insertNoticeToDb(
     memberIdx: number,
@@ -106,7 +111,7 @@ export default class NoticeRepository {
         WHERE n.idx = $1 AND n.is_deleted = 'f'`,
         [idx],
       )
-    ).rows[0]
+    ).rows[0] as NoticeInfoFromDB
   }
   static async deleteNoticeFromDb(idx: UUID) {
     return await postgres.query(
