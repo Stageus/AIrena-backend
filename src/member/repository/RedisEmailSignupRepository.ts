@@ -50,4 +50,10 @@ export default class RedisSignupRepository {
     }
     await redis.hincrby(email, 'send_count', 1)
   }
+
+  /** 가입이 완료되고 나면 redis 데이터를 삭제합니다.
+   */
+  static async resetEmailDataFromRedis(email: string) {
+    await redis.del(email)
+  }
 }
