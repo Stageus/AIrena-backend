@@ -33,9 +33,12 @@ export default class MockItemService {
   ): Promise<ResultResponse> {
     const result = await MockScoreRepository.getScore(userIdx, path.idx)
 
-    const topPercentile =
-      (result.greaterEqualCandidateCount / result.totalCandidateCount) * 100
-    return new ResultResponse(result.score, result.maxScore, topPercentile)
+    return new ResultResponse(
+      result.score,
+      result.maxScore,
+      result.greaterEqualCandidateCount,
+      result.totalCandidateCount,
+    )
   }
 
   static async saveMockResult(
