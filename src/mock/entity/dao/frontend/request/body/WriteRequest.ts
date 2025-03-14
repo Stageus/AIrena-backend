@@ -1,4 +1,5 @@
 import ErrorRegistry from '#error/ErrorRegistry'
+import Regex from '#util/Regex'
 
 interface WriteRequestParams {
   subject: string
@@ -16,31 +17,22 @@ export default class WriteRequest {
   public uploadUrls: string[]
 
   constructor(params: WriteRequestParams) {
-    if (!params.subject) {
-      throw ErrorRegistry.INVALID_INPUT_FORMAT
-    }
-    if (params.subject.length > 50 || params.subject.length < 2) {
+    if (!Regex.SUBJECT.test(params.subject)) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }
     this.subject = params.subject
 
-    if (!params.title) {
-      throw ErrorRegistry.INVALID_INPUT_FORMAT
-    }
-    if (params.title.length > 50 || params.title.length < 2) {
+    if (!Regex.TITLE.test(params.title)) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }
     this.title = params.title
 
-    if (!params.description) {
-      throw ErrorRegistry.INVALID_INPUT_FORMAT
-    }
-    if (params.description.length > 1000) {
+    if (params.description && !Regex.DESCRIPTION.test(params.description)) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }
     this.description = params.description
 
-    if (params.quizCount > 10 || params.quizCount < 0) {
+    if (params.quizCount > 10 || params.quizCount < 1) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }
     this.quizCount = params.quizCount

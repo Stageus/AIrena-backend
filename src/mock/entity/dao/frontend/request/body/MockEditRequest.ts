@@ -1,4 +1,5 @@
 import ErrorRegistry from '#error/ErrorRegistry'
+import Regex from '#util/Regex'
 
 interface MockEditRequestParams {
   title: string
@@ -12,18 +13,12 @@ export default class MockEditRequest {
   uploadUrls: string[]
 
   constructor(params: MockEditRequestParams) {
-    if (!params.title) {
-      throw ErrorRegistry.INVALID_INPUT_FORMAT
-    }
-    if (params.title.length > 50 || params.title.length < 2) {
+    if (!Regex.TITLE.test(params.title)) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }
     this.title = params.title
 
-    if (!params.description) {
-      throw ErrorRegistry.INVALID_INPUT_FORMAT
-    }
-    if (params.description.length > 1000) {
+    if (params.description && !Regex.DESCRIPTION.test(params.description)) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }
     this.description = params.description
