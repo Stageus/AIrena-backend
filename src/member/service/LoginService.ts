@@ -120,6 +120,6 @@ export default class LoginService {
     )
     Token.generateCookie('loginToken', token, res)
 
-    return signupRedirectUrl
+    return loginRedirectUrl
   }
 }
