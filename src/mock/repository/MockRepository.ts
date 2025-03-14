@@ -37,7 +37,7 @@ export default class MockRepository {
             mock.idx,
             mock.title,
             mock.description,
-            mock.created_at as "createdAt",
+            TO_CHAR(mock.created_at,'YYYY-MM-DD' )as "createdAt",
             mock.quiz_count as "quizCount",
             like_count.count as "likeCount",
             member.nickname as "writerNickname",
@@ -96,7 +96,7 @@ export default class MockRepository {
             SELECT
                 new_paginated.idx,
                 new_paginated.title,
-                new_paginated.created_at as "createdAt",
+                TO_CHAR(new_paginated.created_at,'YYYY-MM-DD') as "createdAt",
                 member.nickname as "writerNickname",
                 (SELECT COUNT(*) FROM like_history lh WHERE lh.article_idx = new_paginated.idx) AS "likeCount"
             FROM new_paginated
@@ -142,7 +142,7 @@ export default class MockRepository {
             SELECT
                 like_count_paginated.idx,
                 like_count_paginated.title,
-                like_count_paginated.created_at as "createdAt",
+                TO_CHAR(like_count_paginated.created_at,'YYYY-MM-DD') as "createdAt",
                 member.nickname as "writerNickname",
                 (SELECT COUNT(*) FROM like_history lc WHERE lc.article_idx = like_count_paginated.idx) AS "likeCount"
             FROM like_count_paginated
@@ -188,7 +188,7 @@ export default class MockRepository {
             SELECT
                 new_paginated.idx,
                 new_paginated.title,
-                new_paginated.created_at as "createdAt",
+                TO_CHAR(new_paginated.created_at,'YYYY-MM-DD') as "createdAt",
                 member.nickname as "writerNickname",
                 (SELECT COUNT(*) FROM like_history lh WHERE lh.article_idx = new_paginated.idx) AS "likeCount"
             FROM new_paginated
