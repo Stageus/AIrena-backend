@@ -43,5 +43,5 @@ jobs:
             docker rm -f ${{secrets.PROJECT_NAME }}
             docker rmi ${{secrets.DOCKER_ID}}/${{secrets.PROJECT_NAME}}
             docker pull ${{secrets.DOCKER_ID}}/${{secrets.PROJECT_NAME}}
-            docker run -p ${{secrets.EC2_PORT}}:${{secrets.EC2_PORT}} --name ${{secrets.PROJECT_NAME}} -d ${{secrets.DOCKER_ID}}/${{secrets.PROJECT_NAME}}
+            docker run -p 3000:3000 --name ${{secrets.PROJECT_NAME}} -d ${{secrets.DOCKER_ID}}/${{secrets.PROJECT_NAME}}
             docker image prune -af
