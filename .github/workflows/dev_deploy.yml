@@ -13,7 +13,7 @@ jobs:
 
     env:
       # 프로젝트
-      PROJECT_NAME: stageus22-backend
+      PROJECT_NAME: ai-rena-backend
       ENV_CONTENT: ${{ secrets.DEVELOP_ENV_CONTENT }}
       # Docker
       DOCKER_ID: ${{ secrets.DOCKER_ID }}
@@ -43,7 +43,7 @@ jobs:
 
     env:
       # 프로젝트
-      PROJECT_NAME: stageus22-backend
+      PROJECT_NAME: ai-rena-backend
       # AWS
       EC2_HOST: ${{ secrets.EC2_HOST }}
       EC2_USER: ${{ secrets.EC2_USER }}
