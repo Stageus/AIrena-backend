@@ -1,8 +1,6 @@
 import express from 'express'
-import { addRouter } from './addRouter.js'
-import { deleteRouter } from './deleteRouter.js'
+import { likeItemRouter } from './likeItemRouter.js'
 
 export const likeRouter = express.Router()
 
-likeRouter.use('/add', addRouter)
-likeRouter.use('/delete', deleteRouter)
+likeRouter.use('/', likeItemRouter)

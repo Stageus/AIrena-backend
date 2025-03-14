@@ -28,14 +28,18 @@ export default class MockRepository {
           FROM first_score
           ORDER BY score DESC
           LIMIT 15
+        ),
+        like_count AS (
+          SELECT COUNT(*)::integer as count FROM like_history
+          WHERE article_idx = $1
         )
         SELECT
             mock.idx,
             mock.title,
             mock.description,
-            mock.created_at as "createdAt",
+            TO_CHAR(mock.created_at,'YYYY-MM-DD' )as "createdAt",
             mock.quiz_count as "quizCount",
-            mock.like_count as "likeCount",
+            like_count.count as "likeCount",
             member.nickname as "writerNickname",
             image.urls as images,
             (
@@ -45,19 +49,23 @@ export default class MockRepository {
                 ORDER BY quiz.created_at ASC
                 LIMIT 1
             ) AS "firstQuizIdx",
-            (
-              SELECT json_agg(
-                json_build_object(
+            COALESCE(
+              (
+                SELECT json_agg(
+                  json_build_object(
                   'rank', mr.rank,
                   'nickname', mr.nickname,
                   'score', mr.score
+                  )
                 )
-              )
-              FROM mock_rank mr
+                FROM mock_rank mr
+              ),
+            '[]'::json
             ) AS "ranks"
         FROM mock
         JOIN member ON member.idx = mock.member_idx
-        JOIN image ON image.article_idx = mock.idx
+        JOIN image ON image.article_idx = mock.idx,
+        like_count
         WHERE mock.idx = $1 AND mock.is_deleted = false
         `,
         [idx],
@@ -74,8 +82,7 @@ export default class MockRepository {
                 idx, 
                 title, 
                 member_idx,
-                created_at,
-                like_count
+                created_at
             FROM mock
             WHERE is_deleted = false
         ),
@@ -89,9 +96,9 @@ export default class MockRepository {
             SELECT
                 new_paginated.idx,
                 new_paginated.title,
-                new_paginated.created_at as "createdAt",
-                new_paginated.like_count as "likeCount",
-                member.nickname as "writerNickname"
+                TO_CHAR(new_paginated.created_at,'YYYY-MM-DD') as "createdAt",
+                member.nickname as "writerNickname",
+                (SELECT COUNT(*) FROM like_history lh WHERE lh.article_idx = new_paginated.idx) AS "likeCount"
             FROM new_paginated
             JOIN member ON member.idx = new_paginated.member_idx
         )
@@ -121,24 +128,23 @@ export default class MockRepository {
                 idx, 
                 title, 
                 member_idx,
-                created_at,
-                like_count
+                created_at
             FROM mock
             WHERE title LIKE $1 AND is_deleted = false
         ),
         like_count_paginated AS (
             SELECT *
             FROM filtered
-            ORDER BY like_count DESC, created_at DESC
+            ORDER BY created_at DESC
             LIMIT $2 OFFSET $3
         ),
         nickname_added AS (
             SELECT
                 like_count_paginated.idx,
                 like_count_paginated.title,
-                like_count_paginated.like_count as "likeCount",
-                like_count_paginated.created_at as "createdAt",
-                member.nickname as "writerNickname"
+                TO_CHAR(like_count_paginated.created_at,'YYYY-MM-DD') as "createdAt",
+                member.nickname as "writerNickname",
+                (SELECT COUNT(*) FROM like_history lc WHERE lc.article_idx = like_count_paginated.idx) AS "likeCount"
             FROM like_count_paginated
             JOIN member ON member.idx = like_count_paginated.member_idx
         )
@@ -168,8 +174,7 @@ export default class MockRepository {
                 idx, 
                 title, 
                 member_idx,
-                created_at,
-                like_count
+                created_at
             FROM mock
             WHERE title LIKE $1 AND is_deleted = false
         ),
@@ -183,9 +188,9 @@ export default class MockRepository {
             SELECT
                 new_paginated.idx,
                 new_paginated.title,
-                new_paginated.created_at as "createdAt",
-                new_paginated.like_count as "likeCount",
-                member.nickname as "writerNickname"
+                TO_CHAR(new_paginated.created_at,'YYYY-MM-DD') as "createdAt",
+                member.nickname as "writerNickname",
+                (SELECT COUNT(*) FROM like_history lh WHERE lh.article_idx = new_paginated.idx) AS "likeCount"
             FROM new_paginated
             JOIN member ON member.idx = new_paginated.member_idx
         )

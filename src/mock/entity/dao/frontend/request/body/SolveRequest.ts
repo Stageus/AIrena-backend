@@ -1,5 +1,4 @@
 import ErrorRegistry from '#error/ErrorRegistry'
-import Regex from '#util/Regex'
 
 interface SolveRequestParams {
   singleChoiceAnswer?: number
@@ -10,17 +9,22 @@ export default class SolveRequest {
   singleChoiceAnswer?: number
   textAnswer?: string
 
-  constructor(public params: SolveRequestParams) {
+  constructor(params: SolveRequestParams) {
     if (
-      (typeof params.textAnswer === 'string' &&
-        !new RegExp(Regex.TEXT_ANSWER).test(params.textAnswer)) ||
-      (typeof params.singleChoiceAnswer === 'number' &&
-        (params.singleChoiceAnswer > 3 || params.singleChoiceAnswer < 0))
+      params.singleChoiceAnswer &&
+      (params.singleChoiceAnswer > 3 || params.singleChoiceAnswer < 0)
     ) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }
+    this.singleChoiceAnswer = Number(params.singleChoiceAnswer)
 
-    this.singleChoiceAnswer = params.singleChoiceAnswer
+    if (params.textAnswer && params.textAnswer.length > 100) {
+      throw ErrorRegistry.INVALID_INPUT_FORMAT
+    }
     this.textAnswer = params.textAnswer
+
+    if (params.singleChoiceAnswer === null && params.textAnswer === null) {
+      throw ErrorRegistry.INVALID_INPUT_FORMAT
+    }
   }
 }

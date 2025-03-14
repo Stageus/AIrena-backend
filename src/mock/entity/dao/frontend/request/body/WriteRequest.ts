@@ -17,19 +17,26 @@ export default class WriteRequest {
   public uploadUrls: string[]
 
   constructor(params: WriteRequestParams) {
-    if (
-      !new RegExp(Regex.SUBJECT).test(params.subject) ||
-      !new RegExp(Regex.TITLE).test(params.title) ||
-      !new RegExp(Regex.DESCRIPTION).test(params.description) ||
-      params.quizCount > 10 ||
-      params.quizCount < 0
-    ) {
+    if (!Regex.SUBJECT.test(params.subject)) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }
     this.subject = params.subject
-    this.quizCount = params.quizCount
+
+    if (!Regex.TITLE.test(params.title)) {
+      throw ErrorRegistry.INVALID_INPUT_FORMAT
+    }
     this.title = params.title
+
+    if (params.description && !Regex.DESCRIPTION.test(params.description)) {
+      throw ErrorRegistry.INVALID_INPUT_FORMAT
+    }
     this.description = params.description
+
+    if (params.quizCount > 10 || params.quizCount < 1) {
+      throw ErrorRegistry.INVALID_INPUT_FORMAT
+    }
+    this.quizCount = params.quizCount
+
     this.uploadUrls = params.uploadUrls
   }
 }

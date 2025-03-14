@@ -1,5 +1,3 @@
-import MockList from 'src/mock/entity/dto/MockList.js'
-
 export default class ListResponse {
   firstPageNumber: number
   currentPageNumber: number
@@ -14,16 +12,10 @@ export default class ListResponse {
     likeCount: number
   }[]
 
-  public static createEmpty(): ListResponse {
-    return new ListResponse(1, 1, 1, false, false, [])
-  }
-
   constructor(
-    firstPageNumber: number,
     currentPageNumber: number,
-    lastPageNumber: number,
-    prevPageExist: boolean,
-    nextPageExist: boolean,
+    displayCount: number,
+    totalCount: number,
     mocks: {
       idx: number
       title: string
@@ -32,22 +24,18 @@ export default class ListResponse {
       likeCount: number
     }[],
   ) {
-    this.firstPageNumber = firstPageNumber
     this.currentPageNumber = currentPageNumber
-    this.lastPageNumber = lastPageNumber
-    this.prevPageExist = prevPageExist
-    this.nextPageExist = nextPageExist
-    this.mocks = mocks
-  }
-
-  static of(mockList: MockList): ListResponse {
-    return new ListResponse(
-      mockList.firstPageNumber,
-      mockList.currentPageNumber,
-      mockList.lastPageNumber,
-      mockList.prevPageExist,
-      mockList.nextPageExist,
-      mockList.mocks,
+    this.firstPageNumber = Math.floor((currentPageNumber - 1) / 10) * 10 + 1
+    const pageOffset = Math.min(
+      9,
+      Math.floor(
+        (totalCount - (this.firstPageNumber - 1) * displayCount) / displayCount,
+      ),
     )
+    this.lastPageNumber = this.firstPageNumber + pageOffset
+    this.prevPageExist = this.firstPageNumber > 1
+    this.nextPageExist =
+      this.lastPageNumber < Math.floor((totalCount - 1) / displayCount) + 1
+    this.mocks = mocks
   }
 }

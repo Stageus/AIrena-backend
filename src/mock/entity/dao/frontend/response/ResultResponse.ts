@@ -1,11 +1,18 @@
 export default class ResultResponse {
   score: number
   maxScore: number
-  topPercentile: number
+  greaterEqualCandidateCount: number
+  totalCandidateCount: number
 
-  constructor(score: number, maxScore: number, topPercentile: number) {
+  constructor(
+    score: number,
+    maxScore: number,
+    greaterEqualCandidateCount: number,
+    totalCandidateCount: number,
+  ) {
     this.score = score
     this.maxScore = maxScore
-    this.topPercentile = topPercentile
+    this.greaterEqualCandidateCount = greaterEqualCandidateCount
+    this.totalCandidateCount = totalCandidateCount
   }
 }

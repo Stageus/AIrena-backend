@@ -98,6 +98,11 @@ export default class ErrorRegistry {
     'MU001',
     '지원하지 않는 파일 형식입니다',
   )
+  static readonly OUT_OF_UPLOAD_LIMIT = new CustomError(
+    400,
+    'MU002',
+    '파일 업로드 개수를 초과했습니다',
+  )
 
   // Like(LI)
   static readonly DUPLICATE_LIKE = new CustomError(

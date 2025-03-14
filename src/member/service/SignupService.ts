@@ -58,6 +58,7 @@ export default class SignupService {
       result.email,
       result.role,
     )
+    await RedisEmailSignupRepository.resetEmailDataFromRedis(data.email)
     Token.generateCookie('loginToken', token, res)
   }
   /** 회원가입 인증 이메일 재전송 서비스 로직 */

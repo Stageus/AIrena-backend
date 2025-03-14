@@ -5,6 +5,6 @@ export default class MeService {
   /** 로그아웃 */
   static async getProfile(memberIdx: number) {
     const result = await MemberInfoRepository.getProfile(memberIdx)
-    return new ProfileResponse(result.nickname)
+    return new ProfileResponse(result.nickname, result.role, result.idx)
   }
 }

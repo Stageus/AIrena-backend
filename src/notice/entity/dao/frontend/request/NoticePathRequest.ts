@@ -9,7 +9,7 @@ interface NoticePathRequestParams {
 export default class NoticePathRequest {
   public idx: UUID
   constructor(params: NoticePathRequestParams) {
-    if (!new RegExp(Regex.UUID).test(params.idx)) {
+    if (!Regex.UUID.test(params.idx)) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }
     this.idx = params.idx

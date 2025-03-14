@@ -17,10 +17,22 @@ export default class MemberLoginRepository {
    */
   static async checkMemberDataFromDb(socialId: string) {
     return (
-      await postgres.query('SELECT * FROM member WHERE id = $1', [socialId])
+      await postgres.query('SELECT * FROM member WHERE id =$1', [socialId])
     ).rows[0]
   }
-
+  static async checkGoogleMailAvailable(socialId: string, email: string) {
+    return (
+      await postgres.query(
+        `SELECT 
+    CASE 
+        WHEN EXISTS (SELECT 1 FROM member WHERE id = $1 AND email = $2) THEN true
+        WHEN EXISTS (SELECT 1 FROM member WHERE email = $2) THEN false
+        ELSE NULL
+    END AS result`,
+        [socialId, email],
+      )
+    ).rows[0].result
+  }
   /** 카카오 소셜로그인 회원가입 */
   static async insertKakaoLoginMemberData(socialId: string, nickname: string) {
     let dateTime = new Date()

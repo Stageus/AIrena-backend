@@ -1,4 +1,5 @@
 import ErrorRegistry from '#error/ErrorRegistry'
+import Regex from '#util/Regex'
 interface FindIdRequestParams {
   email: string
 }
@@ -7,10 +8,9 @@ export default class FindIdRequest {
   public email: string
 
   constructor(params: FindIdRequestParams) {
-    if (!params.email || params.email.length > 100) {
+    if (!Regex.EMAIL.test(params.email)) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }
     this.email = params.email
   }
 }
-;``

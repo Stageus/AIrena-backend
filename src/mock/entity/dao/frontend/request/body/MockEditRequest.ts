@@ -13,14 +13,16 @@ export default class MockEditRequest {
   uploadUrls: string[]
 
   constructor(params: MockEditRequestParams) {
-    if (
-      !new RegExp(Regex.TITLE).test(params.title) ||
-      !new RegExp(Regex.DESCRIPTION).test(params.description)
-    ) {
+    if (!Regex.TITLE.test(params.title)) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }
     this.title = params.title
+
+    if (params.description && !Regex.DESCRIPTION.test(params.description)) {
+      throw ErrorRegistry.INVALID_INPUT_FORMAT
+    }
     this.description = params.description
+
     this.uploadUrls = params.uploadUrls
   }
 }

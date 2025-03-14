@@ -13,16 +13,19 @@ export default class NoticeItemService {
     }
     return new NoticeResponse(result)
   }
+
   static async deleteNotice(noticePathRequest: NoticePathRequest) {
     const { idx } = noticePathRequest
     await NoticeRepository.deleteNoticeFromDb(idx)
   }
+
   static async editNotice(
     noticePathRequest: NoticePathRequest,
     noticeEditBodyRequest: NoticeEditBodyRequest,
   ) {
     const { idx } = noticePathRequest
     const { title, content, uploadUrls } = noticeEditBodyRequest
+    console.log(noticeEditBodyRequest)
     await NoticeRepository.editNoticeFromDb(idx, title, content, uploadUrls)
   }
 }

@@ -1,6 +1,7 @@
 import ErrorRegistry from '#error/ErrorRegistry'
 import EmailSender from '#util/EmailSender'
 import Token from '#util/Token'
+import CryptoJS from 'crypto-js'
 import { Request } from 'express'
 import jwt from 'jsonwebtoken'
 import NicknameChangeRequest from '../entity/dao/frontend/request/NicknameChangeRequest.js'
@@ -30,7 +31,12 @@ export default class ChangeService {
       }
       const secretKey = process.env.JWT_SIGNATURE_KEY
       const data: any = jwt.verify(token, secretKey)
-      await MemberChangeRepository.updateMemberPassword(password, data.userId)
+      const salt = process.env.ENCRYPT_SALT_STRING
+      const changePassword = CryptoJS.SHA256(password + salt).toString()
+      await MemberChangeRepository.updateMemberPassword(
+        changePassword,
+        data.userId,
+      )
       await RedisEmailChangeRepository.resetFindPasswordEmailDataFromRedis(
         data.email,
       )
