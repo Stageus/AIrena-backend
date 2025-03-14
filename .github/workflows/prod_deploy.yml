@@ -1,4 +1,5 @@
-name: Production-Deploy-From-Github-Go-AWS-EC2-With-DockerHub
+name: Docker Hub Push & EC2에 운영용 컨테이너 띄우기
+
 on:
   push:
     branches:
@@ -7,42 +8,66 @@ on:
 
 jobs:
   build:
-    name: Docker Image Build
+    name: 빌드 작업
     runs-on: ubuntu-latest
+
+    env:
+      # 프로젝트
+      PROJECT_NAME: ai-rena-backend
+      ENV_CONTENT: ${{ secrets.PROD_ENV_CONTENT }}
+      # Docker
+      DOCKER_ID: ${{ secrets.DOCKER_ID }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
     steps:
-      - name: Checkout Code
+      - name: 코드 체크아웃
         uses: actions/checkout@v4
 
-      - name: Login to DockerHub
+      - name: .env 등록
+        run: echo "${{ env.ENV_CONTENT }}" > .env
+
+      - name: Docker Hub에 로그인
         uses: docker/login-action@v2
         with:
-          username: ${{secrets.DOCKER_ID}}
-          password: ${{secrets.DOCKER_PASSWORD}}
+          username: ${{env.DOCKER_ID}}
+          password: ${{env.DOCKER_PASSWORD}}
 
-      - name: Build the Docker image
+      - name: Docker 이미지 빌드
         run: |
-          docker build -t ${{ secrets.DOCKER_ID }}/${{ secrets.PROJECT_NAME }}:latest .
+          docker build -t ${{ env.DOCKER_ID }}/${{ env.PROJECT_NAME }}:latest .
 
-      - name: Push Docker image
+      - name: Docker 이미지 푸시
         run: |
-          docker push ${{secrets.DOCKER_ID}}/${{secrets.PROJECT_NAME}}:latest
+          docker push ${{env.DOCKER_ID}}/${{env.PROJECT_NAME}}:latest
+
   deploy:
-    name: Deploy to Server
+    name: 운영 서버 배포 작업
     needs: build
     runs-on: ubuntu-latest
+
+    env:
+      # 프로젝트
+      PROJECT_NAME: ai-rena-backend
+      # AWS
+      EC2_HOST: ${{ secrets.EC2_HOST }}
+      EC2_USER: ${{ secrets.EC2_USER }}
+      EC2_KEY: ${{ secrets.EC2_KEY }}
+      # Dokcer
+      DOCKER_ID: ${{ secrets.DOCKER_ID }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
     steps:
       - name: Application Build and Run
         uses: appleboy/ssh-action@v0.1.6
         with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USER}}
-          key: ${{secrets.EC2_KEY}}
+          host: ${{ env.EC2_HOST }}
+          username: ${{ env.EC2_USER}}
+          key: ${{env.EC2_KEY}}
+          debug: true
           script: |
-            docker stop ${{secrets.PROJECT_NAME}}
-            docker rm -f ${{secrets.PROJECT_NAME }}
-            docker rmi ${{secrets.DOCKER_ID}}/${{secrets.PROJECT_NAME}}
-            docker pull ${{secrets.DOCKER_ID}}/${{secrets.PROJECT_NAME}}
-            docker run -p 3000:3000 --name ${{secrets.PROJECT_NAME}} -d ${{secrets.DOCKER_ID}}/${{secrets.PROJECT_NAME}}
+            docker stop ${{env.PROJECT_NAME}}
+            docker rm -f ${{env.PROJECT_NAME }}
+            docker rmi ${{env.DOCKER_ID}}/${{env.PROJECT_NAME}}
+            docker pull ${{env.DOCKER_ID}}/${{env.PROJECT_NAME}}
+            docker run -p 3000:3000 --name ${{env.PROJECT_NAME}} -d ${{env.DOCKER_ID}}/${{env.PROJECT_NAME}}
             docker image prune -af
