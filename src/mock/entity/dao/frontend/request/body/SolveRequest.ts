@@ -16,12 +16,14 @@ export default class SolveRequest {
       }
       this.singleChoiceAnswer = Number(params.singleChoiceAnswer)
     }
+
     if (typeof params.textAnswer === 'string') {
       if (params.textAnswer.length > 100) {
         throw ErrorRegistry.INVALID_INPUT_FORMAT
       }
       this.textAnswer = params.textAnswer
     }
+
     if (params.singleChoiceAnswer === null && params.textAnswer === null) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }
