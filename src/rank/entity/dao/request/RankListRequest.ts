@@ -22,7 +22,7 @@ export default class RankListRequest {
     }
     this.tier = params.tier
 
-    if (params.nickname && params.nickname.length > 100) {
+    if (params.nickname && params.nickname.length > 12) {
       throw ErrorRegistry.INVALID_INPUT_FORMAT
     }
     this.nickname = params.nickname

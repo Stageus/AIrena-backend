@@ -10,6 +10,8 @@ export default class WriteService {
     const singleChoiceQuizCount = Math.floor(quizCount * 0.8)
     const textQuizCount = Math.ceil(quizCount * 0.2)
 
+    console.log(body)
+
     const generatedQuizzes = await Promise.all([
       AIAdapter.getSingleChoiceQuizzes(
         body.title,

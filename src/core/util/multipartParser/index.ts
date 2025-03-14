@@ -49,7 +49,7 @@ const multipartParser = (contentType: string, limit: number) => {
           }
         })
         if (existingUrls.length + req.files.length > limit) {
-          return next(ErrorRegistry.INVALID_INPUT_FORMAT)
+          return next(ErrorRegistry.OUT_OF_UPLOAD_LIMIT)
         }
         uploadUrls.push(...existingUrls)
       }

@@ -42,6 +42,10 @@ export default class ListService {
       }
     }
 
+    if (dbResult.totalCount === 0) {
+      return new ListResponse(current, display, 0, [])
+    }
+
     return new ListResponse(
       current,
       display,
