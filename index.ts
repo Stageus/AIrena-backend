@@ -7,11 +7,19 @@ import { mockRouter } from '#mock/router'
 import { noticeRouter } from '#notice/router'
 import { rankRouter } from '#rank/router'
 import cookieParser from 'cookie-parser'
+import cors from 'cors'
 import { configDotenv } from 'dotenv'
 import express from 'express'
 configDotenv()
 
 const app = express()
+
+const corsOptions = {
+  origin: 'http://d38ylon4m8ioll.cloudfront.net/',
+  method: ['GET', 'POST', 'PUT', 'DELETE', 'UPDATE'],
+  credentials: true,
+}
+app.use(cors(corsOptions))
 
 app.use(cookieParser())
 app.use(express.json())
