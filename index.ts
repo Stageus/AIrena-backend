@@ -15,7 +15,7 @@ configDotenv()
 const app = express()
 
 const corsOptions = {
-  origin: 'http://d38ylon4m8ioll.cloudfront.net/',
+  origin: 'http://dev.ai-rena.com/',
   method: ['GET', 'POST', 'PUT', 'DELETE', 'UPDATE'],
   credentials: true,
 }
