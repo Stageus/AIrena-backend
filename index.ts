@@ -18,6 +18,7 @@ const corsOptions = {
   origin: 'http://dev.ai-rena.com/',
   method: ['GET', 'POST', 'PUT', 'DELETE', 'UPDATE'],
   credentials: true,
+  preflightContinue: true,
 }
 app.use(cors(corsOptions))
 
