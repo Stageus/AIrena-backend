@@ -7,20 +7,12 @@ import { mockRouter } from '#mock/router'
 import { noticeRouter } from '#notice/router'
 import { rankRouter } from '#rank/router'
 import cookieParser from 'cookie-parser'
-import cors from 'cors'
 import { configDotenv } from 'dotenv'
 import express from 'express'
 configDotenv()
 
 const app = express()
 
-app.use(
-  cors({
-    origin: process.env.FRONTEND_SERVER_URL,
-    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
-    credentials: true,
-  }),
-)
 app.use(cookieParser())
 app.use(express.json())
 app.use('/member', memberRouter)
