@@ -15,7 +15,7 @@ configDotenv()
 const app = express()
 
 const corsOptions = {
-  origin: 'http://dev.ai-rena.com/',
+  origin: 'http://dev.ai-rena.com',
   method: ['GET', 'POST', 'PUT', 'DELETE', 'UPDATE'],
   credentials: true,
   preflightContinue: true,
